@@ -1,0 +1,55 @@
+import Image from 'next/image';
+
+export default function AboutPage() {
+    return (
+        <div className="animate-fade-in">
+            <section className="relative py-24 bg-gray-900 text-white">
+                <div className="absolute inset-0 opacity-30">
+                    <Image src="https://placehold.co/1920x800/000000/ffffff?text=Our+Dealership" alt="Dealership building" layout="fill" objectFit="cover" />
+                </div>
+                <div className="relative container mx-auto px-4 text-center">
+                    <h1 className="text-5xl font-extrabold">About YourDealership</h1>
+                    <p className="mt-4 text-xl text-gray-300">Driving Your Dreams Forward Since 2005</p>
+                </div>
+            </section>
+
+            <section className="py-16 sm:py-24">
+                <div className="container mx-auto px-4">
+                    <div className="max-w-3xl mx-auto text-center">
+                        <h2 className="section-title">Our Mission</h2>
+                        <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+                            To provide an unparalleled car buying experience by offering a curated selection of high-quality vehicles, transparent pricing, and customer service that builds lifelong relationships. We believe buying a car should be an exciting and trustworthy process.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section className="py-16 sm:py-24 bg-white dark:bg-gray-800/50">
+                <div className="container mx-auto px-4">
+                    <h2 className="section-title">Meet the Team</h2>
+                    <p className="section-subtitle">The dedicated professionals behind your exceptional experience.</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+                        {/* Team Member Card */}
+                        <div className="text-center">
+                            <Image src="https://placehold.co/400x400/cccccc/ffffff?text=Team+Member" alt="Team member" width={150} height={150} className="mx-auto rounded-full" />
+                            <h3 className="mt-4 text-xl font-bold">John Doe</h3>
+                            <p className="text-gray-500">General Manager</p>
+                        </div>
+                        {/* Team Member Card */}
+                        <div className="text-center">
+                            <Image src="https://placehold.co/400x400/cccccc/ffffff?text=Team+Member" alt="Team member" width={150} height={150} className="mx-auto rounded-full" />
+                            <h3 className="mt-4 text-xl font-bold">Jane Smith</h3>
+                            <p className="text-gray-500">Head of Sales</p>
+                        </div>
+                        {/* Team Member Card */}
+                        <div className="text-center">
+                            <Image src="https://placehold.co/400x400/cccccc/ffffff?text=Team+Member" alt="Team member" width={150} height={150} className="mx-auto rounded-full" />
+                            <h3 className="mt-4 text-xl font-bold">Mike Johnson</h3>
+                            <p className="text-gray-500">Finance Expert</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    );
+}
