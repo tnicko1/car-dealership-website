@@ -10,6 +10,13 @@ const nextConfig = {
                 port: '',
                 pathname: '/**',
             },
+            {
+                // Add this new block to allow GitHub profile pictures
+                protocol: 'https',
+                hostname: 'avatars.githubusercontent.com',
+                port: '',
+                pathname: '/**',
+            },
         ],
     },
 };
