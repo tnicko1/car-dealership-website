@@ -1,6 +1,7 @@
 'use client';
 
-import { Car } from "@/types/car";
+// This is the correct, direct way to import the Car type from Prisma.
+import type { Car } from "@prisma/client";
 import Image from "next/image";
 
 export default function CarDetailsClient({ car }: { car: Car }) {
@@ -32,7 +33,8 @@ export default function CarDetailsClient({ car }: { car: Car }) {
                         Key Features
                     </h2>
                     <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
-                        {car.features.map((feature, index) => (
+                        {/* Add explicit types for the map function parameters */}
+                        {car.features.map((feature: string, index: number) => (
                             <li key={index}>{feature}</li>
                         ))}
                     </ul>

@@ -4,12 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
+    "postinstall": "prisma generate",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^5.15.1",
     "next": "15.3.5",
+    "next-auth": "^4.24.7",
     "react": "^18",
     "react-dom": "^18"
   },
@@ -21,7 +24,7 @@
     "eslint": "^8",
     "eslint-config-next": "15.3.5",
     "postcss": "^8",
-    "prisma": "^6.11.1",
+    "prisma": "^5.15.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

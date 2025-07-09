@@ -1,15 +1,32 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// This file is the single source of truth for your database schema.
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL") // This pulls the connection string from Vercel/your .env file
+}
+
+// Defines the Car table in your database
+model Car {
+  id          String   @id @default(cuid())
+  make        String
+  model       String
+  year        Int
+  price       Int
+  imageUrl    String
+  description String
+  features    String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Defines the User table for handling admin roles
+model User {
+  id    String  @id @default(cuid())
+  email String  @unique
+  name  String?
+  role  String  @default("user") // Can be "user" or "admin"
 }
