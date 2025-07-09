@@ -3,6 +3,7 @@
 export default function ContactPage() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        // Corrected the text to avoid the ESLint error
         alert('Thank you for your message! We will get back to you shortly. (This is a demo)');
     };
 
@@ -11,7 +12,7 @@ export default function ContactPage() {
             <section className="bg-gray-100 dark:bg-gray-800 py-12">
                 <div className="container mx-auto px-4">
                     <h1 className="text-4xl font-bold text-center text-gray-900 dark:text-white">Contact Us</h1>
-                    <p className="text-lg text-center text-gray-600 dark:text-gray-400 mt-2">We're here to help. Reach out to us anytime.</p>
+                    <p className="text-lg text-center text-gray-600 dark:text-gray-400 mt-2">We are here to help. Reach out to us anytime.</p>
                 </div>
             </section>
 

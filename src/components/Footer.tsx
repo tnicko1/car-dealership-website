@@ -8,8 +8,9 @@ export default function Footer() {
                     {/* About Section */}
                     <div className="col-span-1 md:col-span-2">
                         <h3 className="text-xl font-bold text-white mb-4">YourDealership</h3>
+                        {/* Corrected the text to avoid the ESLint error */}
                         <p className="text-gray-400 max-w-md">
-                            Your premier destination for quality vehicles and exceptional service. We're committed to helping you find the car that's right for you.
+                            Your premier destination for quality vehicles and exceptional service. We are committed to helping you find the car that is right for you.
                         </p>
                     </div>
 
