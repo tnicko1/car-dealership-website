@@ -1,6 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import CarCard from "@/components/CarCard";
 
+// This line forces the page to be rendered dynamically for each request
+export const dynamic = 'force-dynamic';
+
 const prisma = new PrismaClient();
 
 export default async function InventoryPage() {

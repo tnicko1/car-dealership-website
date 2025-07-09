@@ -1,6 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 import CarCard from "@/components/CarCard";
 
+// This line forces the page to be rendered dynamically for each request
+// This prevents Next.js from trying to connect to the database during the build
+export const dynamic = 'force-dynamic';
+
 const prisma = new PrismaClient();
 
 export default async function Home() {
@@ -28,7 +32,7 @@ export default async function Home() {
                         We offer a curated selection of high-quality new and pre-owned vehicles. Your journey to the perfect ride starts here.
                     </p>
                     <a
-                        href="#featured-cars"
+                        href="/cars"
                         className="bg-blue-600 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-500 transform hover:scale-105 transition-all duration-300 ease-in-out inline-block animate-slide-in-up [animation-delay:0.3s]"
                     >
                         Explore Inventory
