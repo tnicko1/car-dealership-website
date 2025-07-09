@@ -5,8 +5,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL") // This pulls the connection string from Vercel/your .env file
+  provider          = "postgresql"
+  url               = env("DATABASE_URL") // Used for runtime
+  directUrl         = env("DATABASE_URL_NON_POOLING") // Used for migrations and build steps
 }
 
 // Defines the Car table in your database
