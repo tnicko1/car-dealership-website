@@ -1,14 +1,10 @@
 'use client';
 
-import { Car } from "@/types/car";
+import type { Car } from "@prisma/client";
 import Link from "next/link";
 import Image from "next/image";
 
-interface CarCardProps {
-    car: Car;
-}
-
-export default function CarCard({ car }: CarCardProps) {
+export default function CarCard({ car }: { car: Car }) {
     return (
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-300 ease-in-out group">
             <div className="relative">

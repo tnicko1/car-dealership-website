@@ -1,12 +1,14 @@
-'use client';
-
+import { PrismaClient } from '@prisma/client';
 import CarCard from "@/components/CarCard";
-import { DUMMY_CARS } from "@/data/dummy-cars";
-import { useState } from "react";
 
-export default function InventoryPage() {
-    const [cars, setCars] = useState(DUMMY_CARS);
-    // Add state for filters here later
+const prisma = new PrismaClient();
+
+export default async function InventoryPage() {
+    const cars = await prisma.car.findMany({
+        orderBy: {
+            createdAt: 'desc'
+        }
+    });
 
     return (
         <div className="animate-fade-in">

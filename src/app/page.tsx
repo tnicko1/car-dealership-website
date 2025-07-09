@@ -1,7 +1,16 @@
+import { PrismaClient } from '@prisma/client';
 import CarCard from "@/components/CarCard";
-import { DUMMY_CARS } from "@/data/dummy-cars";
 
-export default function Home() {
+const prisma = new PrismaClient();
+
+export default async function Home() {
+    const featuredCars = await prisma.car.findMany({
+        take: 3,
+        orderBy: {
+            createdAt: 'desc'
+        }
+    });
+
     return (
         <div className="animate-fade-in">
             {/* Hero Section */}
@@ -32,10 +41,10 @@ export default function Home() {
                 <div className="container mx-auto px-4">
                     <div className="animate-slide-in-up">
                         <h2 className="section-title">Featured Vehicles</h2>
-                        <p className="section-subtitle">Hand-picked models we think you'll love.</p>
+                        <p className="section-subtitle">Hand-picked models we think you will love.</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {DUMMY_CARS.slice(0, 3).map((car, index) => (
+                        {featuredCars.map((car, index) => (
                             <div key={car.id} className="animate-slide-in-up" style={{animationDelay: `${0.1 * (index + 1)}s`}}>
                                 <CarCard car={car} />
                             </div>
