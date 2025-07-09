@@ -1,7 +1,8 @@
 'use client';
 
 import Link from "next/link";
-import ThemeSwitcher from "./ThemeSwitcher"; // Make sure this import is present
+import ThemeSwitcher from "./ThemeSwitcher";
+import AuthButtons from "./AuthButtons"; // Import the auth buttons
 
 export default function Header() {
     return (
@@ -24,16 +25,10 @@ export default function Header() {
                         Contact
                     </Link>
                 </nav>
-                <div className="flex items-center">
-                    {/* This is where the ThemeSwitcher component is added */}
+                <div className="flex items-center gap-4">
                     <ThemeSwitcher />
-
-                    {/* Basic Mobile Menu Button */}
-                    <div className="md:hidden ml-4">
-                        <button className="text-gray-600 dark:text-gray-300 focus:outline-none">
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                        </button>
-                    </div>
+                    <AuthButtons /> {/* Add the auth buttons here */}
+                    {/* Mobile Menu Button can be added here later */}
                 </div>
             </div>
         </header>
