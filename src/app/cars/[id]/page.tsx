@@ -4,21 +4,29 @@ import { notFound } from "next/navigation";
 
 const prisma = new PrismaClient();
 
+// Define a specific interface for the page's props
+interface CarDetailsPageProps {
+    params: {
+        id: string;
+    };
+}
+
 // This function tells Next.js which pages to build statically
 export async function generateStaticParams() {
     const cars = await prisma.car.findMany({
         select: { id: true },
     });
-    // Add explicit type to the 'car' parameter to resolve the TS7006 error.
-    return cars.map((car: { id: string }) => ({
+    return cars.map((car) => ({
         id: car.id,
     }));
 }
 
 // This is the main server component for the page
-export default async function CarDetailsPage({ params }: { params: { id: string } }) {
+export default async function CarDetailsPage({ params }: CarDetailsPageProps) {
+    const { id } = params; // Destructure the id from params
+
     const car = await prisma.car.findUnique({
-        where: { id: params.id },
+        where: { id: id },
     });
 
     if (!car) {
