@@ -1,9 +1,9 @@
 import { PrismaClient } from '@prisma/client';
-import Image from 'next/image';
+import Image from 'next/image'; // Import the Image component
 import CarCard from "@/components/CarCard";
 
-// This tells Next.js to cache this page and revalidate the data at most once every 60 seconds.
-export const revalidate = 60;
+// This line is ESSENTIAL. It prevents the build from connecting to the database.
+export const dynamic = 'force-dynamic';
 
 const prisma = new PrismaClient();
 
@@ -19,14 +19,16 @@ export default async function Home() {
         <div className="animate-fade-in">
             {/* Hero Section */}
             <section className="relative text-center py-20 md:py-32 text-white overflow-hidden">
+                {/* The Image component now acts as the background */}
                 <Image
-                    src="/showroom-bg.jpg"
+                    src="/showroom-bg.png"
                     alt="A modern car showroom"
                     fill
                     style={{objectFit: 'cover'}}
-                    priority
-                    className="-z-10"
+                    priority // Load this image first as it's above the fold
+                    className="-z-10" // Places the image behind the content
                 />
+                {/* This div creates the dark overlay effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-indigo-900/70 -z-10"></div>
 
                 <div className="relative container mx-auto px-4">
