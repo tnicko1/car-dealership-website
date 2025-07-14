@@ -1,8 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import CarCard from "@/components/CarCard";
 
-// This line forces the page to be rendered dynamically for each request
-export const dynamic = 'force-dynamic';
+// This tells Next.js to cache this page and revalidate the data at most once every 60 seconds.
+export const revalidate = 60;
 
 const prisma = new PrismaClient();
 
