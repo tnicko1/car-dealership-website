@@ -2,6 +2,9 @@ import { PrismaClient } from '@prisma/client';
 import Image from 'next/image'; // Import the Image component
 import CarCard from "@/components/CarCard";
 
+// This line is ESSENTIAL. It prevents the build from connecting to the database.
+export const dynamic = 'force-dynamic';
+
 const prisma = new PrismaClient();
 
 export default async function Home() {
