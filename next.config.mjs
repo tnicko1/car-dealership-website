@@ -17,6 +17,13 @@ const nextConfig = {
                 port: '',
                 pathname: '/**',
             },
+            {
+                // Add this new block to allow images from your Supabase Storage
+                protocol: 'https',
+                hostname: 'udpcbvigxnuwjvwwponb.supabase.co',
+                port: '',
+                pathname: '/**',
+            },
         ],
     },
 };

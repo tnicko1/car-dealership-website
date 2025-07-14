@@ -1,9 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import Image from 'next/image'; // Import the Image component
 import CarCard from "@/components/CarCard";
-
-// This line forces the page to be rendered dynamically for each request
-// This prevents Next.js from trying to connect to the database during the build
-export const dynamic = 'force-dynamic';
 
 const prisma = new PrismaClient();
 
@@ -18,12 +15,19 @@ export default async function Home() {
     return (
         <div className="animate-fade-in">
             {/* Hero Section */}
-            <section className="relative text-center py-20 md:py-32 bg-gray-900 text-white overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-900/50 to-indigo-900/50"></div>
-                <div
-                    className="absolute inset-0 bg-cover bg-center opacity-20"
-                    style={{backgroundImage: "url('https://placehold.co/1920x1080/000000/ffffff?text=Showroom+BG')"}
-                    }></div>
+            <section className="relative text-center py-20 md:py-32 text-white overflow-hidden">
+                {/* The Image component now acts as the background */}
+                <Image
+                    src="/showroom-bg.png"
+                    alt="A modern car showroom"
+                    fill
+                    style={{objectFit: 'cover'}}
+                    priority // Load this image first as it's above the fold
+                    className="-z-10" // Places the image behind the content
+                />
+                {/* This div creates the dark overlay effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-indigo-900/70 -z-10"></div>
+
                 <div className="relative container mx-auto px-4">
                     <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 animate-slide-in-up [animation-delay:0.1s]">
                         Find Your Next Dream Car

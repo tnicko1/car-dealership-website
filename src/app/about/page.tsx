@@ -5,7 +5,7 @@ export default function AboutPage() {
         <div className="animate-fade-in">
             <section className="relative py-24 bg-gray-900 text-white">
                 <div className="absolute inset-0 opacity-30">
-                    <Image src="https://placehold.co/1920x800/000000/ffffff?text=Our+Dealership" alt="Dealership building" layout="fill" objectFit="cover" />
+                    <Image src="/our-dealership.avif" alt="Dealership building" layout="fill" objectFit="cover" />
                 </div>
                 <div className="relative container mx-auto px-4 text-center">
                     <h1 className="text-5xl font-extrabold">About YourDealership</h1>
