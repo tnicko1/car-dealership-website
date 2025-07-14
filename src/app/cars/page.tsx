@@ -1,13 +1,13 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma'; // Import the shared prisma instance
 import CarCard from "@/components/CarCard";
+import type { Car } from '@prisma/client'; // Import the Car type for clarity
 
-// This is the definitive fix. It prevents the database connection issue at runtime.
+// This line prevents database connection issues at runtime.
 export const dynamic = 'force-dynamic';
 
-const prisma = new PrismaClient();
-
 export default async function InventoryPage() {
-    const cars = await prisma.car.findMany({
+    // This now uses the single, optimized database connection.
+    const cars: Car[] = await prisma.car.findMany({
         orderBy: {
             createdAt: 'desc'
         }
