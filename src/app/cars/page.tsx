@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import CarCard from "@/components/CarCard";
 
-// This line forces the page to be rendered dynamically for each request
+// This is the definitive fix. It prevents the database connection issue at runtime.
 export const dynamic = 'force-dynamic';
 
 const prisma = new PrismaClient();
