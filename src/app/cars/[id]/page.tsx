@@ -1,13 +1,11 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma'; // Import the shared prisma instance
 import CarDetailsClient from "@/components/CarDetailsClient";
 import { notFound } from "next/navigation";
 
-const prisma = new PrismaClient();
-
-// By removing generateStaticParams, this page becomes fully dynamic.
-// It will be rendered on the server for each request, which avoids the build-time database connection error.
+// We no longer create a new PrismaClient here.
 
 export default async function CarDetailsPage({ params }: { params: { id: string } }) {
+    // This now uses the single, optimized database connection.
     const car = await prisma.car.findUnique({
         where: { id: params.id },
     });
