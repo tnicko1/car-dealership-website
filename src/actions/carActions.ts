@@ -3,10 +3,10 @@
 import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth.config'; // Import from the new central file
+import { authOptions } from '@/auth.config';
 import { supabase } from '@/lib/supabase';
+import { redirect } from 'next/navigation';
 
-// This helper function now creates a descriptive and unique filename
 async function uploadImageAndGetUrl(imageFile: File, make: string, model: string) {
     if (!imageFile || imageFile.size === 0) {
         return null;
@@ -39,9 +39,7 @@ async function uploadImageAndGetUrl(imageFile: File, make: string, model: string
 // Server Action to add a new car
 export async function addCar(formData: FormData) {
     const session = await getServerSession(authOptions);
-    if (session?.user?.role !== 'admin') {
-        throw new Error('Unauthorized');
-    }
+    if (session?.user?.role !== 'admin') throw new Error('Unauthorized');
 
     const imageFile = formData.get('imageFile') as File;
     let imageUrl = formData.get('imageUrl') as string;
@@ -50,21 +48,16 @@ export async function addCar(formData: FormData) {
 
     if (imageFile && imageFile.size > 0) {
         const uploadedUrl = await uploadImageAndGetUrl(imageFile, make, model);
-        if (uploadedUrl) {
-            imageUrl = uploadedUrl;
-        }
+        if (uploadedUrl) imageUrl = uploadedUrl;
     }
 
-    if (!imageUrl) {
-        throw new Error('Image URL or file is required.');
-    }
+    if (!imageUrl) throw new Error('Image URL or file is required.');
 
     const data = {
-        make,
-        model,
+        make, model,
         year: Number(formData.get('year')),
         price: Number(formData.get('price')),
-        imageUrl: imageUrl,
+        imageUrl,
         description: formData.get('description') as string,
         features: (formData.get('features') as string).split(',').map(f => f.trim()).filter(f => f),
     };
@@ -75,13 +68,47 @@ export async function addCar(formData: FormData) {
     revalidatePath('/cars');
 }
 
+// NEW Server Action to update an existing car
+export async function updateCar(id: string, formData: FormData) {
+    const session = await getServerSession(authOptions);
+    if (session?.user?.role !== 'admin') throw new Error('Unauthorized');
+
+    const imageFile = formData.get('imageFile') as File;
+    let imageUrl = formData.get('imageUrl') as string;
+    const make = formData.get('make') as string;
+    const model = formData.get('model') as string;
+
+    // Only upload a new image if one is provided
+    if (imageFile && imageFile.size > 0) {
+        const uploadedUrl = await uploadImageAndGetUrl(imageFile, make, model);
+        if (uploadedUrl) imageUrl = uploadedUrl;
+    }
+
+    if (!imageUrl) throw new Error('Image URL or file is required.');
+
+    const data = {
+        make, model,
+        year: Number(formData.get('year')),
+        price: Number(formData.get('price')),
+        imageUrl,
+        description: formData.get('description') as string,
+        features: (formData.get('features') as string).split(',').map(f => f.trim()).filter(f => f),
+    };
+
+    await prisma.car.update({ where: { id }, data });
+
+    revalidatePath('/admin');
+    revalidatePath('/cars');
+    revalidatePath(`/cars/${id}`);
+    redirect('/admin'); // Redirect back to the admin panel after updating
+}
+
 // Server Action to remove a car
 export async function removeCar(id: string) {
     const session = await getServerSession(authOptions);
-    if (session?.user?.role !== 'admin') {
-        throw new Error('Unauthorized');
-    }
+    if (session?.user?.role !== 'admin') throw new Error('Unauthorized');
 
+    // Note: This does not delete the image from Supabase Storage.
     await prisma.car.delete({ where: { id } });
 
     revalidatePath('/admin');
