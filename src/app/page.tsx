@@ -1,13 +1,14 @@
-import { PrismaClient } from '@prisma/client';
-import Image from 'next/image'; // Import the Image component
+import prisma from '@/lib/prisma'; // Import the shared prisma instance
+import Image from 'next/image';
 import CarCard from "@/components/CarCard";
 
-// This line is ESSENTIAL. It prevents the build from connecting to the database.
+// This line prevents database connection issues by rendering the page on-demand.
 export const dynamic = 'force-dynamic';
 
-const prisma = new PrismaClient();
+// We no longer create a new PrismaClient here.
 
 export default async function Home() {
+    // This now uses the single, optimized database connection.
     const featuredCars = await prisma.car.findMany({
         take: 3,
         orderBy: {
@@ -19,16 +20,14 @@ export default async function Home() {
         <div className="animate-fade-in">
             {/* Hero Section */}
             <section className="relative text-center py-20 md:py-32 text-white overflow-hidden">
-                {/* The Image component now acts as the background */}
                 <Image
-                    src="/showroom-bg.png"
+                    src="/showroom-bg.jpg"
                     alt="A modern car showroom"
                     fill
                     style={{objectFit: 'cover'}}
-                    priority // Load this image first as it's above the fold
-                    className="-z-10" // Places the image behind the content
+                    priority
+                    className="-z-10"
                 />
-                {/* This div creates the dark overlay effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-indigo-900/70 -z-10"></div>
 
                 <div className="relative container mx-auto px-4">
