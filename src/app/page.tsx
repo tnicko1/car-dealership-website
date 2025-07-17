@@ -21,7 +21,7 @@ export default async function Home() {
             {/* Hero Section */}
             <section className="relative text-center py-20 md:py-32 text-white overflow-hidden">
                 <Image
-                    src="/showroom-bg.jpg"
+                    src="/showroom-bg.png"
                     alt="A modern car showroom"
                     fill
                     style={{objectFit: 'cover'}}
