@@ -1,11 +1,14 @@
 'use client';
 
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
+import LoginModal from './LoginModal';
 
 export default function AuthButtons() {
     const { data: session } = useSession();
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     if (session) {
         return (
@@ -33,16 +36,11 @@ export default function AuthButtons() {
     }
 
     return (
-        <div className="flex items-center gap-4">
-            <button onClick={() => signIn('github')} className="text-sm font-medium hover:underline">
-                Sign In with GitHub
+        <>
+            <button onClick={() => setIsModalOpen(true)} className="text-sm font-medium hover:underline">
+                Sign In
             </button>
-            <button onClick={() => signIn('google')} className="text-sm font-medium hover:underline">
-                Sign In with Google
-            </button>
-            <button onClick={() => signIn('email')} className="text-sm font-medium hover:underline">
-                Sign In with Email
-            </button>
-        </div>
+            <LoginModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+        </>
     );
 }
