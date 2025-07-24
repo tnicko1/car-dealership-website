@@ -2,14 +2,17 @@ import { AuthOptions } from "next-auth"
 import { Adapter } from "next-auth/adapters";
 import GitHub from "next-auth/providers/github"
 import Google from "next-auth/providers/google"
-import Resend from "next-auth/providers/resend"
+import Email from "next-auth/providers/email"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import prisma from "@/lib/prisma";
+import { Resend } from "resend";
 
 // Check for environment variables and throw an error if they are missing
 if (!process.env.GITHUB_ID || !process.env.GITHUB_SECRET || !process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET || !process.env.RESEND_API_KEY) {
     throw new Error("Missing environment variables for authentication");
 }
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // This is the single configuration object for NextAuth.js v4.
 export const authOptions: AuthOptions = {
@@ -24,9 +27,22 @@ export const authOptions: AuthOptions = {
             clientId: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         }),
-        Resend({
-            apiKey: process.env.RESEND_API_KEY!,
-            from: 'onboarding@resend.dev',
+        Email({
+            server: {}, // Required, but empty as we override sendVerificationRequest
+            from: "onboarding@resend.dev",
+            sendVerificationRequest: async ({ identifier: email, url, provider: { from } }) => {
+                const { data, error } = await resend.emails.send({
+                    from: from,
+                    to: email,
+                    subject: "Sign in to Your Car Dealership",
+                    html: `<p>Click the magic link to sign in: <a href="${url}"><strong>Sign in</strong></a></p>`,
+                });
+
+                if (error) {
+                    console.error("Resend error:", error);
+                    throw new Error("Failed to send verification email.");
+                }
+            },
         }),
     ],
     session: {
