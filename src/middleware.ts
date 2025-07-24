@@ -2,19 +2,21 @@ import { withAuth } from "next-auth/middleware"
 import { NextResponse } from "next/server"
 
 export default withAuth(
-    // `withAuth` augments your `Request` with the user's token.
     function middleware(req) {
-        // If the user is not an admin, redirect them to the home page.
-        if (req.nextUrl.pathname.startsWith("/admin") && req.nextauth.token?.role !== "admin") {
-            return NextResponse.redirect(new URL("/", req.url))
+        const isAdminRoute = req.nextUrl.pathname.startsWith("/admin");
+        const isUserAdmin = req.nextauth.token?.role === "admin";
+
+        if (isAdminRoute && !isUserAdmin) {
+            return NextResponse.redirect(new URL("/", req.url));
         }
+
+        return NextResponse.next();
     },
     {
         callbacks: {
-            authorized: ({ token }) => !!token, // A user is authorized if they have a token (are logged in)
+            authorized: ({ token }) => !!token,
         },
     }
-)
+);
 
-// This applies the middleware to all routes under /admin
-export const config = { matcher: ["/admin/:path*"] }
+export const config = { matcher: ["/admin/:path*"] };
