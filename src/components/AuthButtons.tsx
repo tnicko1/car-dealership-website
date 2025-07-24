@@ -33,8 +33,16 @@ export default function AuthButtons() {
     }
 
     return (
-        <button onClick={() => signIn('github')} className="text-sm font-medium hover:underline">
-            Sign In with GitHub
-        </button>
+        <div className="flex items-center gap-4">
+            <button onClick={() => signIn('github')} className="text-sm font-medium hover:underline">
+                Sign In with GitHub
+            </button>
+            <button onClick={() => signIn('google')} className="text-sm font-medium hover:underline">
+                Sign In with Google
+            </button>
+            <button onClick={() => signIn('email')} className="text-sm font-medium hover:underline">
+                Sign In with Email
+            </button>
+        </div>
     );
 }
