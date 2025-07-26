@@ -7,7 +7,7 @@ import type { CarWithImages } from '@/types/car';
 export default async function WishlistPage() {
     const session = await getServerSession(authOptions);
 
-    if (!session?.user) {
+    if (!session?.user?.id) {
         return (
             <div className="container mx-auto px-4 py-12">
                 <h1 className="text-4xl font-bold text-center">My Wishlist</h1>
