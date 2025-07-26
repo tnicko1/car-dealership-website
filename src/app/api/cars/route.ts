@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     const maxPrice = searchParams.get('maxPrice');
     const bodyStyle = searchParams.get('bodyStyle');
     const fuelType = searchParams.get('fuelType');
-    const transmission = search_params.get('transmission');
+    const transmission = searchParams.get('transmission');
     const minYear = searchParams.get('minYear');
     const maxYear = searchParams.get('maxYear');
     const maxMileage = searchParams.get('maxMileage');
