@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import type { Car } from '@prisma/client';
 import { addCar, updateCar } from '@/actions/carActions';
 import { supabase } from '@/lib/supabase';
 import Image from 'next/image';
+import type { CarWithImages } from '@/types/car';
 
 // This form now handles both creating and updating cars
-export default function AdminForm({ car }: { car?: Car }) {
+export default function AdminForm({ car }: { car?: CarWithImages }) {
     const [imageFiles, setImageFiles] = useState<File[]>([]);
     const [imageUrls, setImageUrl] = useState<string[]>(car?.images?.map(i => i.url) || []);
 
