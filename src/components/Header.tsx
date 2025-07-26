@@ -7,11 +7,16 @@ import AuthButtons from "./AuthButtons"; // Import the auth buttons
 export default function Header() {
     return (
         <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-sm sticky top-0 z-50 transition-colors">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-                <Link href="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400 hover:opacity-80 transition-opacity">
-                    YourDealership
-                </Link>
-                <nav className="hidden md:flex items-center space-x-8">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center">
+                {/* Left Section: Logo */}
+                <div className="flex-1 flex justify-start">
+                    <Link href="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400 hover:opacity-80 transition-opacity">
+                        YourDealership
+                    </Link>
+                </div>
+
+                {/* Center Section: Navigation */}
+                <nav className="hidden md:flex flex-1 justify-center items-center space-x-8">
                     <Link href="/" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
                         Home
                     </Link>
@@ -28,10 +33,11 @@ export default function Header() {
                         Contact
                     </Link>
                 </nav>
-                <div className="flex items-center gap-4">
+
+                {/* Right Section: Theme Switcher and Auth */}
+                <div className="flex-1 flex justify-end items-center gap-4">
                     <ThemeSwitcher />
-                    <AuthButtons /> {/* Add the auth buttons here */}
-                    {/* Mobile Menu Button can be added here later */}
+                    <AuthButtons />
                 </div>
             </div>
         </header>
