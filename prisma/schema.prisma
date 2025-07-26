@@ -17,11 +17,18 @@ model Car {
   model       String
   year        Int
   price       Int
-  imageUrl    String
+  mileage     Int
+  horsepower  Int
+  fuelType    String
+  transmission String
+  bodyStyle   String
+  imageUrls   String[]
   description String
   features    String[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  wishlistedBy User[] @relation
 }
 
 // Models required by NextAuth.js Prisma Adapter
@@ -61,6 +68,7 @@ model User {
   role          String    @default("user") // "user" or "admin"
   accounts      Account[]
   sessions      Session[]
+  wishlist      Car[]     @relation
 }
 
 model VerificationToken {

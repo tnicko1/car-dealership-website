@@ -4,7 +4,12 @@ export interface Car {
     model: string;
     year: number;
     price: number;
-    imageUrl: string;
+    mileage: number;
+    horsepower: number;
+    fuelType: string;
+    transmission: string;
+    bodyStyle: string;
+    imageUrls: string[];
     description: string;
     features: string[];
 }

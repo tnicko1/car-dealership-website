@@ -4,6 +4,11 @@ import FilterSidebar from '@/components/FilterSidebar';
 import type { Car } from '@prisma/client';
 
 // This page is now dynamic because it reads search parameters
+import prisma from '@/lib/prisma';
+import CarCard from "@/components/CarCard";
+import FilterSidebar from '@/components/FilterSidebar';
+import type { Car } from '@prisma/client';
+
 export default async function InventoryPage({
                                                 searchParams,
                                             }: {
@@ -12,21 +17,25 @@ export default async function InventoryPage({
         model?: string;
         minPrice?: string;
         maxPrice?: string;
+        bodyStyle?: string;
+        transmission?: string;
+        fuelType?: string;
     };
 }) {
     const make = searchParams?.make;
     const model = searchParams?.model;
     const minPrice = Number(searchParams?.minPrice) || 0;
-    const maxPrice = searchParams?.maxPrice; // Get the raw value
+    const maxPrice = searchParams?.maxPrice;
+    const bodyStyle = searchParams?.bodyStyle;
+    const transmission = searchParams?.transmission;
+    const fuelType = searchParams?.fuelType;
 
-    // Build the dynamic where clause for Prisma
     const whereClause: any = {
         price: {
             gte: minPrice,
-        }
+        },
     };
 
-    // Only add the 'lte' condition if a valid maxPrice is provided
     if (maxPrice && !isNaN(Number(maxPrice))) {
         whereClause.price.lte = Number(maxPrice);
     }
@@ -40,18 +49,40 @@ export default async function InventoryPage({
             mode: 'insensitive',
         };
     }
+    if (bodyStyle) {
+        whereClause.bodyStyle = bodyStyle;
+    }
+    if (transmission) {
+        whereClause.transmission = transmission;
+    }
+    if (fuelType) {
+        whereClause.fuelType = fuelType;
+    }
 
-    // Fetch the cars based on the filters
     const cars: Car[] = await prisma.car.findMany({
         where: whereClause,
         orderBy: { createdAt: 'desc' },
     });
 
-    // Fetch all unique makes for the filter dropdown
     const makes = (await prisma.car.findMany({
         select: { make: true },
         distinct: ['make'],
     })).map(car => car.make);
+
+    const bodyStyles = (await prisma.car.findMany({
+        select: { bodyStyle: true },
+        distinct: ['bodyStyle'],
+    })).map(car => car.bodyStyle);
+
+    const fuelTypes = (await prisma.car.findMany({
+        select: { fuelType: true },
+        distinct: ['fuelType'],
+    })).map(car => car.fuelType);
+
+    const transmissions = (await prisma.car.findMany({
+        select: { transmission: true },
+        distinct: ['transmission'],
+    })).map(car => car.transmission);
 
     return (
         <div className="animate-fade-in">
@@ -63,12 +94,10 @@ export default async function InventoryPage({
             </section>
 
             <div className="container mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-4 gap-8">
-                {/* Sidebar */}
                 <div className="lg:col-span-1">
-                    <FilterSidebar makes={makes} />
+                    <FilterSidebar makes={makes} bodyStyles={bodyStyles} fuelTypes={fuelTypes} transmissions={transmissions} />
                 </div>
 
-                {/* Car Grid */}
                 <div className="lg:col-span-3">
                     {cars.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">

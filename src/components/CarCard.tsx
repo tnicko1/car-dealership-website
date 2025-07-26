@@ -1,6 +1,6 @@
 'use client';
 
-import type { Car } from "@prisma/client";
+import type { Car } from "@/types/car";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -10,7 +10,7 @@ export default function CarCard({ car }: { car: Car }) {
             <div className="relative">
                 <div className="relative h-56 w-full">
                     <Image
-                        src={car.imageUrl}
+                        src={car.imageUrls[0]}
                         alt={`${car.make} ${car.model}`}
                         fill
                         style={{ objectFit: 'cover' }}
@@ -38,7 +38,7 @@ export default function CarCard({ car }: { car: Car }) {
                         ))}
                     </div>
                 </div>
-                <Link href={`/cars/${car.id}`} aria-label={`View details for ${car.make} ${car.model}`} className="block w-full text-center bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                <Link href={`/cars/${car.id}`} className="block w-full text-center bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
                     View Details
                 </Link>
             </div>
