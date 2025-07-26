@@ -69,13 +69,14 @@ export default function AdminForm({ car }: { car?: Car }) {
             <div className="p-6 border rounded-lg dark:border-gray-700">
                 <h2 className="text-xl font-semibold mb-4">Images</h2>
                 <input type="file" name="images" multiple onChange={handleImageFileChange} className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {imageUrls.map((url, index) => (
-                        <div key={index} className="relative">
-                            <img src={url} alt="Car image" className="w-full h-auto rounded" />
-                        </div>
-                    ))}
-                </div>
+                import Image from 'next/image';
+<div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+    {imageUrls.map((url, index) => (
+        <div key={index} className="relative">
+            <Image src={url} alt="Car image" width={200} height={150} className="w-full h-auto rounded" />
+        </div>
+    ))}
+</div>
             </div>
             
             <div className="p-6 border rounded-lg dark:border-gray-700">

@@ -1,6 +1,6 @@
 import { removeCar } from '@/actions/carActions';
 import prisma from '@/lib/prisma';
-import type { Car } from '@prisma/client';
+import type { CarWithImages } from '@/types/car';
 import Image from 'next/image';
 import Link from 'next/link';
 import AdminForm from '@/components/AdminForm';
@@ -8,6 +8,7 @@ import AdminForm from '@/components/AdminForm';
 export default async function AdminPage() {
     const cars = await prisma.car.findMany({
         orderBy: { createdAt: 'desc' },
+        include: { images: true },
     });
 
     return (
@@ -31,14 +32,14 @@ export default async function AdminPage() {
     );
 }
 
-function CarListItem({ car }: { car: Car }) {
+function CarListItem({ car }: { car: CarWithImages }) {
     const removeAction = removeCar.bind(null, car.id);
 
     return (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 flex items-center justify-between">
             <div className="flex items-center gap-4">
                 <Image
-                    src={car.imageUrl}
+                    src={car.images[0]?.url || 'https://placehold.co/100x75/cccccc/ffffff?text=No+Image'}
                     alt={`${car.make} ${car.model}`}
                     width={96}
                     height={64}
