@@ -15,10 +15,13 @@ export default function AboutPage() {
 
             <section className="py-16 sm:py-24">
                 <div className="container mx-auto px-4">
-                    <div className="max-w-3xl mx-auto text-center">
-                        <h2 className="section-title">Our Mission</h2>
+                    <div className="max-w-4xl mx-auto">
+                        <h2 className="section-title">Our Story</h2>
                         <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
-                            To provide an unparalleled car buying experience by offering a curated selection of high-quality vehicles, transparent pricing, and customer service that builds lifelong relationships. We believe buying a car should be an exciting and trustworthy process.
+                            Founded in 2005 by a group of passionate car enthusiasts, YourDealership started as a small lot with a big dream: to create a car buying experience that was honest, transparent, and customer-focused. Over the years, we've grown into one of the most trusted dealerships in the region, but our core values remain the same. We believe that everyone deserves to drive a car they love, and we're here to make that happen.
+                        </p>
+                        <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+                            Our dealership is more than just a place to buy a car. It's a community of car lovers, and we're proud to be a part of it. We host regular events, from classic car shows to new model unveilings, and we're always happy to chat with fellow enthusiasts. Whether you're a seasoned collector or a first-time buyer, you'll find a warm welcome at YourDealership.
                         </p>
                     </div>
                 </div>
@@ -28,7 +31,7 @@ export default function AboutPage() {
                 <div className="container mx-auto px-4">
                     <h2 className="section-title">Meet the Team</h2>
                     <p className="section-subtitle">The dedicated professionals behind your exceptional experience.</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-8">
                         {/* Team Member Card */}
                         <div className="text-center">
                             <Image src="https://placehold.co/400x400/cccccc/ffffff?text=Team+Member" alt="Team member" width={150} height={150} className="mx-auto rounded-full" />
@@ -46,6 +49,12 @@ export default function AboutPage() {
                             <Image src="https://placehold.co/400x400/cccccc/ffffff?text=Team+Member" alt="Team member" width={150} height={150} className="mx-auto rounded-full" />
                             <h3 className="mt-4 text-xl font-bold">Mike Johnson</h3>
                             <p className="text-gray-500">Finance Expert</p>
+                        </div>
+                        {/* Team Member Card */}
+                        <div className="text-center">
+                            <Image src="https://placehold.co/400x400/cccccc/ffffff?text=Team+Member" alt="Team member" width={150} height={150} className="mx-auto rounded-full" />
+                            <h3 className="mt-4 text-xl font-bold">Sarah Williams</h3>
+                            <p className="text-gray-500">Service Manager</p>
                         </div>
                     </div>
                 </div>

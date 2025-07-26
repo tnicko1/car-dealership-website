@@ -3,7 +3,9 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/providers/ThemeProvider";
-import AppSessionProvider from "@/providers/SessionProvider"; // Import the new provider
+import AppSessionProvider from "@/providers/SessionProvider";
+import { CompareProvider } from "@/providers/CompareProvider";
+import CompareBar from "@/components/CompareBar";
 
 export const metadata: Metadata = {
     title: "Your Car Dealership",
@@ -11,8 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
+    children,
+}: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
@@ -23,11 +25,14 @@ export default function RootLayout({
             <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
         </head>
         <body className="font-sans bg-gray-50 dark:bg-gray-900">
-        <AppSessionProvider> {/* Wrap everything */}
+        <AppSessionProvider>
             <ThemeProvider>
-                <Header />
-                <main>{children}</main>
-                <Footer />
+                <CompareProvider>
+                    <Header />
+                    <main className="pb-24">{children}</main>
+                    <CompareBar />
+                    <Footer />
+                </CompareProvider>
             </ThemeProvider>
         </AppSessionProvider>
         </body>

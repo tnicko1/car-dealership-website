@@ -1,18 +1,19 @@
-import prisma from '@/lib/prisma'; // Import the shared prisma instance
+import prisma from '@/lib/prisma';
 import Image from 'next/image';
 import CarCard from "@/components/CarCard";
+import Testimonials from '@/components/Testimonials';
+import type { CarWithImages } from '@/types/car';
 
-// This line prevents database connection issues by rendering the page on-demand.
 export const dynamic = 'force-dynamic';
 
-// We no longer create a new PrismaClient here.
-
 export default async function Home() {
-    // This now uses the single, optimized database connection.
-    const featuredCars = await prisma.car.findMany({
+    const featuredCars: CarWithImages[] = await prisma.car.findMany({
         take: 3,
         orderBy: {
             createdAt: 'desc'
+        },
+        include: {
+            images: true,
         }
     });
 
@@ -62,6 +63,8 @@ export default async function Home() {
                     </div>
                 </div>
             </section>
+
+            <Testimonials />
 
             {/* Payment Information Section */}
             <section className="py-16 sm:py-24 bg-white dark:bg-gray-800/50">

@@ -1,13 +1,14 @@
-import prisma from '@/lib/prisma'; // Import the shared prisma instance
+import prisma from '@/lib/prisma';
 import CarDetailsClient from "@/components/CarDetailsClient";
 import { notFound } from "next/navigation";
-
-// We no longer create a new PrismaClient here.
+import type { CarWithImages } from '@/types/car';
 
 export default async function CarDetailsPage({ params }: { params: { id: string } }) {
-    // This now uses the single, optimized database connection.
     const car = await prisma.car.findUnique({
         where: { id: params.id },
+        include: {
+            images: true,
+        },
     });
 
     if (!car) {
@@ -16,7 +17,7 @@ export default async function CarDetailsPage({ params }: { params: { id: string 
 
     return (
         <div className="container mx-auto px-4 py-12 animate-fade-in">
-            <CarDetailsClient car={car} />
+            <CarDetailsClient car={car as CarWithImages} />
         </div>
     );
 }

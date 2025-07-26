@@ -1,13 +1,15 @@
 'use client';
 
-import type { Car } from "@/types/car";
+import type { CarWithImages } from "@/types/car";
 import Link from "next/link";
 import Image from "next/image";
 import { toggleWishlist } from "@/actions/wishlistActions";
 import { useSession } from "next-auth/react";
+import { useCompare } from "@/providers/CompareProvider";
 
-export default function CarCard({ car }: { car: Car }) {
+export default function CarCard({ car }: { car: CarWithImages }) {
     const { data: session } = useSession();
+    const { addToCompare } = useCompare();
 
     const handleWishlistToggle = async () => {
         if (!session) {
@@ -22,7 +24,7 @@ export default function CarCard({ car }: { car: Car }) {
             <div className="relative">
                 <div className="relative h-56 w-full">
                     <Image
-                        src={car.imageUrls[0]}
+                        src={car.images[0]?.url || 'https://placehold.co/600x400/cccccc/ffffff?text=No+Image'}
                         alt={`${car.make} ${car.model}`}
                         fill
                         style={{ objectFit: 'cover' }}
@@ -52,14 +54,17 @@ export default function CarCard({ car }: { car: Car }) {
                         ${car.price.toLocaleString()}
                     </p>
                     <div className="flex space-x-2">
-                        {car.features.slice(0, 2).map(feature => (
-                            <span key={feature} className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full">{feature}</span>
-                        ))}
+                        <span className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full">{car.bodyStyle}</span>
                     </div>
                 </div>
-                <Link href={`/cars/${car.id}`} className="block w-full text-center bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
-                    View Details
-                </Link>
+                <div className="flex gap-2">
+                    <Link href={`/cars/${car.id}`} className="block w-full text-center bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                        View Details
+                    </Link>
+                    <button onClick={() => addToCompare(car)} className="block w-full text-center bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">
+                        Compare
+                    </button>
+                </div>
             </div>
         </div>
     );

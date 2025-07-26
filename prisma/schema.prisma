@@ -22,13 +22,50 @@ model Car {
   fuelType    String
   transmission String
   bodyStyle   String
-  imageUrls   String[]
   description String
   features    String[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  images CarImage[]
+
+  // Detailed Specifications
+  category          String?
+  engineVolume      Float?
+  cylinders         Int?
+  driveWheels       String?
+  doors             Int?
+  airbags           Int?
+  wheel             String?
+  color             String?
+  interiorColor     String?
+  interiorMaterial  String?
+  exchange          Boolean?
+  technicalInspection Boolean?
+
+  // General Specifications (Comfort, Safety, Multimedia, Other)
+  comfort           String[]
+  safety            String[]
+  multimedia        String[]
+  other             String[]
+
   wishlistedBy User[] @relation
+}
+
+model CarImage {
+  id        String   @id @default(cuid())
+  url       String
+  carId     String
+  car       Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Testimonial {
+    id          String @id @default(cuid())
+    name        String
+    testimonial String
+    rating      Int
+    createdAt   DateTime @default(now())
 }
 
 // Models required by NextAuth.js Prisma Adapter

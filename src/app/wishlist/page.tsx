@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma';
 import CarCard from "@/components/CarCard";
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/auth.config';
+import type { CarWithImages } from '@/types/car';
 
 export default async function WishlistPage() {
     const session = await getServerSession(authOptions);
@@ -17,7 +18,13 @@ export default async function WishlistPage() {
 
     const user = await prisma.user.findUnique({
         where: { id: session.user.id },
-        include: { wishlist: true },
+        include: { 
+            wishlist: {
+                include: {
+                    images: true,
+                }
+            }
+        },
     });
 
     const cars = user?.wishlist || [];
@@ -34,7 +41,7 @@ export default async function WishlistPage() {
                 {cars.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                         {cars.map((car) => (
-                            <CarCard key={car.id} car={car} />
+                            <CarCard key={car.id} car={car as CarWithImages} />
                         ))}
                     </div>
                 ) : (

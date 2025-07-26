@@ -2,16 +2,11 @@ import prisma from '@/lib/prisma';
 import CarCard from "@/components/CarCard";
 import FilterSidebar from '@/components/FilterSidebar';
 import type { Car } from '@prisma/client';
-
-// This page is now dynamic because it reads search parameters
-import prisma from '@/lib/prisma';
-import CarCard from "@/components/CarCard";
-import FilterSidebar from '@/components/FilterSidebar';
-import type { Car } from '@prisma/client';
+import type { CarWithImages } from '@/types/car';
 
 export default async function InventoryPage({
-                                                searchParams,
-                                            }: {
+    searchParams,
+}: {
     searchParams?: {
         make?: string;
         model?: string;
@@ -20,6 +15,9 @@ export default async function InventoryPage({
         bodyStyle?: string;
         transmission?: string;
         fuelType?: string;
+        minYear?: string;
+        maxYear?: string;
+        maxMileage?: string;
     };
 }) {
     const make = searchParams?.make;
@@ -29,6 +27,9 @@ export default async function InventoryPage({
     const bodyStyle = searchParams?.bodyStyle;
     const transmission = searchParams?.transmission;
     const fuelType = searchParams?.fuelType;
+    const minYear = searchParams?.minYear;
+    const maxYear = searchParams?.maxYear;
+    const maxMileage = searchParams?.maxMileage;
 
     const whereClause: any = {
         price: {
@@ -39,7 +40,6 @@ export default async function InventoryPage({
     if (maxPrice && !isNaN(Number(maxPrice))) {
         whereClause.price.lte = Number(maxPrice);
     }
-
     if (make) {
         whereClause.make = make;
     }
@@ -58,10 +58,20 @@ export default async function InventoryPage({
     if (fuelType) {
         whereClause.fuelType = fuelType;
     }
+    if (minYear) {
+        whereClause.year = { ...whereClause.year, gte: Number(minYear) };
+    }
+    if (maxYear) {
+        whereClause.year = { ...whereClause.year, lte: Number(maxYear) };
+    }
+    if (maxMileage) {
+        whereClause.mileage = { ...whereClause.mileage, lte: Number(maxMileage) };
+    }
 
-    const cars: Car[] = await prisma.car.findMany({
+    const cars: CarWithImages[] = await prisma.car.findMany({
         where: whereClause,
         orderBy: { createdAt: 'desc' },
+        include: { images: true },
     });
 
     const makes = (await prisma.car.findMany({
