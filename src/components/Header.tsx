@@ -21,6 +21,9 @@ export default function Header() {
                     <Link href="/about" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
                         About Us
                     </Link>
+                    <Link href="/wishlist" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+                        Wishlist
+                    </Link>
                     <Link href="/contact" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
                         Contact
                     </Link>

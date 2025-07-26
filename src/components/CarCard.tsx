@@ -3,8 +3,20 @@
 import type { Car } from "@/types/car";
 import Link from "next/link";
 import Image from "next/image";
+import { toggleWishlist } from "@/actions/wishlistActions";
+import { useSession } from "next-auth/react";
 
 export default function CarCard({ car }: { car: Car }) {
+    const { data: session } = useSession();
+
+    const handleWishlistToggle = async () => {
+        if (!session) {
+            // Handle case where user is not logged in
+            return;
+        }
+        await toggleWishlist(car.id);
+    };
+
     return (
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-300 ease-in-out group">
             <div className="relative">
@@ -18,6 +30,13 @@ export default function CarCard({ car }: { car: Car }) {
                         className="group-hover:scale-105 transition-transform duration-300"
                         onError={(e) => { e.currentTarget.src = 'https://placehold.co/600x400/ff0000/ffffff?text=Image+Not+Found'; }}
                     />
+                </div>
+                <div className="absolute top-2 right-2">
+                    <button onClick={handleWishlistToggle} className="p-2 rounded-full bg-white dark:bg-gray-800 text-red-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </button>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 p-4">
