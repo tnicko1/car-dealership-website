@@ -50,7 +50,7 @@ export const authOptions: AuthOptions = {
     },
     callbacks: {
         async jwt({ token, user }) {
-            if (user) {
+            if (user?.id) {
                 const userInDb = await prisma.user.findUnique({
                     where: { id: user.id },
                 });
