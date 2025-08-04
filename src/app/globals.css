@@ -2,35 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Define a modern color palette */
 :root {
-  --background-start-rgb: 249, 250, 251; /* gray-50 */
-  --background-end-rgb: 255, 255, 255;
-  --foreground-rgb: 17, 24, 39; /* gray-900 */
-  --primary-rgb: 59, 130, 246; /* blue-500 */
-  --secondary-rgb: 107, 114, 128; /* gray-500 */
+  --background-rgb: 249, 250, 251;
+  --foreground-rgb: 17, 24, 39;
+  --primary-rgb: 59, 130, 246;
+  --secondary-rgb: 107, 114, 128;
+  --bg-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.05) 1px, transparent 0);
 }
 
-/* Define dark mode colors */
 .dark {
-  --background-start-rgb: 17, 24, 39; /* gray-900 */
-  --background-end-rgb: 31, 41, 55; /* gray-800 */
-  --foreground-rgb: 243, 244, 246; /* gray-100 */
-  --secondary-rgb: 156, 163, 175; /* gray-400 */
+  --background-rgb: 17, 24, 39;
+  --foreground-rgb: 243, 244, 246;
+  --secondary-rgb: 156, 163, 175;
+  --bg-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 0);
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-          to bottom,
-          transparent,
-          rgb(var(--background-end-rgb))
-  )
-  rgb(var(--background-start-rgb));
-  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: rgb(var(--background-rgb));
+  background-image: var(--bg-image);
+  background-size: 2rem 2rem;
+  transition: background-color 0.5s ease, color 0.5s ease;
 }
 
-/* Add some custom component styles */
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}
+
 @layer components {
   .section-title {
     @apply text-3xl font-bold text-center mb-2 text-gray-900 dark:text-white;
@@ -39,3 +39,43 @@ body {
     @apply text-lg text-center text-gray-500 dark:text-gray-400 mb-10;
   }
 }
+
+/* Cool fade-in animation for page content */
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* View Transition API styles */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 9999;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+}
+
+.dark::view-transition-old(root) {
+  z-index: 1;
+}
+
+.dark::view-transition-new(root) {
+  z-index: 9999;
+}
+
