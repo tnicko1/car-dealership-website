@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import prisma from '@/lib/prisma';
 import Image from 'next/image';
 import CarCard from "@/components/CarCard";
@@ -38,12 +39,12 @@ export default async function Home() {
                     <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto animate-slide-in-up [animation-delay:0.2s]">
                         We offer a curated selection of high-quality new and pre-owned vehicles. Your journey to the perfect ride starts here.
                     </p>
-                    <a
+                    <Link
                         href="/cars"
                         className="bg-blue-600 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-500 transform hover:scale-105 transition-all duration-300 ease-in-out inline-block animate-slide-in-up [animation-delay:0.3s]"
                     >
                         Explore Inventory
-                    </a>
+                    </Link>
                 </div>
             </section>
 
