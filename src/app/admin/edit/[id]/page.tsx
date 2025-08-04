@@ -3,13 +3,7 @@ import { notFound } from 'next/navigation';
 import AdminForm from '@/components/AdminForm';
 import type { CarWithImages } from '@/types/car';
 
-interface PageProps {
-    params: {
-        id: string;
-    }
-}
-
-export default async function EditCarPage({ params }: PageProps) {
+export default async function EditCarPage({ params }: { params: { id: string } }) {
     const car = await prisma.car.findUnique({
         where: { id: params.id },
         include: {
