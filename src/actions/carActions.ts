@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/auth.config';
 import { redirect } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import {CarWithImages} from "@/types/car";
 
 // Helper function to parse form data
 const getCarData = (formData: FormData) => {
@@ -38,6 +39,15 @@ const getCarData = (formData: FormData) => {
         other: (formData.get('other') as string).split(',').map(f => f.trim()).filter(f => f),
     };
 };
+
+export async function getCar(id: string): Promise<CarWithImages | null> {
+    return await prisma.car.findUnique({
+        where: {id},
+        include: {
+            images: true,
+        },
+    });
+}
 
 // Server Action to add a new car
 export async function addCar(formData: FormData) {
