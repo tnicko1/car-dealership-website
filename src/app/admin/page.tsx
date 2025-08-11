@@ -6,17 +6,10 @@ import Link from 'next/link';
 import AdminForm from '@/components/AdminForm';
 
 export default async function AdminPage() {
-    let cars: CarWithImages[] = [];
-    try {
-        cars = await prisma.car.findMany({
-            orderBy: { createdAt: 'desc' },
-            include: { images: true },
-        });
-    } catch (error) {
-        console.error("Failed to fetch cars for admin page:", error);
-        // You might want to render an error message to the user
-        // For now, we'll just log it and show an empty list.
-    }
+    const cars = await prisma.car.findMany({
+        orderBy: { createdAt: 'desc' },
+        include: { images: true },
+    });
 
     return (
         <div className="container mx-auto px-4 py-8">
