@@ -10,11 +10,31 @@ import type { CarWithImages } from '@/types/car';
 export default function AdminForm({ car }: { car?: CarWithImages }) {
     const [imageFiles, setImageFiles] = useState<File[]>([]);
     const [imageUrls, setImageUrls] = useState<string[]>(car?.images?.map(i => i.url) || []);
+    const [draggedImage, setDraggedImage] = useState<string | null>(null);
 
     // Function to handle removing an image URL
     const handleRemoveImage = (urlToRemove: string) => {
         setImageUrls(prevUrls => prevUrls.filter(url => url !== urlToRemove));
     };
+
+    const handleDragStart = (url: string) => {
+        setDraggedImage(url);
+    };
+
+    const handleDrop = (targetUrl: string) => {
+        if (!draggedImage) return;
+
+        const newImageUrls = [...imageUrls];
+        const draggedIndex = newImageUrls.findIndex(url => url === draggedImage);
+        const targetIndex = newImageUrls.findIndex(url => url === targetUrl);
+
+        // Swap the images
+        [newImageUrls[draggedIndex], newImageUrls[targetIndex]] = [newImageUrls[targetIndex], newImageUrls[draggedIndex]];
+
+        setImageUrls(newImageUrls);
+        setDraggedImage(null);
+    };
+
 
     // Determine which server action to call based on whether a car object was passed
     const action = async (formData: FormData) => {
@@ -77,12 +97,20 @@ export default function AdminForm({ car }: { car?: CarWithImages }) {
                 <input type="file" name="images" multiple onChange={handleImageFileChange} className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
                 <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
                     {imageUrls.map((url, index) => (
-                        <div key={index} className="relative">
-                            <Image src={url} alt="Car image" width={200} height={150} className="w-full h-auto rounded" />
+                        <div
+                            key={index}
+                            className={`relative cursor-grab ${draggedImage === url ? 'opacity-50' : ''}`}
+                            draggable
+                            onDragStart={() => handleDragStart(url)}
+                            onDragOver={(e) => e.preventDefault()}
+                            onDrop={() => handleDrop(url)}
+                            onDragEnd={() => setDraggedImage(null)}
+                        >
+                            <Image src={url} alt="Car image" width={200} height={150} className="w-full h-auto rounded pointer-events-none" />
                             <button
                                 type="button"
                                 onClick={() => handleRemoveImage(url)}
-                                className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 text-xs leading-none hover:bg-red-700"
+                                className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 text-xs leading-none hover:bg-red-700 z-10"
                                 aria-label="Remove image"
                             >
                                 &#x2715;
