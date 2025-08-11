@@ -42,4 +42,5 @@ export async function toggleWishlist(carId: string) {
 
     revalidatePath('/cars');
     revalidatePath(`/cars/${carId}`);
+    revalidatePath('/wishlist');
 }
