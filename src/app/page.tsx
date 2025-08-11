@@ -3,19 +3,27 @@ import Image from 'next/image';
 import CarCard from "@/components/CarCard";
 import Testimonials from '@/components/Testimonials';
 import type { CarWithImages } from '@/types/car';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/auth.config';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-    const featuredCars: CarWithImages[] = await prisma.car.findMany({
-        take: 3,
-        orderBy: {
-            createdAt: 'desc'
-        },
-        include: {
-            images: true,
-        }
-    });
+    const session = await getServerSession(authOptions);
+
+    const [featuredCars, user] = await Promise.all([
+        prisma.car.findMany({
+            take: 3,
+            orderBy: { createdAt: 'desc' },
+            include: { images: true },
+        }),
+        session?.user?.id ? prisma.user.findUnique({
+            where: { id: session.user.id },
+            include: { wishlist: { select: { id: true } } },
+        }) : null
+    ]);
+
+    const wishlistedCarIds = user?.wishlist.map(car => car.id) || [];
 
     return (
         <div className="animate-fade-in">
@@ -57,7 +65,7 @@ export default async function Home() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {featuredCars.map((car, index) => (
                             <div key={car.id} className="animate-slide-in-up" style={{animationDelay: `${0.1 * (index + 1)}s`}}>
-                                <CarCard car={car} />
+                                <CarCard car={car} isWishlisted={wishlistedCarIds.includes(car.id)} />
                             </div>
                         ))}
                     </div>

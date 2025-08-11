@@ -1,8 +1,9 @@
 import prisma from '@/lib/prisma';
 import CarCard from "@/components/CarCard";
 import FilterSidebar from '@/components/FilterSidebar';
-import type { Car } from '@prisma/client';
 import type { CarWithImages } from '@/types/car';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/auth.config';
 
 export default async function InventoryPage({
     searchParams,
@@ -29,7 +30,7 @@ export default async function InventoryPage({
     const fuelType = searchParams?.fuelType;
     const minYear = searchParams?.minYear;
     const maxYear = searchParams?.maxYear;
-    const maxMileage = searchParams?.maxMileage;
+    const maxMileage = search?.maxMileage;
 
     const whereClause: any = {
         price: {
@@ -68,31 +69,25 @@ export default async function InventoryPage({
         whereClause.mileage = { ...whereClause.mileage, lte: Number(maxMileage) };
     }
 
-    const cars: CarWithImages[] = await prisma.car.findMany({
-        where: whereClause,
-        orderBy: { createdAt: 'desc' },
-        include: { images: true },
-    });
+    const session = await getServerSession(authOptions);
 
-    const makes = (await prisma.car.findMany({
-        select: { make: true },
-        distinct: ['make'],
-    })).map(car => car.make);
+    const [cars, makes, bodyStyles, fuelTypes, transmissions, user] = await Promise.all([
+        prisma.car.findMany({
+            where: whereClause,
+            orderBy: { createdAt: 'desc' },
+            include: { images: true },
+        }),
+        prisma.car.findMany({ select: { make: true }, distinct: ['make'] }).then(res => res.map(c => c.make)),
+        prisma.car.findMany({ select: { bodyStyle: true }, distinct: ['bodyStyle'] }).then(res => res.map(c => c.bodyStyle)),
+        prisma.car.findMany({ select: { fuelType: true }, distinct: ['fuelType'] }).then(res => res.map(c => c.fuelType)),
+        prisma.car.findMany({ select: { transmission: true }, distinct: ['transmission'] }).then(res => res.map(c => c.transmission)),
+        session?.user?.id ? prisma.user.findUnique({
+            where: { id: session.user.id },
+            include: { wishlist: { select: { id: true } } },
+        }) : null
+    ]);
 
-    const bodyStyles = (await prisma.car.findMany({
-        select: { bodyStyle: true },
-        distinct: ['bodyStyle'],
-    })).map(car => car.bodyStyle);
-
-    const fuelTypes = (await prisma.car.findMany({
-        select: { fuelType: true },
-        distinct: ['fuelType'],
-    })).map(car => car.fuelType);
-
-    const transmissions = (await prisma.car.findMany({
-        select: { transmission: true },
-        distinct: ['transmission'],
-    })).map(car => car.transmission);
+    const wishlistedCarIds = user?.wishlist.map(car => car.id) || [];
 
     return (
         <div className="animate-fade-in">
@@ -112,7 +107,7 @@ export default async function InventoryPage({
                     {cars.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                             {cars.map((car) => (
-                                <CarCard key={car.id} car={car} />
+                                <CarCard key={car.id} car={car} isWishlisted={wishlistedCarIds.includes(car.id)} />
                             ))}
                         </div>
                     ) : (

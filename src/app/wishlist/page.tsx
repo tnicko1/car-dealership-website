@@ -41,7 +41,7 @@ export default async function WishlistPage() {
                 {cars.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                         {cars.map((car) => (
-                            <CarCard key={car.id} car={car as CarWithImages} />
+                            <CarCard key={car.id} car={car as CarWithImages} isWishlisted={true} />
                         ))}
                     </div>
                 ) : (

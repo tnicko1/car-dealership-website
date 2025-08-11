@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import type { CarWithImages } from "@/types/car";
 import Link from "next/link";
 import Image from "next/image";
@@ -7,16 +8,27 @@ import { toggleWishlist } from "@/actions/wishlistActions";
 import { useSession } from "next-auth/react";
 import { useCompare } from "@/providers/CompareProvider";
 
-export default function CarCard({ car }: { car: CarWithImages }) {
+export default function CarCard({ car, isWishlisted: initialIsWishlisted }: { car: CarWithImages, isWishlisted?: boolean }) {
     const { data: session } = useSession();
     const { addToCompare } = useCompare();
+    const [isWishlisted, setIsWishlisted] = useState(initialIsWishlisted);
 
     const handleWishlistToggle = async () => {
         if (!session) {
-            // Handle case where user is not logged in
+            // Here you might want to trigger a login modal
+            alert("Please log in to add items to your wishlist.");
             return;
         }
-        await toggleWishlist(car.id);
+        // Optimistically update the UI
+        setIsWishlisted(prev => !prev);
+        try {
+            await toggleWishlist(car.id);
+        } catch (error) {
+            console.error("Failed to toggle wishlist", error);
+            // Revert the change if the server action fails
+            setIsWishlisted(prev => !prev);
+            alert("Something went wrong. Please try again.");
+        }
     };
 
     return (
@@ -34,8 +46,9 @@ export default function CarCard({ car }: { car: CarWithImages }) {
                     />
                 </div>
                 <div className="absolute top-2 right-2">
-                    <button onClick={handleWishlistToggle} className="p-2 rounded-full bg-white dark:bg-gray-800 text-red-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <button onClick={handleWishlistToggle} className={`p-2 rounded-full transition-colors
+                        ${isWishlisted ? 'text-red-500 bg-red-100 dark:bg-gray-700' : 'text-gray-500 bg-white dark:bg-gray-800'}`}>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill={isWishlisted ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
                     </button>
