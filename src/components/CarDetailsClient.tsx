@@ -3,13 +3,32 @@
 import { useState } from 'react';
 import type { CarWithImages } from "@/types/car";
 import Image from "next/image";
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, Heart } from 'lucide-react';
 import InquiryModal from './InquiryModal';
 import FinancingCalculator from './FinancingCalculator';
+import { useSession } from 'next-auth/react';
+import { toggleWishlist } from '@/actions/wishlistActions';
 
-export default function CarDetailsClient({ car }: { car: CarWithImages }) {
+export default function CarDetailsClient({ car, isWishlisted: initialIsWishlisted }: { car: CarWithImages, isWishlisted?: boolean }) {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const { data: session } = useSession();
+    const [isWishlisted, setIsWishlisted] = useState(initialIsWishlisted);
+
+    const handleWishlistToggle = async () => {
+        if (!session) {
+            alert("Please log in to add items to your wishlist.");
+            return;
+        }
+        setIsWishlisted(prev => !prev);
+        try {
+            await toggleWishlist(car.id);
+        } catch (error) {
+            console.error("Failed to toggle wishlist", error);
+            setIsWishlisted(prev => !prev);
+            alert("Something went wrong. Please try again.");
+        }
+    };
 
     const handleNextImage = () => {
         setCurrentImageIndex((prevIndex) => (prevIndex + 1) % car.images.length);
@@ -66,22 +85,29 @@ export default function CarDetailsClient({ car }: { car: CarWithImages }) {
                             </div>
                         )}
                     </div>
-                    <div className="p-8 md:p-12">
+                    <div className="p-8 md:p-12 flex flex-col">
                         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
                             {car.year} {car.make} {car.model}
                         </h1>
                         <p className="text-3xl font-semibold text-blue-600 dark:text-blue-400 mb-6">
                             ${car.price.toLocaleString()}
                         </p>
-                        <p className="text-gray-700 dark:text-gray-300 mb-6">
+                        <p className="text-gray-700 dark:text-gray-300 mb-6 flex-grow">
                             {car.description}
                         </p>
                         <div className="mt-8 flex gap-4">
                             <button onClick={() => setIsModalOpen(true)} className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors w-full">
                                 Inquire Now
                             </button>
-                            <button className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors w-full">
-                                Add to Wishlist
+                            <button
+                                onClick={handleWishlistToggle}
+                                className={`flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-colors w-full
+                                    ${isWishlisted
+                                        ? 'bg-red-100 text-red-600 hover:bg-red-200'
+                                        : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
+                            >
+                                <Heart fill={isWishlisted ? 'currentColor' : 'none'} className="w-5 h-5" />
+                                {isWishlisted ? 'Wishlisted' : 'Add to Wishlist'}
                             </button>
                         </div>
                     </div>

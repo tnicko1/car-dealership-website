@@ -45,7 +45,7 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted }: { ca
                         onError={(e) => { e.currentTarget.src = 'https://placehold.co/600x400/ff0000/ffffff?text=Image+Not+Found'; }}
                     />
                 </div>
-                <div className="absolute top-2 right-2">
+                <div className="absolute top-2 right-2 z-10">
                     <button onClick={handleWishlistToggle} className={`p-2 rounded-full transition-colors
                         ${isWishlisted ? 'text-red-500 bg-red-100 dark:bg-gray-700' : 'text-gray-500 bg-white dark:bg-gray-800'}`}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill={isWishlisted ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">

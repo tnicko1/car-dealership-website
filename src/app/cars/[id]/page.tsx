@@ -1,23 +1,32 @@
 import prisma from '@/lib/prisma';
-import CarDetailsClient from "@/components/CarDetailsClient";
-import { notFound } from "next/navigation";
-import type { CarWithImages } from '@/types/car';
+import { notFound } from 'next/navigation';
+import CarDetailsClient from '@/components/CarDetailsClient';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/auth.config';
 
 export default async function CarDetailsPage({ params }: { params: { id: string } }) {
-    const car = await prisma.car.findUnique({
-        where: { id: params.id },
-        include: {
-            images: true,
-        },
-    });
+    const session = await getServerSession(authOptions);
+
+    const [car, user] = await Promise.all([
+        prisma.car.findUnique({
+            where: { id: params.id },
+            include: { images: true },
+        }),
+        session?.user?.id ? prisma.user.findUnique({
+            where: { id: session.user.id },
+            include: { wishlist: { select: { id: true } } },
+        }) : null
+    ]);
 
     if (!car) {
         notFound();
     }
 
+    const isWishlisted = user?.wishlist.some(item => item.id === car.id) || false;
+
     return (
-        <div className="container mx-auto px-4 py-12 animate-fade-in">
-            <CarDetailsClient car={car as CarWithImages} />
+        <div className="container mx-auto px-4 py-12">
+            <CarDetailsClient car={car} isWishlisted={isWishlisted} />
         </div>
     );
 }
