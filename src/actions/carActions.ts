@@ -67,21 +67,51 @@ export async function updateCar(id: string, formData: FormData) {
     if (session?.user?.role !== 'admin') throw new Error('Unauthorized');
 
     const carData = getCarData(formData);
-    const imageUrls = formData.getAll('images') as string[];
+    const newImageUrls = formData.getAll('images') as string[];
 
+    // Get the current state of the car from the database
+    const existingCar = await prisma.car.findUnique({
+        where: { id },
+        include: { images: true },
+    });
+
+    if (!existingCar) throw new Error('Car not found');
+
+    const existingImageUrls = existingCar.images.map(image => image.url);
+
+    // Identify images to be deleted from Supabase
+    const urlsToDelete = existingImageUrls.filter(url => !newImageUrls.includes(url));
+    const pathsToDelete = urlsToDelete.map(url => {
+        const parts = url.split('/');
+        return parts[parts.length - 1];
+    });
+
+    if (pathsToDelete.length > 0) {
+        const { error } = await supabase.storage.from('car-images').remove(pathsToDelete);
+        if (error) {
+            console.error('Error deleting images from Supabase:', error);
+            // Depending on the desired behavior, you might want to stop the update process
+        }
+    }
+
+    // Perform the database update in a transaction
     await prisma.$transaction(async (tx) => {
+        // Clear out the old image associations
         await tx.carImage.deleteMany({ where: { carId: id } });
+
+        // Update the car with the new data and new image associations
         await tx.car.update({
             where: { id },
             data: {
                 ...carData,
                 images: {
-                    create: imageUrls.map(url => ({ url })),
+                    create: newImageUrls.map(url => ({ url })),
                 },
             },
         });
     });
 
+    // Revalidate paths and redirect
     revalidatePath('/admin');
     revalidatePath('/cars');
     revalidatePath(`/cars/${id}`);

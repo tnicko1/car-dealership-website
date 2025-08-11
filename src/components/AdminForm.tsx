@@ -99,11 +99,24 @@ export default function AdminForm({ car }: { car?: CarWithImages }) {
                     {imageUrls.map((url, index) => (
                         <div
                             key={index}
-                            className={`relative cursor-grab ${draggedImage === url ? 'opacity-50' : ''}`}
+                            className={`relative cursor-grab transition-all duration-300 ease-in-out transform hover:scale-105
+                                ${draggedImage === url ? 'opacity-50 scale-110 shadow-2xl z-20' : 'hover:shadow-lg'}`}
                             draggable
                             onDragStart={() => handleDragStart(url)}
-                            onDragOver={(e) => e.preventDefault()}
-                            onDrop={() => handleDrop(url)}
+                            onDragOver={(e) => {
+                                e.preventDefault();
+                                const target = e.currentTarget;
+                                if (draggedImage && draggedImage !== url) {
+                                    target.classList.add('bg-blue-100', 'dark:bg-blue-900/50', 'rounded-lg');
+                                }
+                            }}
+                            onDragLeave={(e) => {
+                                e.currentTarget.classList.remove('bg-blue-100', 'dark:bg-blue-900/50', 'rounded-lg');
+                            }}
+                            onDrop={(e) => {
+                                e.currentTarget.classList.remove('bg-blue-100', 'dark:bg-blue-900/50', 'rounded-lg');
+                                handleDrop(url);
+                            }}
                             onDragEnd={() => setDraggedImage(null)}
                         >
                             <Image src={url} alt="Car image" width={200} height={150} className="w-full h-auto rounded pointer-events-none" />
