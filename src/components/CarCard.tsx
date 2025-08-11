@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 import type { CarWithImages } from "@/types/car";
 import Link from "next/link";
 import Image from "next/image";
@@ -12,27 +12,51 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted }: { ca
     const { data: session } = useSession();
     const { addToCompare } = useCompare();
     const [isWishlisted, setIsWishlisted] = useState(initialIsWishlisted);
+    const [transform, setTransform] = useState('');
 
-    const handleWishlistToggle = async () => {
+    const handleWishlistToggle = async (e: MouseEvent) => {
+        e.preventDefault(); // Prevent link navigation
         if (!session) {
-            // Here you might want to trigger a login modal
             alert("Please log in to add items to your wishlist.");
             return;
         }
-        // Optimistically update the UI
         setIsWishlisted(prev => !prev);
         try {
             await toggleWishlist(car.id);
         } catch (error) {
             console.error("Failed to toggle wishlist", error);
-            // Revert the change if the server action fails
             setIsWishlisted(prev => !prev);
             alert("Something went wrong. Please try again.");
         }
     };
 
+    const handleCompareClick = (e: MouseEvent) => {
+        e.preventDefault(); // Prevent link navigation
+        addToCompare(car);
+    };
+
+    const onMouseMove = (e: MouseEvent<HTMLAnchorElement>) => {
+        const card = e.currentTarget;
+        const { left, top, width, height } = card.getBoundingClientRect();
+        const x = e.clientX - left - width / 2;
+        const y = e.clientY - top - height / 2;
+        const rotateX = (y / height) * -3; // Tilt intensity
+        const rotateY = (x / width) * 3;  // Tilt intensity
+        setTransform(`perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`);
+    };
+
+    const onMouseLeave = () => {
+        setTransform('perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)');
+    };
+
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-300 ease-in-out group">
+        <Link
+            href={`/cars/${car.id}`}
+            onMouseMove={onMouseMove}
+            onMouseLeave={onMouseLeave}
+            style={{ transform: transform }}
+            className="block bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-200 ease-out group"
+        >
             <div className="relative">
                 <div className="relative h-56 w-full">
                     <Image
@@ -41,7 +65,7 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted }: { ca
                         fill
                         style={{ objectFit: 'cover' }}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="group-hover:scale-105 transition-transform duration-300"
+                        className="transition-transform duration-300"
                         onError={(e) => { e.currentTarget.src = 'https://placehold.co/600x400/ff0000/ffffff?text=Image+Not+Found'; }}
                     />
                 </div>
@@ -71,14 +95,11 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted }: { ca
                     </div>
                 </div>
                 <div className="flex gap-2">
-                    <Link href={`/cars/${car.id}`} className="block w-full text-center bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
-                        View Details
-                    </Link>
-                    <button onClick={() => addToCompare(car)} className="block w-full text-center bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">
+                    <button onClick={handleCompareClick} className="block w-full text-center bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">
                         Compare
                     </button>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 }
