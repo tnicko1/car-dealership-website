@@ -30,7 +30,7 @@ export default async function InventoryPage({
     const fuelType = searchParams?.fuelType;
     const minYear = searchParams?.minYear;
     const maxYear = searchParams?.maxYear;
-    const maxMileage = search?.maxMileage;
+    const maxMileage = searchParams?.maxMileage;
 
     const whereClause: any = {
         price: {
