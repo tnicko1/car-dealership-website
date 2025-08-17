@@ -51,8 +51,12 @@ export default function Header() {
 
     const headerClasses = `
         sticky top-0 z-50 transition-all duration-300
-        ${isScrolled ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md' : 'bg-transparent'}
-        ${isMenuOpen ? 'bg-white dark:bg-gray-900 shadow-md' : ''}
+        ${isMenuOpen
+? 'bg-white dark:bg-gray-900 shadow-md'
+: isScrolled
+    ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md'
+    : 'bg-transparent'
+}
     `;
 
     const linkClasses = (href: string) => `
@@ -100,8 +104,8 @@ export default function Header() {
 
             {/* Mobile Menu Drawer */}
             <div
-                className={`md:hidden fixed top-0 left-0 w-full h-full bg-white dark:bg-gray-900 z-40 transition-transform duration-300 ease-in-out ${
-                    isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+                className={`md:hidden fixed top-0 left-0 w-full h-full bg-white dark:bg-gray-900 z-40 transition-opacity duration-300 ease-in-out ${
+                    isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
                 }`}
             >
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8 h-full flex flex-col">
