@@ -20,25 +20,18 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
     const [isWishlisted, setIsWishlisted] = useState(initialIsWishlisted);
     const [openLightbox, setOpenLightbox] = useState(false);
     const [isCtaVisible, setIsCtaVisible] = useState(false);
-    const [isMounted, setIsMounted] = useState(false);
 
     const ctaTriggerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        // This ensures the transition class is only added after the initial render,
-        // preventing the unwanted slide-in animation on page load.
-        setIsMounted(true);
-
         const triggerElement = ctaTriggerRef.current;
         if (!triggerElement) return;
 
         const observer = new IntersectionObserver(
             ([entry]) => {
-                // When the trigger is out of view (scrolled past), show the CTA
                 setIsCtaVisible(!entry.isIntersecting);
             },
             {
-                // The CTA becomes visible when the trigger element is 150px from the top of the viewport
                 rootMargin: "-150px 0px 0px 0px",
                 threshold: 0
             }
@@ -80,7 +73,13 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
             </div>
 
             {/* Sticky CTA Bar */}
-            <div className={`fixed top-[80px] left-0 right-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md ${isMounted ? 'transition-transform duration-300 ease-in-out' : ''} ${isCtaVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+            <div className={`
+                fixed top-[80px] left-0 right-0 z-40 
+                bg-white/80 dark:bg-gray-900/80 
+                backdrop-blur-sm shadow-md 
+                transition-all duration-300 ease-in-out 
+                ${isCtaVisible ? 'translate-y-0 opacity-100 visible' : '-translate-y-full opacity-0 invisible'}
+            `}>
                 <div className="container mx-auto px-4 py-3 flex justify-between items-center">
                     <div>
                         <h2 className="font-bold text-lg">{car.year} {car.make} {car.model}</h2>
