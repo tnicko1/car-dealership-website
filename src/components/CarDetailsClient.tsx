@@ -20,10 +20,15 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
     const [isWishlisted, setIsWishlisted] = useState(initialIsWishlisted);
     const [openLightbox, setOpenLightbox] = useState(false);
     const [isCtaVisible, setIsCtaVisible] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
 
     const ctaTriggerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        // This ensures the transition class is only added after the initial render,
+        // preventing the unwanted slide-in animation on page load.
+        setIsMounted(true);
+
         const triggerElement = ctaTriggerRef.current;
         if (!triggerElement) return;
 
@@ -42,7 +47,9 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
         observer.observe(triggerElement);
 
         return () => {
-            observer.unobserve(triggerElement);
+            if (triggerElement) {
+                observer.unobserve(triggerElement);
+            }
         };
     }, []);
 
@@ -73,7 +80,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
             </div>
 
             {/* Sticky CTA Bar */}
-            <div className={`fixed top-[80px] left-0 right-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md transition-transform duration-300 ease-in-out ${isCtaVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+            <div className={`fixed top-[80px] left-0 right-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md ${isMounted ? 'transition-transform duration-300 ease-in-out' : ''} ${isCtaVisible ? 'translate-y-0' : '-translate-y-full'}`}>
                 <div className="container mx-auto px-4 py-3 flex justify-between items-center">
                     <div>
                         <h2 className="font-bold text-lg">{car.year} {car.make} {car.model}</h2>
