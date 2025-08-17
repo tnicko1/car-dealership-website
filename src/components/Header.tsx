@@ -67,9 +67,10 @@ export default function Header() {
 
     return (
         <header className={headerClasses}>
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+            {/* Main Header Bar - Hidden when mobile menu is open */}
+            <div className={`container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}>
                 {/* Logo */}
-                <Link href="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400 hover:opacity-80 transition-opacity z-50">
+                <Link href="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400 hover:opacity-80 transition-opacity">
                     YourDealership
                 </Link>
 
@@ -87,32 +88,32 @@ export default function Header() {
                     <ThemeSwitcher />
                     <UserMenu />
                 </div>
+            </div>
 
-                {/* Mobile Menu Button */}
-                <div className="md:hidden flex items-center gap-2 z-50">
-                    <ThemeSwitcher />
-                    <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-800 dark:text-gray-200">
-                        {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-                    </button>
-                </div>
+            {/* Mobile Menu Button - Always present on mobile, positioned absolutely */}
+            <div className="md:hidden absolute top-4 right-4 flex items-center gap-2 z-50">
+                <ThemeSwitcher />
+                <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-800 dark:text-gray-200">
+                    {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                </button>
+            </div>
 
-                {/* Mobile Menu Drawer */}
-                <div
-                    className={`md:hidden fixed top-0 left-0 w-full h-full bg-white dark:bg-gray-900 z-40 transition-transform duration-300 ease-in-out ${
-                        isMenuOpen ? 'translate-x-0' : '-translate-x-full'
-                    }`}
-                >
-                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8 h-full flex flex-col">
-                        <nav className="flex flex-col items-center space-y-6 text-xl">
-                            {navLinks.map((link) => (
-                                <Link key={link.href} href={link.href} className={linkClasses(link.href)}>
-                                    {link.label}
-                                </Link>
-                            ))}
-                        </nav>
-                        <div className="mt-auto pt-8 flex justify-center">
-                            <UserMenu />
-                        </div>
+            {/* Mobile Menu Drawer */}
+            <div
+                className={`md:hidden fixed top-0 left-0 w-full h-full bg-white dark:bg-gray-900 z-40 transition-transform duration-300 ease-in-out ${
+                    isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+                }`}
+            >
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8 h-full flex flex-col">
+                    <nav className="flex flex-col items-center space-y-6 text-xl">
+                        {navLinks.map((link) => (
+                            <Link key={link.href} href={link.href} className={linkClasses(link.href)}>
+                                {link.label}
+                            </Link>
+                        ))}
+                    </nav>
+                    <div className="mt-auto pt-8 flex justify-center">
+                        <UserMenu />
                     </div>
                 </div>
             </div>
