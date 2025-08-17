@@ -1,15 +1,51 @@
 'use client';
 
-import Link from "next/link";
-import ThemeSwitcher from "./ThemeSwitcher";
-import AuthButtons from "./AuthButtons";
-import { useSession } from "next-auth/react";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import ThemeSwitcher from './ThemeSwitcher';
+import AuthButtons from './AuthButtons';
 
 export default function Header() {
     const { data: session } = useSession();
+    const pathname = usePathname();
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 10);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const navLinks = [
+        { href: '/', label: 'Home' },
+        { href: '/cars', label: 'Inventory' },
+        { href: '/about', label: 'About Us' },
+        { href: '/wishlist', label: 'Wishlist' },
+        ...(session ? [{ href: '/my-listings', label: 'My Listings' }] : []),
+        { href: '/contact', label: 'Contact' },
+    ];
+
+    const headerClasses = `
+        sticky top-0 z-50 transition-all duration-300
+        ${isScrolled ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md' : 'bg-transparent'}
+    `;
+
+    const linkClasses = (href: string) => `
+        relative font-medium text-gray-600 dark:text-gray-300 whitespace-nowrap
+        transition-colors duration-300 hover:text-blue-600 dark:hover:text-blue-400
+        after:content-[''] after:absolute after:left-0 after:bottom-[-2px]
+        after:w-full after:h-[2px] after:bg-blue-600 dark:after:bg-blue-400
+        after:transition-transform after:duration-300
+        ${pathname === href ? 'after:scale-x-100' : 'after:scale-x-0'}
+        hover:after:scale-x-100
+    `;
 
     return (
-        <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-sm sticky top-0 z-50 transition-colors">
+        <header className={headerClasses}>
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center">
                 {/* Left Section: Logo */}
                 <div className="flex-1 flex justify-start">
@@ -20,26 +56,11 @@ export default function Header() {
 
                 {/* Center Section: Navigation */}
                 <nav className="hidden md:flex flex-1 justify-center items-center space-x-8">
-                    <Link href="/" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
-                        Home
-                    </Link>
-                    <Link href="/cars" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
-                        Inventory
-                    </Link>
-                    <Link href="/about" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
-                        About Us
-                    </Link>
-                    <Link href="/wishlist" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
-                        Wishlist
-                    </Link>
-                    {session && (
-                        <Link href="/my-listings" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
-                            My Listings
+                    {navLinks.map((link) => (
+                        <Link key={link.href} href={link.href} className={linkClasses(link.href)}>
+                            {link.label}
                         </Link>
-                    )}
-                    <Link href="/contact" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
-                        Contact
-                    </Link>
+                    ))}
                 </nav>
 
                 {/* Right Section: Theme Switcher and Auth */}
