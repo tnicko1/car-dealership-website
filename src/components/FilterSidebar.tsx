@@ -1,11 +1,12 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 import { useState } from 'react';
 
-const RangeSlider = ({ min, max, step, name, title, defaultValue, onValueChange }: any) => {
-    const [value, setValue] = useState(defaultValue || min);
+const RangeSlider = ({ min, max, step, name, title, value: initialValue, onValueChange }: any) => {
+    const [value, setValue] = useState(initialValue);
+    const debouncedOnChange = useDebouncedCallback(onValueChange, 300);
+
     return (
         <div>
             <label htmlFor={name} className="block text-sm font-medium text-gray-700 dark:text-gray-300">{title}</label>
@@ -18,8 +19,9 @@ const RangeSlider = ({ min, max, step, name, title, defaultValue, onValueChange 
                 step={step}
                 value={value}
                 onChange={(e) => {
-                    setValue(e.target.value);
-                    onValueChange(e.target.value, name);
+                    const newValue = Number(e.target.value);
+                    setValue(newValue);
+                    debouncedOnChange(newValue, name);
                 }}
                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
             />
@@ -32,20 +34,15 @@ const RangeSlider = ({ min, max, step, name, title, defaultValue, onValueChange 
     )
 }
 
-export default function FilterSidebar({ makes, bodyStyles, fuelTypes, transmissions }: { makes: string[], bodyStyles: string[], fuelTypes: string[], transmissions: string[] }) {
-    const searchParams = useSearchParams();
-    const pathname = usePathname();
-    const { replace } = useRouter();
-
-    const handleFilterChange = useDebouncedCallback((term: string, name: string) => {
-        const params = new URLSearchParams(searchParams);
-        if (term) {
-            params.set(name, term);
-        } else {
-            params.delete(name);
-        }
-        replace(`${pathname}?${params.toString()}`);
+export default function FilterSidebar({ makes, bodyStyles, fuelTypes, transmissions, onFilterChange, initialFilters }: any) {
+    const handleInputChange = useDebouncedCallback((value: string, name: string) => {
+        onFilterChange(value, name);
     }, 300);
+
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, name: string) => {
+        // Basic logic for single checkbox selection, can be expanded for multi-select
+        onFilterChange(e.target.checked ? e.target.value : '', name);
+    };
 
     return (
         <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
@@ -57,12 +54,12 @@ export default function FilterSidebar({ makes, bodyStyles, fuelTypes, transmissi
                     <select
                         id="make"
                         name="make"
-                        onChange={(e) => handleFilterChange(e.target.value, 'make')}
-                        defaultValue={searchParams.get('make') || ''}
+                        onChange={(e) => onFilterChange(e.target.value, 'make')}
+                        defaultValue={initialFilters.make}
                         className="mt-1 block w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
                     >
                         <option value="">All Makes</option>
-                        {makes.map(make => (
+                        {makes.map((make: string) => (
                             <option key={make} value={make}>{make}</option>
                         ))}
                     </select>
@@ -75,8 +72,8 @@ export default function FilterSidebar({ makes, bodyStyles, fuelTypes, transmissi
                         type="text"
                         id="model"
                         name="model"
-                        onChange={(e) => handleFilterChange(e.target.value, 'model')}
-                        defaultValue={searchParams.get('model') || ''}
+                        onChange={(e) => handleInputChange(e.target.value, 'model')}
+                        defaultValue={initialFilters.model}
                         placeholder="e.g., Camry"
                         className="mt-1 block w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
                     />
@@ -89,8 +86,8 @@ export default function FilterSidebar({ makes, bodyStyles, fuelTypes, transmissi
                     step={1000}
                     name="maxPrice"
                     title="Max Price"
-                    defaultValue={searchParams.get('maxPrice')}
-                    onValueChange={handleFilterChange}
+                    value={initialFilters.maxPrice}
+                    onValueChange={onFilterChange}
                 />
 
                 {/* Year Range Sliders */}
@@ -101,8 +98,8 @@ export default function FilterSidebar({ makes, bodyStyles, fuelTypes, transmissi
                         step={1}
                         name="minYear"
                         title="Min Year"
-                        defaultValue={searchParams.get('minYear')}
-                        onValueChange={handleFilterChange}
+                        value={initialFilters.minYear}
+                        onValueChange={onFilterChange}
                     />
                     <RangeSlider
                         min={1990}
@@ -110,8 +107,8 @@ export default function FilterSidebar({ makes, bodyStyles, fuelTypes, transmissi
                         step={1}
                         name="maxYear"
                         title="Max Year"
-                        defaultValue={searchParams.get('maxYear')}
-                        onValueChange={handleFilterChange}
+                        value={initialFilters.maxYear}
+                        onValueChange={onFilterChange}
                     />
                 </div>
 
@@ -122,24 +119,24 @@ export default function FilterSidebar({ makes, bodyStyles, fuelTypes, transmissi
                     step={10000}
                     name="maxMileage"
                     title="Max Mileage"
-                    defaultValue={searchParams.get('maxMileage')}
-                    onValueChange={handleFilterChange}
+                    value={initialFilters.maxMileage}
+                    onValueChange={onFilterChange}
                 />
 
                 {/* Body Style Filter */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Body Style</label>
                     <div className="mt-2 space-y-2">
-                        {bodyStyles.map(style => (
+                        {bodyStyles.map((style: string) => (
                             <div key={style} className="flex items-center">
                                 <input
                                     id={`bodyStyle-${style}`}
                                     name="bodyStyle"
-                                    type="checkbox"
+                                    type="radio" // Changed to radio for single selection
                                     value={style}
-                                    onChange={(e) => handleFilterChange(e.target.checked ? e.target.value : '', 'bodyStyle')}
-                                    defaultChecked={searchParams.get('bodyStyle') === style}
-                                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                    onChange={(e) => handleCheckboxChange(e, 'bodyStyle')}
+                                    checked={initialFilters.bodyStyle === style}
+                                    className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                                 />
                                 <label htmlFor={`bodyStyle-${style}`} className="ml-3 text-sm text-gray-600 dark:text-gray-300">
                                     {style}
@@ -153,16 +150,16 @@ export default function FilterSidebar({ makes, bodyStyles, fuelTypes, transmissi
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Fuel Type</label>
                     <div className="mt-2 space-y-2">
-                        {fuelTypes.map(type => (
+                        {fuelTypes.map((type: string) => (
                             <div key={type} className="flex items-center">
                                 <input
                                     id={`fuelType-${type}`}
                                     name="fuelType"
-                                    type="checkbox"
+                                    type="radio"
                                     value={type}
-                                    onChange={(e) => handleFilterChange(e.target.checked ? e.target.value : '', 'fuelType')}
-                                    defaultChecked={searchParams.get('fuelType') === type}
-                                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                    onChange={(e) => handleCheckboxChange(e, 'fuelType')}
+                                    checked={initialFilters.fuelType === type}
+                                    className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                                 />
                                 <label htmlFor={`fuelType-${type}`} className="ml-3 text-sm text-gray-600 dark:text-gray-300">
                                     {type}
@@ -176,16 +173,16 @@ export default function FilterSidebar({ makes, bodyStyles, fuelTypes, transmissi
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Transmission</label>
                     <div className="mt-2 space-y-2">
-                        {transmissions.map(transmission => (
+                        {transmissions.map((transmission: string) => (
                             <div key={transmission} className="flex items-center">
                                 <input
                                     id={`transmission-${transmission}`}
                                     name="transmission"
-                                    type="checkbox"
+                                    type="radio"
                                     value={transmission}
-                                    onChange={(e) => handleFilterChange(e.target.checked ? e.target.value : '', 'transmission')}
-                                    defaultChecked={searchParams.get('transmission') === transmission}
-                                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                    onChange={(e) => handleCheckboxChange(e, 'transmission')}
+                                    checked={initialFilters.transmission === transmission}
+                                    className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                                 />
                                 <label htmlFor={`transmission-${transmission}`} className="ml-3 text-sm text-gray-600 dark:text-gray-300">
                                     {transmission}
