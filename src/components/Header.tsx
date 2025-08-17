@@ -52,7 +52,7 @@ export default function Header() {
     const headerClasses = `
         sticky top-0 z-50 transition-all duration-300
         ${isScrolled ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md' : 'bg-transparent'}
-        ${isMenuOpen ? 'bg-white/80 dark:bg-gray-900/80 shadow-md' : ''}
+        ${isMenuOpen ? 'bg-white dark:bg-gray-900 shadow-md' : ''}
     `;
 
     const linkClasses = (href: string) => `
