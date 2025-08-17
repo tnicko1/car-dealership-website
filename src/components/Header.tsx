@@ -108,7 +108,7 @@ export default function Header() {
                     isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
                 }`}
             >
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8 h-full flex flex-col">
+                <div className={`container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8 h-full flex flex-col transition-opacity duration-300 delay-100 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
                     <nav className="flex flex-col items-center space-y-6 text-xl">
                         {navLinks.map((link) => (
                             <Link key={link.href} href={link.href} className={linkClasses(link.href)}>
