@@ -31,11 +31,20 @@ export default async function CarDetailsPage({ params }: { params: { id: string 
         notFound();
     }
 
+    const similarCars = await prisma.car.findMany({
+        where: {
+            bodyStyle: car.bodyStyle,
+            id: { not: car.id },
+        },
+        take: 5,
+        include: { images: true },
+    });
+
     const isWishlisted = user?.wishlist.some(item => item.id === car.id) || false;
 
     return (
         <div className="container mx-auto px-4 py-12">
-            <CarDetailsClient car={car} isWishlisted={isWishlisted} />
+            <CarDetailsClient car={car} isWishlisted={isWishlisted} similarCars={similarCars} />
         </div>
     );
 }
