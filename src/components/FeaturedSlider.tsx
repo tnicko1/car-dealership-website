@@ -44,7 +44,7 @@ export default function FeaturedSlider({ cars, wishlistedCarIds }: { cars: CarWi
             <div className="flex">
                 {cars.map((car) => (
                     <div key={car.id} className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.33%] p-4">
-                        <CarCard car={car} isWishlisted={wishlistedCarIds.includes(car.id)} />
+                        <CarCard car={car} isWishlisted={wishlistedCarIds.includes(car.id)} isInteractive={false} />
                     </div>
                 ))}
             </div>
