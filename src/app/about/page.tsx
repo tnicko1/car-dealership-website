@@ -8,8 +8,8 @@ export default function AboutPage() {
                     <Image src="/our-dealership.avif" alt="Dealership building" layout="fill" objectFit="cover" />
                 </div>
                 <div className="relative container mx-auto px-4 text-center">
-                    <h1 className="text-5xl font-extrabold">About YourDealership</h1>
-                    <p className="mt-4 text-xl text-gray-300">Driving Your Dreams Forward Since 2005</p>
+                    <h1 className="text-4xl md:text-5xl font-extrabold">About YourDealership</h1>
+                    <p className="mt-4 text-lg md:text-xl text-gray-300">Driving Your Dreams Forward Since 2005</p>
                 </div>
             </section>
 

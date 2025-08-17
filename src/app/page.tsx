@@ -42,7 +42,7 @@ export default async function Home() {
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-indigo-900/70"></div>
 
                 <div className="relative container mx-auto px-4">
-                    <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                         Find Your Next Dream Car
                     </h1>
                     <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.4s' }}>

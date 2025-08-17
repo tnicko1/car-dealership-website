@@ -124,17 +124,17 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                         </div>
                     </div>
 
-                    <div ref={ctaTriggerRef} className="p-8 md:p-12 flex flex-col">
-                        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                    <div ref={ctaTriggerRef} className="p-6 md:p-12 flex flex-col">
+                        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
                             {car.year} {car.make} {car.model}
                         </h1>
-                        <p className="text-3xl font-semibold text-blue-600 dark:text-blue-400 mb-6">
+                        <p className="text-2xl md:text-3xl font-semibold text-blue-600 dark:text-blue-400 mb-6">
                             ${car.price.toLocaleString()}
                         </p>
                         <p className="text-gray-700 dark:text-gray-300 mb-6 flex-grow">
                             {car.description}
                         </p>
-                        <div className="mt-8 flex gap-4">
+                        <div className="mt-auto pt-6 flex flex-col sm:flex-row gap-4">
                             <button onClick={() => setIsModalOpen(true)} className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors w-full">
                                 Inquire Now
                             </button>
@@ -150,31 +150,31 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                 </div>
 
                 {/* Tabbed Specifications */}
-                <div className="p-8 md:p-12 border-t border-gray-200 dark:border-gray-700">
+                <div className="p-6 md:p-12 border-t border-gray-200 dark:border-gray-700">
                     <SpecTabs car={car} />
                 </div>
 
                 <FinancingCalculator price={car.price} />
                 {car.owner && (
-                    <div className="p-8 md:p-12 border-t border-gray-200 dark:border-gray-700">
-                        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Seller Information</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="p-6 md:p-12 border-t border-gray-200 dark:border-gray-700">
+                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">Seller Information</h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                             <div className="flex items-center gap-4">
-                                <User className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                                <User className="w-8 h-8 text-blue-600 dark:text-blue-400 flex-shrink-0" />
                                 <div>
                                     <p className="font-semibold">Name</p>
                                     <p className="text-gray-600 dark:text-gray-300">{car.owner.name}</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-4">
-                                <Mail className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                                <Mail className="w-8 h-8 text-blue-600 dark:text-blue-400 flex-shrink-0" />
                                 <div>
                                     <p className="font-semibold">Email</p>
-                                    <a href={`mailto:${car.owner.email}`} className="text-blue-600 dark:text-blue-400 hover:underline">{car.owner.email}</a>
+                                    <a href={`mailto:${car.owner.email}`} className="text-blue-600 dark:text-blue-400 hover:underline break-all">{car.owner.email}</a>
                                 </div>
                             </div>
                             <div className="flex items-center gap-4">
-                                <Phone className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                                <Phone className="w-8 h-8 text-blue-600 dark:text-blue-400 flex-shrink-0" />
                                 <div>
                                     <p className="font-semibold">Phone</p>
                                     <p className="text-gray-600 dark:text-gray-300">{car.owner.phone || 'N/A'}</p>

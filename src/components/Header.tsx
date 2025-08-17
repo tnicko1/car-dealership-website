@@ -6,11 +6,13 @@ import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import ThemeSwitcher from './ThemeSwitcher';
 import UserMenu from './UserMenu';
+import { Menu, X } from 'lucide-react';
 
 export default function Header() {
     const { data: session } = useSession();
     const pathname = usePathname();
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -19,6 +21,11 @@ export default function Header() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    // Close mobile menu on route change
+    useEffect(() => {
+        setIsMenuOpen(false);
+    }, [pathname]);
 
     const navLinks = [
         { href: '/', label: 'Home' },
@@ -31,7 +38,7 @@ export default function Header() {
 
     const headerClasses = `
         sticky top-0 z-50 transition-all duration-300
-        ${isScrolled ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md' : 'bg-transparent'}
+        ${isScrolled || isMenuOpen ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md' : 'bg-transparent'}
     `;
 
     const linkClasses = (href: string) => `
@@ -46,16 +53,14 @@ export default function Header() {
 
     return (
         <header className={headerClasses}>
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center">
-                {/* Left Section: Logo */}
-                <div className="flex-1 flex justify-start">
-                    <Link href="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400 hover:opacity-80 transition-opacity">
-                        YourDealership
-                    </Link>
-                </div>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+                {/* Logo */}
+                <Link href="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400 hover:opacity-80 transition-opacity z-50">
+                    YourDealership
+                </Link>
 
-                {/* Center Section: Navigation */}
-                <nav className="hidden md:flex flex-1 justify-center items-center space-x-8">
+                {/* Desktop Navigation */}
+                <nav className="hidden md:flex items-center space-x-8">
                     {navLinks.map((link) => (
                         <Link key={link.href} href={link.href} className={linkClasses(link.href)}>
                             {link.label}
@@ -63,10 +68,38 @@ export default function Header() {
                     ))}
                 </nav>
 
-                {/* Right Section: Theme Switcher and Auth */}
-                <div className="flex-1 flex justify-end items-center gap-4">
+                {/* Right side icons */}
+                <div className="hidden md:flex items-center gap-4">
                     <ThemeSwitcher />
                     <UserMenu />
+                </div>
+
+                {/* Mobile Menu Button */}
+                <div className="md:hidden flex items-center gap-2 z-50">
+                    <ThemeSwitcher />
+                    <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-800 dark:text-gray-200">
+                        {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                    </button>
+                </div>
+
+                {/* Mobile Menu Drawer */}
+                <div
+                    className={`md:hidden fixed top-0 left-0 w-full h-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg z-40 transition-transform duration-300 ease-in-out ${
+                        isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+                    }`}
+                >
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8 h-full flex flex-col">
+                        <nav className="flex flex-col items-center space-y-6 text-xl">
+                            {navLinks.map((link) => (
+                                <Link key={link.href} href={link.href} className={linkClasses(link.href)}>
+                                    {link.label}
+                                </Link>
+                            ))}
+                        </nav>
+                        <div className="mt-auto pt-8 flex justify-center">
+                            <UserMenu />
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
