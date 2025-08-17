@@ -27,6 +27,19 @@ export default function Header() {
         setIsMenuOpen(false);
     }, [pathname]);
 
+    // Add/remove class to body to prevent scrolling & add blur when mobile menu is open
+    useEffect(() => {
+        if (isMenuOpen) {
+            document.body.classList.add('overflow-hidden', 'menu-open');
+        } else {
+            document.body.classList.remove('overflow-hidden', 'menu-open');
+        }
+        // Cleanup on component unmount
+        return () => {
+            document.body.classList.remove('overflow-hidden', 'menu-open');
+        };
+    }, [isMenuOpen]);
+
     const navLinks = [
         { href: '/', label: 'Home' },
         { href: '/cars', label: 'Inventory' },
