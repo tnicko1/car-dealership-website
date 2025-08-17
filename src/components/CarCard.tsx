@@ -100,8 +100,8 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted }: { ca
                 {/* Image Carousel */}
                 <div 
                     className="overflow-hidden" 
-                    ref={emblaRef} 
-                    onMouseDownCapture={(e) => e.stopPropagation()} 
+                    ref={emblaRef}
+                    onMouseDownCapture={(e) => e.stopPropagation()}
                     onTouchStartCapture={(e) => e.stopPropagation()}
                 >
                     <div className="flex">
