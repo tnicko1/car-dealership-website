@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { CarWithImages } from '@/types/car';
 import CarCard from './CarCard';
 import FilterSidebar from './FilterSidebar';
@@ -55,7 +56,7 @@ export default function CarListings({ cars, filters, wishlistedCarIds }: { cars:
     };
 
     const CarListItem = ({ car }: { car: CarWithImages }) => (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 flex gap-4">
+        <Link href={`/cars/${car.id}`} className="flex bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 gap-4 hover:shadow-lg hover:scale-[1.01] transition-all duration-200">
             <div className="w-1/3 h-32 relative">
                 <Image src={car.images[0]?.url || ''} alt={`${car.make} ${car.model}`} fill style={{ objectFit: 'cover' }} className="rounded-md" />
             </div>
@@ -69,7 +70,7 @@ export default function CarListings({ cars, filters, wishlistedCarIds }: { cars:
                     <p><strong>Transmission:</strong> {car.transmission}</p>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 
     return (
