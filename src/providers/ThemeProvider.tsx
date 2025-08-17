@@ -18,10 +18,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         const storedTheme = localStorage.getItem('theme') as Theme | null;
         if (storedTheme) {
             setTheme(storedTheme);
-            document.documentElement.classList.add(storedTheme);
-        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            setTheme('dark');
-            document.documentElement.classList.add('dark');
+            if (storedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
         }
     }, []);
 
