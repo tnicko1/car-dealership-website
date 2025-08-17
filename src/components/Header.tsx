@@ -98,7 +98,7 @@ export default function Header() {
 
                 {/* Mobile Menu Drawer */}
                 <div
-                    className={`md:hidden fixed top-0 left-0 w-full h-full bg-white dark:bg-gray-900 z-40 transition-transform duration-300 ease-in-out ${
+                    className={`md:hidden fixed top-0 left-0 w-full h-full bg-white dark:bg-gray-900 z-[60] transition-transform duration-300 ease-in-out ${
                         isMenuOpen ? 'translate-x-0' : '-translate-x-full'
                     }`}
                 >
