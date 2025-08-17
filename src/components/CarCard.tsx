@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, MouseEvent, useCallback, useEffect } from 'react';
 import type { CarWithImages } from "@/types/car";
 import Link from "next/link";
