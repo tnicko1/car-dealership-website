@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import ThemeSwitcher from './ThemeSwitcher';
-import AuthButtons from './AuthButtons';
+import UserMenu from './UserMenu';
 
 export default function Header() {
     const { data: session } = useSession();
@@ -66,7 +66,7 @@ export default function Header() {
                 {/* Right Section: Theme Switcher and Auth */}
                 <div className="flex-1 flex justify-end items-center gap-4">
                     <ThemeSwitcher />
-                    <AuthButtons />
+                    <UserMenu />
                 </div>
             </div>
         </header>
