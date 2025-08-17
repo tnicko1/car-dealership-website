@@ -1,0 +1,137 @@
+'use client';
+
+import { useState } from 'react';
+import { Car } from '@prisma/client';
+import { CheckCircle, Gauge, Gem, ShieldCheck, SlidersHorizontal, Sparkles } from 'lucide-react';
+
+type SpecTabsProps = {
+    car: Car;
+};
+
+const iconMap = {
+    Mileage: <Gauge className="w-5 h-5 mr-2 text-blue-500" />,
+    'Fuel Type': <Gem className="w-5 h-5 mr-2 text-green-500" />,
+    Transmission: <SlidersHorizontal className="w-5 h-5 mr-2 text-purple-500" />,
+    'Engine Volume': <Sparkles className="w-5 h-5 mr-2 text-yellow-500" />,
+};
+
+const SpecItem = ({ label, value }: { label: keyof typeof iconMap | string; value: string | number | boolean | null | undefined }) => {
+    if (!value) return null;
+    const icon = label in iconMap ? iconMap[label as keyof typeof iconMap] : <div className="w-5 h-5 mr-2" />;
+    return (
+        <div className="flex items-center bg-gray-100 dark:bg-gray-900 p-3 rounded-lg">
+            {icon}
+            <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
+                <p className="font-semibold">{String(value)}</p>
+            </div>
+        </div>
+    );
+};
+
+const FeatureList = ({ items }: { items: string[] }) => (
+    <ul className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {items.map((item, index) => (
+            <li key={index} className="flex items-center">
+                <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
+                <span>{item}</span>
+            </li>
+        ))}
+    </ul>
+);
+
+export default function SpecTabs({ car }: SpecTabsProps) {
+    const [activeTab, setActiveTab] = useState('overview');
+
+    const tabs = [
+        { id: 'overview', label: 'Overview' },
+        { id: 'performance', label: 'Performance' },
+        { id: 'features', label: 'Features' },
+    ];
+
+    const renderContent = () => {
+        switch (activeTab) {
+            case 'overview':
+                return (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <SpecItem label="Mileage" value={`${car.mileage.toLocaleString()} mi`} />
+                        <SpecItem label="Fuel Type" value={car.fuelType} />
+                        <SpecItem label="Transmission" value={car.transmission} />
+                        <SpecItem label="Engine Volume" value={car.engineVolume ? `${car.engineVolume}L` : null} />
+                        <SpecItem label="Make" value={car.make} />
+                        <SpecItem label="Model" value={car.model} />
+                        <SpecItem label="Year" value={car.year} />
+                        <SpecItem label="Body Style" value={car.bodyStyle} />
+                        <SpecItem label="Color" value={car.color} />
+                        <SpecItem label="Drive Wheels" value={car.driveWheels} />
+                        <SpecItem label="Doors" value={car.doors} />
+                        <SpecItem label="Wheel" value={car.wheel} />
+                    </div>
+                );
+            case 'performance':
+                return (
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <SpecItem label="Horsepower" value={car.horsepower} />
+                        <SpecItem label="Engine Volume" value={car.engineVolume ? `${car.engineVolume}L` : null} />
+                        <SpecItem label="Cylinders" value={car.cylinders} />
+                        <SpecItem label="Drive Wheels" value={car.driveWheels} />
+                        <SpecItem label="Transmission" value={car.transmission} />
+                    </div>
+                );
+            case 'features':
+                return (
+                    <div className="space-y-6">
+                        {car.comfort.length > 0 && (
+                            <div>
+                                <h3 className="text-lg font-semibold mb-2">Comfort</h3>
+                                <FeatureList items={car.comfort} />
+                            </div>
+                        )}
+                        {car.safety.length > 0 && (
+                            <div>
+                                <h3 className="text-lg font-semibold mb-2">Safety</h3>
+                                <FeatureList items={car.safety} />
+                            </div>
+                        )}
+                        {car.multimedia.length > 0 && (
+                            <div>
+                                <h3 className="text-lg font-semibold mb-2">Multimedia</h3>
+                                <FeatureList items={car.multimedia} />
+                            </div>
+                        )}
+                        {car.other.length > 0 && (
+                            <div>
+                                <h3 className="text-lg font-semibold mb-2">Other</h3>
+                                <FeatureList items={car.other} />
+                            </div>
+                        )}
+                    </div>
+                );
+            default:
+                return null;
+        }
+    };
+
+    return (
+        <div>
+            <div className="border-b border-gray-200 dark:border-gray-700 mb-6">
+                <nav className="-mb-px flex space-x-6" aria-label="Tabs">
+                    {tabs.map(tab => (
+                        <button
+                            key={tab.id}
+                            onClick={() => setActiveTab(tab.id)}
+                            className={`${
+                                activeTab === tab.id
+                                    ? 'border-blue-500 text-blue-600'
+                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+                            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
+                </nav>
+            </div>
+            <div>{renderContent()}</div>
+        </div>
+    );
+}
