@@ -61,6 +61,12 @@ export default function UserMenu() {
                         <Settings className="w-4 h-4 mr-2" />
                         Account Settings
                     </Link>
+                    {session.user.role === 'admin' && (
+                        <Link href="/admin" className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <User className="w-4 h-4 mr-2" />
+                            Admin Panel
+                        </Link>
+                    )}
                     <button
                         onClick={() => signOut()}
                         className="w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
