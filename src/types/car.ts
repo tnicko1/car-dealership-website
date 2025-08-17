@@ -2,6 +2,10 @@ import type { Car, CarImage, User } from '@prisma/client';
 
 export type { Car, CarImage };
 
+export type CarWithImages = Car & {
+    images: CarImage[];
+};
+
 export type CarWithOwnerAndImages = Car & {
     images: CarImage[];
     owner?: {
