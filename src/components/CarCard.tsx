@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, MouseEvent, useCallback } from 'react';
+import { useState, MouseEvent, useCallback, useEffect } from 'react';
 import type { CarWithImages } from "@/types/car";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,27 +8,55 @@ import { toggleWishlist } from "@/actions/wishlistActions";
 import { useSession } from "next-auth/react";
 import { useCompare } from "@/providers/CompareProvider";
 import useEmblaCarousel from 'embla-carousel-react';
-import { Heart } from 'lucide-react';
+import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
+
+// Prevents the parent carousel from being dragged when interacting with the card's carousel
+const stopPropagation = (e: MouseEvent | TouchEvent) => e.stopPropagation();
 
 export default function CarCard({ car, isWishlisted: initialIsWishlisted }: { car: CarWithImages, isWishlisted?: boolean }) {
     const { data: session } = useSession();
     const { addToCompare } = useCompare();
     const [isWishlisted, setIsWishlisted] = useState(initialIsWishlisted);
     const [transform, setTransform] = useState('');
-    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+    
+    // Embla Carousel setup
+    const [emblaRef, emblaApi] = useEmblaCarousel({ 
+        loop: true, 
+        // Only allow dragging on touch devices, not with a mouse
+        watchDrag: (emblaApi, event) => event.pointerType !== 'mouse'
+    });
     const [currentImage, setCurrentImage] = useState(0);
 
-    const updateCurrent = useCallback(() => {
+    const scrollPrev = useCallback((e: MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        emblaApi?.scrollPrev();
+    }, [emblaApi]);
+
+    const scrollNext = useCallback((e: MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        emblaApi?.scrollNext();
+    }, [emblaApi]);
+
+    const onSelect = useCallback(() => {
         if (emblaApi) {
             setCurrentImage(emblaApi.selectedScrollSnap());
         }
     }, [emblaApi]);
 
-    emblaApi?.on('select', updateCurrent);
+    useEffect(() => {
+        if (!emblaApi) return;
+        onSelect();
+        emblaApi.on('select', onSelect);
+        return () => {
+            emblaApi.off('select', onSelect);
+        };
+    }, [emblaApi, onSelect]);
 
     const handleWishlistToggle = async (e: MouseEvent) => {
         e.preventDefault();
-        e.stopPropagation(); // Prevent link navigation
+        e.stopPropagation();
         if (!session) {
             alert("Please log in to add items to your wishlist.");
             return;
@@ -45,7 +73,7 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted }: { ca
 
     const handleCompareClick = (e: MouseEvent) => {
         e.preventDefault();
-        e.stopPropagation(); // Prevent link navigation
+        e.stopPropagation();
         addToCompare(car);
     };
 
@@ -71,7 +99,7 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted }: { ca
             style={{ transform: transform }}
             className="block bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-200 ease-out group"
         >
-            <div className="relative">
+            <div className="relative" onMouseDownCapture={stopPropagation} onTouchStartCapture={stopPropagation}>
                 {/* Image Carousel */}
                 <div className="overflow-hidden" ref={emblaRef}>
                     <div className="flex">
@@ -90,6 +118,18 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted }: { ca
                         ))}
                     </div>
                 </div>
+
+                {/* Desktop-only Arrow Controls */}
+                {car.images.length > 1 && (
+                    <>
+                        <button onClick={scrollPrev} className="absolute top-1/2 left-2 z-20 -translate-y-1/2 bg-black/30 text-white p-1 rounded-full hover:bg-black/50 transition-all duration-200 opacity-0 md:group-hover:opacity-100 md:flex hidden items-center justify-center">
+                            <ChevronLeft size={20} />
+                        </button>
+                        <button onClick={scrollNext} className="absolute top-1/2 right-2 z-20 -translate-y-1/2 bg-black/30 text-white p-1 rounded-full hover:bg-black/50 transition-all duration-200 opacity-0 md:group-hover:opacity-100 md:flex hidden items-center justify-center">
+                            <ChevronRight size={20} />
+                        </button>
+                    </>
+                )}
 
                 {/* Carousel Dots */}
                 {car.images.length > 1 && (
