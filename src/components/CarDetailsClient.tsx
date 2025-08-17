@@ -54,6 +54,20 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
 
     return (
         <>
+            {/* Preload images */}
+            <div style={{ display: 'none' }}>
+                {car.images.map(image => (
+                    <Image
+                        key={`preload-${image.id}`}
+                        src={image.url}
+                        alt="preload"
+                        width={800}
+                        height={600}
+                        priority={false}
+                    />
+                ))}
+            </div>
+
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden">
                 <div className="grid grid-cols-1 lg:grid-cols-2">
                     <div className="relative h-96 lg:h-auto min-h-[400px]">

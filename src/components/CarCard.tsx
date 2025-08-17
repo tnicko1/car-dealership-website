@@ -70,6 +70,20 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted }: { ca
             style={{ transform: transform }}
             className="block bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-200 ease-out group"
         >
+            {/* Preload images */}
+            <div style={{ display: 'none' }}>
+                {car.images.slice(1).map(image => (
+                    <Image
+                        key={`preload-${image.id}`}
+                        src={image.url}
+                        alt="preload"
+                        width={600}
+                        height={400}
+                        priority={false}
+                    />
+                ))}
+            </div>
+
             <div className="relative">
                 {/* Image Carousel */}
                 <div className="relative h-56 w-full overflow-hidden">
@@ -82,6 +96,7 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted }: { ca
                             style={{ objectFit: 'cover' }}
                             className={`transition-opacity duration-500 ease-in-out ${index === currentImage ? 'opacity-100' : 'opacity-0'}`}
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            priority={index === 0} // Prioritize the first image
                             onError={(e) => { e.currentTarget.src = 'https://placehold.co/600x400/ff0000/ffffff?text=Image+Not+Found'; }}
                         />
                     ))}
