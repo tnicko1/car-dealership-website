@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, MouseEvent, useCallback, useEffect } from 'react';
 import type { CarWithImages } from "@/types/car";
 import Link from "next/link";
@@ -9,9 +7,6 @@ import { useSession } from "next-auth/react";
 import { useCompare } from "@/providers/CompareProvider";
 import useEmblaCarousel from 'embla-carousel-react';
 import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
-
-// Prevents the parent carousel from being dragged when interacting with the card's carousel
-const stopPropagation = (e: MouseEvent | TouchEvent) => e.stopPropagation();
 
 export default function CarCard({ car, isWishlisted: initialIsWishlisted }: { car: CarWithImages, isWishlisted?: boolean }) {
     const { data: session } = useSession();
@@ -99,7 +94,7 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted }: { ca
             style={{ transform: transform }}
             className="block bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-200 ease-out group"
         >
-            <div className="relative" onMouseDownCapture={stopPropagation} onTouchStartCapture={stopPropagation}>
+            <div className="relative" onMouseDownCapture={(e) => e.stopPropagation()} onTouchStartCapture={(e) => e.stopPropagation()}>
                 {/* Image Carousel */}
                 <div className="overflow-hidden" ref={emblaRef}>
                     <div className="flex">
