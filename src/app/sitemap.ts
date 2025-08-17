@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import prisma from '@/lib/prisma';
 
-const URL = 'https://your-production-url.com'; // IMPORTANT: Replace with your actual production URL
+const URL = 'https://yourdealership.netlify.app/'; // IMPORTANT: Replace with your actual production URL
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Fetch all cars from the database
