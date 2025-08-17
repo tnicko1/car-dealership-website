@@ -96,9 +96,14 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted }: { ca
             style={{ transform: transform }}
             className="block bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-200 ease-out group"
         >
-            <div className="relative" onMouseDownCapture={(e) => e.stopPropagation()} onTouchStartCapture={(e) => e.stopPropagation()}>
+            <div className="relative">
                 {/* Image Carousel */}
-                <div className="overflow-hidden" ref={emblaRef}>
+                <div 
+                    className="overflow-hidden" 
+                    ref={emblaRef} 
+                    onMouseDownCapture={(e) => e.stopPropagation()} 
+                    onTouchStartCapture={(e) => e.stopPropagation()}
+                >
                     <div className="flex">
                         {car.images.map((image, index) => (
                             <div className="relative h-56 w-full flex-shrink-0" key={image.id}>
