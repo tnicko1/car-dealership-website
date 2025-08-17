@@ -3,6 +3,78 @@ import { notFound } from 'next/navigation';
 import CarDetailsClient from '@/components/CarDetailsClient';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/auth.config';
+import type { Metadata } from 'next';
+
+// Generate metadata for the page
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+    const car = await prisma.car.findUnique({
+        where: { id: params.id },
+        include: { images: true },
+    });
+
+    if (!car) {
+        return {
+            title: 'Car Not Found',
+        };
+    }
+
+    const title = `${car.year} ${car.make} ${car.model} for Sale`;
+    const description = `View details for the ${car.year} ${car.make} ${car.model}, priced at ${car.price.toLocaleString()}. ${car.description.substring(0, 120)}...`;
+    const imageUrl = car.images[0]?.url || '/showroom-bg.png';
+
+    // Structured Data (JSON-LD) for SEO
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'Vehicle',
+        name: title,
+        description: car.description,
+        image: imageUrl,
+        brand: {
+            '@type': 'Brand',
+            name: car.make,
+        },
+        model: car.model,
+        productionDate: car.year.toString(),
+        vehicleEngine: {
+            '@type': 'EngineSpecification',
+            fuelType: car.fuelType,
+            engineDisplacement: car.engineVolume ? `${car.engineVolume} L` : undefined,
+        },
+        mileageFromOdometer: {
+            '@type': 'QuantitativeValue',
+            value: car.mileage,
+            unitCode: 'SMI', // US Statute Mile
+        },
+        offers: {
+            '@type': 'Offer',
+            price: car.price,
+            priceCurrency: 'USD',
+            availability: 'https://schema.org/InStock',
+        },
+    };
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            images: [
+                {
+                    url: imageUrl,
+                    width: 1200,
+                    height: 630,
+                    alt: title,
+                },
+            ],
+        },
+        // Inject the JSON-LD script into the head
+        other: {
+            'script:ld+json': JSON.stringify(jsonLd),
+        },
+    };
+}
+
 
 export default async function CarDetailsPage({ params }: { params: { id: string } }) {
     const session = await getServerSession(authOptions);
@@ -10,7 +82,7 @@ export default async function CarDetailsPage({ params }: { params: { id: string 
     const [car, user] = await Promise.all([
         prisma.car.findUnique({
             where: { id: params.id },
-            include: { 
+            include: {
                 images: true,
                 owner: {
                     select: {
