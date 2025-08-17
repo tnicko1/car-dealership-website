@@ -37,7 +37,7 @@ export default function UserMenu() {
                     <LogIn className="w-5 h-5" />
                     Login
                 </button>
-                <LoginModal isOpen={isLoginModalOpen} setIsOpen={setIsLoginModalOpen} />
+                <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
             </>
         );
     }
