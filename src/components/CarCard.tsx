@@ -23,7 +23,7 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted }: { ca
     const [emblaRef, emblaApi] = useEmblaCarousel({ 
         loop: true, 
         // Only allow dragging on touch devices, not with a mouse
-        watchDrag: (emblaApi, event) => event.pointerType !== 'mouse'
+        watchDrag: (emblaApi, event) => (event as PointerEvent).pointerType !== 'mouse'
     });
     const [currentImage, setCurrentImage] = useState(0);
 
