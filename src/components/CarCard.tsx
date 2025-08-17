@@ -99,12 +99,8 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInte
             className="block bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-200 ease-out group"
         >
             <div className="relative">
-                <div 
-                    className="overflow-hidden" 
-                    ref={emblaRef}
-                    onMouseDownCapture={(e) => isInteractive && e.stopPropagation()}
-                    onTouchStartCapture={(e) => isInteractive && e.stopPropagation()}
-                >
+                {/* Image Carousel */}
+                <div className="overflow-hidden" ref={emblaRef}>
                     <div className="flex">
                         {car.images.map((image, index) => (
                             <div className="relative h-56 w-full flex-shrink-0" key={image.id}>
@@ -122,6 +118,7 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInte
                     </div>
                 </div>
 
+                {/* Desktop-only Arrow Controls */}
                 {isInteractive && car.images.length > 1 && (
                     <>
                         <button onClick={scrollPrev} className="absolute top-1/2 left-2 z-20 -translate-y-1/2 bg-black/30 text-white p-1 rounded-full hover:bg-black/50 transition-all duration-200 opacity-0 md:group-hover:opacity-100 md:flex hidden items-center justify-center">
