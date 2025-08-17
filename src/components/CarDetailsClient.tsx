@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import type { CarWithOwnerAndImages } from "@/types/car";
+import type { CarWithOwnerAndImages, CarWithImages } from "@/types/car";
 import Image from "next/image";
-import { CheckCircle, Heart } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import InquiryModal from './InquiryModal';
 import FinancingCalculator from './FinancingCalculator';
 import { useSession } from 'next-auth/react';
@@ -24,21 +24,21 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
     const ctaTriggerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        const triggerElement = ctaTriggerRef.current;
         const observer = new IntersectionObserver(
             ([entry]) => {
-                // When the trigger element is NOT intersecting (i.e., scrolled past), show the CTA bar.
                 setIsCtaVisible(!entry.isIntersecting);
             },
-            { rootMargin: "-100px 0px 0px 0px" } // Trigger when the element is 100px from the top
+            { rootMargin: "-100px 0px 0px 0px" }
         );
 
-        if (ctaTriggerRef.current) {
-            observer.observe(ctaTriggerRef.current);
+        if (triggerElement) {
+            observer.observe(triggerElement);
         }
 
         return () => {
-            if (ctaTriggerRef.current) {
-                observer.unobserve(ctaTriggerRef.current);
+            if (triggerElement) {
+                observer.unobserve(triggerElement);
             }
         };
     }, []);
@@ -57,20 +57,6 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
             alert("Something went wrong. Please try again.");
         }
     };
-
-    const renderSpecificationList = (title: string, items: string[]) => (
-        <div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">{title}</h3>
-            <ul className="space-y-2">
-                {items.map((item, index) => (
-                    <li key={index} className="flex items-center text-gray-700 dark:text-gray-300">
-                        <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
-                        <span>{item}</span>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
 
     const slides = car.images.map(img => ({ src: img.url }));
 
