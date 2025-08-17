@@ -2,9 +2,12 @@
 
 import Link from "next/link";
 import ThemeSwitcher from "./ThemeSwitcher";
-import AuthButtons from "./AuthButtons"; // Import the auth buttons
+import AuthButtons from "./AuthButtons";
+import { useSession } from "next-auth/react";
 
 export default function Header() {
+    const { data: session } = useSession();
+
     return (
         <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-sm sticky top-0 z-50 transition-colors">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center">
@@ -29,6 +32,11 @@ export default function Header() {
                     <Link href="/wishlist" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
                         Wishlist
                     </Link>
+                    {session && (
+                        <Link href="/my-listings" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+                            My Listings
+                        </Link>
+                    )}
                     <Link href="/contact" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
                         Contact
                     </Link>

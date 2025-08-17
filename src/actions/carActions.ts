@@ -42,14 +42,15 @@ const getCarData = (formData: FormData) => {
 // Server Action to add a new car
 export async function addCar(formData: FormData) {
     const session = await getServerSession(authOptions);
-    if (session?.user?.role !== 'admin') throw new Error('Unauthorized');
+    if (!session?.user?.id) throw new Error('Unauthorized');
 
     const carData = getCarData(formData);
     const imageUrls = formData.getAll('images') as string[];
 
-    const car = await prisma.car.create({
+    await prisma.car.create({
         data: {
             ...carData,
+            userId: session.user.id,
             images: {
                 create: imageUrls.map(url => ({ url })),
             },
@@ -64,12 +65,11 @@ export async function addCar(formData: FormData) {
 // Server Action to update an existing car
 export async function updateCar(id: string, formData: FormData) {
     const session = await getServerSession(authOptions);
-    if (session?.user?.role !== 'admin') throw new Error('Unauthorized');
+    if (!session?.user?.id) throw new Error('Unauthorized');
 
     const carData = getCarData(formData);
     const newImageUrls = formData.getAll('images') as string[];
 
-    // Get the current state of the car from the database
     const existingCar = await prisma.car.findUnique({
         where: { id },
         include: { images: true },
@@ -77,9 +77,13 @@ export async function updateCar(id: string, formData: FormData) {
 
     if (!existingCar) throw new Error('Car not found');
 
+    // Authorization check: user must be admin or car owner
+    if (session.user.role !== 'admin' && existingCar.userId !== session.user.id) {
+        throw new Error('Unauthorized');
+    }
+
     const existingImageUrls = existingCar.images.map(image => image.url);
 
-    // Identify images to be deleted from Supabase
     const urlsToDelete = existingImageUrls.filter(url => !newImageUrls.includes(url));
     const pathsToDelete = urlsToDelete.map(url => {
         const parts = url.split('/');
@@ -90,16 +94,11 @@ export async function updateCar(id: string, formData: FormData) {
         const { error } = await supabase.storage.from('car-images').remove(pathsToDelete);
         if (error) {
             console.error('Error deleting images from Supabase:', error);
-            // Depending on the desired behavior, you might want to stop the update process
         }
     }
 
-    // Perform the database update in a transaction
     await prisma.$transaction(async (tx) => {
-        // Clear out the old image associations
         await tx.carImage.deleteMany({ where: { carId: id } });
-
-        // Update the car with the new data and new image associations
         await tx.car.update({
             where: { id },
             data: {
@@ -111,7 +110,6 @@ export async function updateCar(id: string, formData: FormData) {
         });
     });
 
-    // Revalidate paths and redirect
     revalidatePath('/admin');
     revalidatePath('/cars');
     revalidatePath(`/cars/${id}`);
@@ -121,12 +119,16 @@ export async function updateCar(id: string, formData: FormData) {
 // Server Action to remove a car
 export async function removeCar(id: string) {
     const session = await getServerSession(authOptions);
-    if (session?.user?.role !== 'admin') throw new Error('Unauthorized');
+    if (!session?.user?.id) throw new Error('Unauthorized');
 
     const car = await prisma.car.findUnique({ where: { id }, include: { images: true } });
     if (!car) throw new Error('Car not found');
 
-    // Delete images from Supabase Storage
+    // Authorization check: user must be admin or car owner
+    if (session.user.role !== 'admin' && car.userId !== session.user.id) {
+        throw new Error('Unauthorized');
+    }
+
     const imagePaths = car.images.map(image => {
         const parts = image.url.split('/');
         return parts[parts.length - 1];

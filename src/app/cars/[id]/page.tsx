@@ -10,7 +10,16 @@ export default async function CarDetailsPage({ params }: { params: { id: string 
     const [car, user] = await Promise.all([
         prisma.car.findUnique({
             where: { id: params.id },
-            include: { images: true },
+            include: { 
+                images: true,
+                owner: {
+                    select: {
+                        name: true,
+                        email: true,
+                        phone: true,
+                    }
+                }
+            },
         }),
         session?.user?.id ? prisma.user.findUnique({
             where: { id: session.user.id },

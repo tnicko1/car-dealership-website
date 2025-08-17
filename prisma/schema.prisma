@@ -7,7 +7,7 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
-  directUrl = env("DATABASE_URL_NON_POOLING")
+  directUrl = env("MIGRATE_DATABASE_URL")
 }
 
 // Defines the Car table in your database
@@ -50,6 +50,9 @@ model Car {
   other             String[]
 
   wishlistedBy User[] @relation
+
+  owner   User   @relation("UserCars", fields: [userId], references: [id])
+  userId  String
 }
 
 model CarImage {
@@ -102,10 +105,12 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  phone         String?
   role          String    @default("user") // "user" or "admin"
   accounts      Account[]
   sessions      Session[]
   wishlist      Car[]     @relation
+  cars          Car[]     @relation("UserCars")
 }
 
 model VerificationToken {

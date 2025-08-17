@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { CarWithImages } from "@/types/car";
+import type { CarWithOwnerAndImages } from "@/types/car";
 import Image from "next/image";
 import { CheckCircle, Heart } from 'lucide-react';
 import InquiryModal from './InquiryModal';
@@ -9,7 +9,7 @@ import FinancingCalculator from './FinancingCalculator';
 import { useSession } from 'next-auth/react';
 import { toggleWishlist } from '@/actions/wishlistActions';
 
-export default function CarDetailsClient({ car, isWishlisted: initialIsWishlisted }: { car: CarWithImages, isWishlisted?: boolean }) {
+export default function CarDetailsClient({ car, isWishlisted: initialIsWishlisted }: { car: CarWithOwnerAndImages, isWishlisted?: boolean }) {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { data: session } = useSession();
@@ -153,6 +153,28 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                     </div>
                 )}
                 <FinancingCalculator price={car.price} />
+
+                {car.owner && (
+                    <div className="p-8 md:p-12 border-t border-gray-200 dark:border-gray-700">
+                        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+                            Seller Information
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                            <div>
+                                <p className="text-gray-500 dark:text-gray-400">Name</p>
+                                <p className="font-semibold text-lg">{car.owner.name || 'N/A'}</p>
+                            </div>
+                            <div>
+                                <p className="text-gray-500 dark:text-gray-400">Email</p>
+                                <p className="font-semibold text-lg">{car.owner.email || 'N/A'}</p>
+                            </div>
+                            <div>
+                                <p className="text-gray-500 dark:text-gray-400">Phone</p>
+                                <p className="font-semibold text-lg">{car.owner.phone || 'N/A'}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
             <InquiryModal car={car} isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
         </>
