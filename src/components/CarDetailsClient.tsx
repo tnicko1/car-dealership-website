@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import type { CarWithOwnerAndImages, CarWithImages } from "@/types/car";
 import Image from "next/image";
-import { Heart } from 'lucide-react';
+import { Heart, Mail, Phone, User } from 'lucide-react';
 import InquiryModal from './InquiryModal';
 import FinancingCalculator from './FinancingCalculator';
 import { useSession } from 'next-auth/react';
@@ -25,21 +25,24 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
 
     useEffect(() => {
         const triggerElement = ctaTriggerRef.current;
+        if (!triggerElement) return;
+
         const observer = new IntersectionObserver(
             ([entry]) => {
+                // When the trigger is out of view (scrolled past), show the CTA
                 setIsCtaVisible(!entry.isIntersecting);
             },
-            { rootMargin: "-100px 0px 0px 0px" }
+            {
+                // The CTA becomes visible when the trigger element is 150px from the top of the viewport
+                rootMargin: "-150px 0px 0px 0px",
+                threshold: 0
+            }
         );
 
-        if (triggerElement) {
-            observer.observe(triggerElement);
-        }
+        observer.observe(triggerElement);
 
         return () => {
-            if (triggerElement) {
-                observer.unobserve(triggerElement);
-            }
+            observer.unobserve(triggerElement);
         };
     }, []);
 
@@ -70,7 +73,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
             </div>
 
             {/* Sticky CTA Bar */}
-            <div className={`sticky top-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md transition-transform duration-300 ${isCtaVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+            <div className={`fixed top-[80px] left-0 right-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md transition-transform duration-300 ease-in-out ${isCtaVisible ? 'translate-y-0' : '-translate-y-full'}`}>
                 <div className="container mx-auto px-4 py-3 flex justify-between items-center">
                     <div>
                         <h2 className="font-bold text-lg">{car.year} {car.make} {car.model}</h2>
@@ -149,7 +152,29 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                 {car.owner && (
                     <div className="p-8 md:p-12 border-t border-gray-200 dark:border-gray-700">
                         <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Seller Information</h2>
-                        {/* ... seller info ... */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="flex items-center gap-4">
+                                <User className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                                <div>
+                                    <p className="font-semibold">Name</p>
+                                    <p className="text-gray-600 dark:text-gray-300">{car.owner.name}</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <Mail className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                                <div>
+                                    <p className="font-semibold">Email</p>
+                                    <a href={`mailto:${car.owner.email}`} className="text-blue-600 dark:text-blue-400 hover:underline">{car.owner.email}</a>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <Phone className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                                <div>
+                                    <p className="font-semibold">Phone</p>
+                                    <p className="text-gray-600 dark:text-gray-300">{car.owner.phone || 'N/A'}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

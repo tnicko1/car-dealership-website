@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Car } from '@prisma/client';
-import { CheckCircle, Gauge, Gem, ShieldCheck, SlidersHorizontal, Sparkles } from 'lucide-react';
+import { CheckCircle, Gauge, Fuel, SlidersHorizontal, User, Zap } from 'lucide-react';
 
 type SpecTabsProps = {
     car: Car;
@@ -10,9 +10,10 @@ type SpecTabsProps = {
 
 const iconMap = {
     Mileage: <Gauge className="w-5 h-5 mr-2 text-blue-500" />,
-    'Fuel Type': <Gem className="w-5 h-5 mr-2 text-green-500" />,
+    'Fuel Type': <Fuel className="w-5 h-5 mr-2 text-green-500" />,
     Transmission: <SlidersHorizontal className="w-5 h-5 mr-2 text-purple-500" />,
-    'Engine Volume': <Sparkles className="w-5 h-5 mr-2 text-yellow-500" />,
+    'Engine Volume': <Zap className="w-5 h-5 mr-2 text-yellow-500" />, // Changed icon
+    'Seller': <User className="w-5 h-5 mr-2 text-gray-500" />,
 };
 
 const SpecItem = ({ label, value }: { label: keyof typeof iconMap | string; value: string | number | boolean | null | undefined }) => {
