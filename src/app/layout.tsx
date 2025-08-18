@@ -37,19 +37,17 @@ export default function RootLayout({
             />
         </head>
         <body className={`${inter.className} bg-gray-50 dark:bg-gray-900`}>
-        <div className="overflow-x-hidden">
-            <AppSessionProvider>
-                <ThemeProvider>
-                    <CompareProvider>
-                        <Header />
-                        <main className="pb-24">{children}</main>
-                        <CompareBar />
-                        <Footer />
-                        <BackToTopButton />
-                    </CompareProvider>
-                </ThemeProvider>
-            </AppSessionProvider>
-        </div>
+        <AppSessionProvider>
+            <ThemeProvider>
+                <CompareProvider>
+                    <Header />
+                    <main className="pb-24 overflow-x-hidden">{children}</main>
+                    <CompareBar />
+                    <Footer />
+                    <BackToTopButton />
+                </CompareProvider>
+            </ThemeProvider>
+        </AppSessionProvider>
         </body>
         </html>
     );
