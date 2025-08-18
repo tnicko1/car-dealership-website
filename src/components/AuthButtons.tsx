@@ -5,10 +5,20 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import LoginModal from './LoginModal';
+import { useRouter } from 'next/navigation';
 
 export default function AuthButtons() {
     const { data: session } = useSession();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const router = useRouter();
+
+    const handleLoginClick = () => {
+        if (window.innerWidth < 768) { // Typical breakpoint for mobile
+            router.push('/login');
+        } else {
+            setIsModalOpen(true);
+        }
+    };
 
     if (session) {
         return (
@@ -40,7 +50,7 @@ export default function AuthButtons() {
 
     return (
         <>
-            <button onClick={() => setIsModalOpen(true)} className="text-sm font-medium hover:underline">
+            <button onClick={handleLoginClick} className="text-sm font-medium hover:underline">
                 Sign In
             </button>
             <LoginModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
