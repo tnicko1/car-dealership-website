@@ -10,6 +10,16 @@ export default withAuth(
             return NextResponse.redirect(new URL("/", req.url));
         }
 
+        const isAccountPage = req.nextUrl.pathname.startsWith("/account");
+        const user = req.nextauth.token;
+
+        if (user && !isAccountPage) {
+            const { firstName, lastName, phone } = user;
+            if (!firstName || !lastName || !phone) {
+                return NextResponse.redirect(new URL("/account", req.url));
+            }
+        }
+
         return NextResponse.next();
     },
     {
