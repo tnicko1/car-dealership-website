@@ -2,32 +2,8 @@ import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import AdminForm from '@/components/AdminForm';
 import type { CarWithImages } from '@/types/car';
-import type { Metadata } from 'next';
 
-interface EditCarPageProps {
-    params: {
-        id: string;
-    };
-}
-
-// Adding generateMetadata can help Next.js and TypeScript correctly resolve page props.
-export async function generateMetadata({ params }: EditCarPageProps): Promise<Metadata> {
-    const car = await prisma.car.findUnique({
-        where: { id: params.id },
-    });
-
-    if (!car) {
-        return {
-            title: 'Car Not Found',
-        };
-    }
-
-    return {
-        title: `Edit ${car.year} ${car.make} ${car.model}`,
-    };
-}
-
-export default async function EditCarPage({ params }: EditCarPageProps) {
+export default async function EditCarPage({ params }: { params: { id: string } }) {
     const car = await prisma.car.findUnique({
         where: { id: params.id },
         include: {
