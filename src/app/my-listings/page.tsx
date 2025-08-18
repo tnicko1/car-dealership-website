@@ -28,9 +28,19 @@ export default async function MyListingsPage() {
 
     return (
         <div className="container mx-auto px-4 py-12">
-            <h1 className="text-4xl font-bold mb-8">My Listings</h1>
+            <div className="flex justify-between items-center mb-8">
+                <h1 className="text-4xl font-bold">My Listings</h1>
+                <Link href="/my-listings/add" className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary-700 transition-colors">
+                    + Add Car
+                </Link>
+            </div>
             {userCars.length === 0 ? (
-                <p>You haven't listed any cars yet.</p>
+                <div className="text-center py-16">
+                    <p className="text-xl text-gray-600 dark:text-gray-400 mb-4">You haven't listed any cars yet.</p>
+                    <Link href="/my-listings/add" className="bg-primary text-white font-bold py-3 px-8 rounded-full hover:bg-primary-500 transition-colors">
+                        List Your First Car
+                    </Link>
+                </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {userCars.map((car: CarWithImages) => (
