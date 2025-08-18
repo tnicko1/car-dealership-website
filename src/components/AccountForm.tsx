@@ -57,7 +57,7 @@ export default function AccountForm({ user }: { user: User }) {
 
         const result = await updateUser(formData);
 
-        if (result.success) {
+        if (result.success && result.user) {
             setMessage('Profile updated successfully!');
             setMessageType('success');
             // Trigger session update to reflect the new avatar and name
@@ -65,11 +65,11 @@ export default function AccountForm({ user }: { user: User }) {
                 ...session,
                 user: {
                     ...session?.user,
-                    name: result.user?.username, // This should be username
-                    username: result.user?.username,
-                    firstName: result.user?.firstName,
-                    lastName: result.user?.lastName,
-                    image: result.user?.image,
+                    username: result.user.username,
+                    firstName: result.user.firstName,
+                    lastName: result.user.lastName,
+                    image: result.user.image,
+                    phone: result.user.phone,
                 },
             });
         } else {
