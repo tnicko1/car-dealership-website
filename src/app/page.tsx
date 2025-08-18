@@ -4,6 +4,7 @@ import Testimonials from '@/components/Testimonials';
 import FeaturedSlider from '@/components/FeaturedSlider';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/auth.config';
+import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
@@ -48,13 +49,13 @@ export default async function Home() {
                     <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
                         We offer a curated selection of high-quality new and pre-owned vehicles. Your journey to the perfect ride starts here.
                     </p>
-                    <a
+                    <Link
                         href="/cars"
                         className="bg-blue-600 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-500 transform hover:scale-105 transition-all duration-300 ease-in-out inline-block animate-fade-in-up"
                         style={{ animationDelay: '0.6s' }}
                     >
                         Explore Inventory
-                    </a>
+                    </Link>
                 </div>
             </section>
 
