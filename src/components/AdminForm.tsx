@@ -150,11 +150,11 @@ export default function AdminForm({ car }: { car?: CarWithImages }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-4">
                         <label className="flex items-center gap-2">
-                            <input type="checkbox" name="exchange" defaultChecked={car?.exchange} className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
+                            <input type="checkbox" name="exchange" defaultChecked={car?.exchange || false} className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
                             <span>Exchange possible</span>
                         </label>
                         <label className="flex items-center gap-2">
-                            <input type="checkbox" name="technicalInspection" defaultChecked={car?.technicalInspection} className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
+                            <input type="checkbox" name="technicalInspection" defaultChecked={car?.technicalInspection || false} className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
                             <span>Technical inspection passed</span>
                         </label>
                     </div>
