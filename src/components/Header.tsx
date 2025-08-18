@@ -73,10 +73,10 @@ export default function Header() {
     return (
         <header className={headerClasses}>
             {/* Main Header Bar - Hidden when mobile menu is open */}
-            <div className={`container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}>
+            <div className={`container mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}>
                 {/* Logo */}
                 <Link href="/" className="flex items-center text-2xl font-bold text-primary dark:text-primary-400 hover:opacity-80 transition-opacity">
-                    <Image src="/logo.svg" alt="YourDealership Logo" width={80} height={80} className="mr-2 drop-shadow-md" />
+                    <Image src="/logo.svg" alt="YourDealership Logo" width={80} height={80} className="mr-2 drop-shadow-md -mt-2" />
                     <span>YourDealership</span>
                 </Link>
 
