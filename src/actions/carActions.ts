@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/auth.config';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabaseAdmin'; // Use the admin client
 
 interface ActionResult {
     success: boolean;
@@ -47,7 +47,7 @@ const getCarData = (formData: FormData) => {
 async function uploadImages(files: File[]): Promise<string[]> {
     const uploadedUrls: string[] = [];
     for (const file of files) {
-        const { data, error } = await supabase.storage
+        const { data, error } = await supabaseAdmin.storage
             .from('car-images')
             .upload(`${Date.now()}-${file.name}`, file);
 
@@ -56,7 +56,7 @@ async function uploadImages(files: File[]): Promise<string[]> {
             throw new Error('Failed to upload one or more images.');
         }
         
-        const { publicUrl } = supabase.storage.from('car-images').getPublicUrl(data.path).data;
+        const { publicUrl } = supabaseAdmin.storage.from('car-images').getPublicUrl(data.path).data;
         uploadedUrls.push(publicUrl);
     }
     return uploadedUrls;
@@ -69,7 +69,7 @@ export async function addCar(formData: FormData): Promise<ActionResult> {
 
     try {
         const carData = getCarData(formData);
-        const imageFiles = formData.getAll('images') as File[];
+        const imageFiles = formData.getAll('newImages') as File[]; // Corrected from 'images'
         const imageUrls = await uploadImages(imageFiles);
 
         await prisma.car.create({
@@ -119,7 +119,7 @@ export async function updateCar(id: string, formData: FormData): Promise<ActionR
         const pathsToDelete = urlsToDelete.map(url => url.split('/').pop()).filter(Boolean) as string[];
 
         if (pathsToDelete.length > 0) {
-            await supabase.storage.from('car-images').remove(pathsToDelete);
+            await supabaseAdmin.storage.from('car-images').remove(pathsToDelete);
         }
 
         await prisma.$transaction(async (tx) => {
@@ -163,7 +163,7 @@ export async function removeCar(id: string) {
     }).filter(Boolean) as string[];
     
     if (imagePaths.length > 0) {
-        const { error } = await supabase.storage.from('car-images').remove(imagePaths);
+        const { error } = await supabaseAdmin.storage.from('car-images').remove(imagePaths);
         if (error) {
             console.error('Error deleting images from Supabase:', error);
             // We can choose to continue even if image deletion fails
