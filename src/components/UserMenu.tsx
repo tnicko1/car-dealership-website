@@ -47,12 +47,12 @@ export default function UserMenu() {
             <button onClick={() => setIsOpen(!isOpen)} className="flex items-center gap-2">
                 <Image
                     src={session.user?.image || 'https://placehold.co/40x40'}
-                    alt={session.user?.name || 'User'}
+                    alt={session.user?.username || 'User'}
                     width={40}
                     height={40}
                     className="rounded-full"
                 />
-                <span className="hidden md:block font-semibold">{session.user?.name}</span>
+                <span className="hidden md:block font-semibold">{session.user?.username}</span>
             </button>
 
             {isOpen && (
