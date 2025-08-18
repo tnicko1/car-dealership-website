@@ -6,12 +6,19 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { LogIn, User, Settings, LogOut } from 'lucide-react';
 import LoginModal from './LoginModal';
+import { usePathname } from 'next/navigation';
 
 export default function UserMenu() {
     const { data: session, status } = useSession();
     const [isOpen, setIsOpen] = useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+    const pathname = usePathname();
+
+    // Close dropdown on route change
+    useEffect(() => {
+        setIsOpen(false);
+    }, [pathname]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -57,18 +64,21 @@ export default function UserMenu() {
 
             {isOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50">
-                    <Link href="/account" className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <Link href="/account" onClick={() => setIsOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                         <Settings className="w-4 h-4 mr-2" />
                         Account Settings
                     </Link>
                     {session.user.role === 'admin' && (
-                        <Link href="/admin" className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <Link href="/admin" onClick={() => setIsOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                             <User className="w-4 h-4 mr-2" />
                             Admin Panel
                         </Link>
                     )}
                     <button
-                        onClick={() => signOut()}
+                        onClick={() => {
+                            setIsOpen(false);
+                            signOut();
+                        }}
                         className="w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                     >
                         <LogOut className="w-4 h-4 mr-2" />
