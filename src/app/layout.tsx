@@ -22,7 +22,16 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" suppressHydrationWarning>
-        <head />
+        <head>
+            <title>Your Car Dealership</title>
+            <link
+                rel="preload"
+                href="/showroom-bg.webp"
+                as="image"
+                type="image/webp"
+                crossOrigin="anonymous"
+            />
+        </head>
         <body className={`${inter.className} bg-gray-50 dark:bg-gray-900`}>
         <AppSessionProvider>
             <ThemeProvider>
