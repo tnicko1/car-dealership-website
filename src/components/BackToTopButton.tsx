@@ -5,7 +5,7 @@ import { useCompare } from '@/providers/CompareProvider';
 
 export default function BackToTopButton() {
     const [isVisible, setIsVisible] = useState(false);
-    const { compareItems } = useCompare();
+    const { compareList } = useCompare();
 
     const toggleVisibility = () => {
         // Using a lower threshold for mobile
@@ -28,7 +28,7 @@ export default function BackToTopButton() {
         return () => window.removeEventListener('scroll', toggleVisibility);
     }, []);
 
-    const isCompareBarActive = compareItems.length > 0;
+    const isCompareBarActive = compareList.length > 0;
 
     return (
         <button
