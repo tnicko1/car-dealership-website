@@ -54,7 +54,7 @@ export default async function Home() {
                     </p>
                     <Link
                         href="/cars"
-                        className="bg-blue-600 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-500 transform hover:scale-105 transition-all duration-300 ease-in-out inline-block animate-fade-in-up"
+                        className="bg-primary text-white font-bold py-3 px-8 rounded-full hover:bg-primary-500 transform hover:scale-105 transition-all duration-300 ease-in-out inline-block animate-fade-in-up"
                         style={{ animationDelay: '0.6s' }}
                     >
                         Explore Inventory

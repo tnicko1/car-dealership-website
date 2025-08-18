@@ -157,7 +157,7 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInte
             </div>
             <div className="p-6">
                 <div className="flex justify-between items-center mb-4">
-                    <p className="text-2xl font-semibold text-blue-600 dark:text-blue-400">
+                    <p className="text-2xl font-semibold text-primary dark:text-primary-400">
                         ${car.price.toLocaleString()}
                     </p>
                     <div className="flex space-x-2">

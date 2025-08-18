@@ -48,7 +48,7 @@ export default function FinancingCalculator({ price }: { price: number }) {
                 <div className="flex items-center justify-center bg-gray-100 dark:bg-gray-900 rounded-lg p-8">
                     <div className="text-center">
                         <p className="text-lg text-gray-600 dark:text-gray-400">Estimated Monthly Payment</p>
-                        <p className="text-5xl font-bold text-blue-600 dark:text-blue-400 mt-2">
+                        <p className="text-5xl font-bold text-primary dark:text-primary-400 mt-2">
                             ${calculateMonthlyPayment()}
                         </p>
                     </div>

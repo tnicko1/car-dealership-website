@@ -83,7 +83,7 @@ export default function Footer() {
                 onClick={scrollToTop}
                 aria-label="Scroll to top"
                 className={`
-                    fixed bottom-5 right-5 p-3 rounded-full bg-blue-600 text-white
+                    fixed bottom-5 right-5 p-3 rounded-full bg-primary text-white
                     hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2
                     focus:ring-blue-500 transition-all duration-300
                     ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}

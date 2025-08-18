@@ -9,7 +9,7 @@ export default function TestimonialForm() {
             <input type="text" name="name" placeholder="Customer Name" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
             <textarea name="testimonial" placeholder="Testimonial" required className="p-2 border rounded w-full h-24 dark:bg-gray-700 dark:border-gray-600"></textarea>
             <input type="number" name="rating" min="1" max="5" placeholder="Rating (1-5)" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-            <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors">
+            <button type="submit" className="bg-primary text-white px-6 py-2 rounded hover:bg-primary-700 transition-colors">
                 Add Testimonial
             </button>
         </form>

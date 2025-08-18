@@ -42,7 +42,7 @@ const CheckboxGroup = ({ name, title, options, value, onValueChange }: any) => (
                         value={option}
                         checked={value.includes(option)}
                         onChange={(e) => onValueChange(e.target.value, name, e.target.checked)}
-                        className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        className="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary-500"
                     />
                     <label htmlFor={`${name}-${option}`} className="ml-3 text-sm text-gray-600 dark:text-gray-300">
                         {option}
@@ -62,7 +62,7 @@ export default function FilterSidebar({ makes, bodyStyles, fuelTypes, transmissi
         <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
             <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-bold">Filters</h3>
-                <button onClick={onReset} className="text-sm text-blue-600 hover:underline">Reset</button>
+                <button onClick={onReset} className="text-sm text-primary hover:underline">Reset</button>
             </div>
             <div className="space-y-6">
                 {/* Make Filter */}

@@ -53,18 +53,18 @@ export default function Header() {
     const headerClasses = `
         sticky top-0 z-50 transition-all duration-300
         ${isMenuOpen
-? 'bg-white dark:bg-gray-900 shadow-md'
+? 'bg-silver-100 dark:bg-gray-900 shadow-md'
 : isScrolled
-    ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md'
+    ? 'bg-silver-100/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md'
     : 'bg-transparent'
 }
     `;
 
     const linkClasses = (href: string) => `
         relative font-medium text-gray-600 dark:text-gray-300 whitespace-nowrap
-        transition-colors duration-300 hover:text-blue-600 dark:hover:text-blue-400
+        transition-colors duration-300 hover:text-primary dark:hover:text-primary-400
         after:content-[''] after:absolute after:left-0 after:bottom-[-2px]
-        after:w-full after:h-[2px] after:bg-blue-600 dark:after:bg-blue-400
+        after:w-full after:h-[2px] after:bg-primary dark:after:bg-primary-400
         after:transition-transform after:duration-300
         ${pathname === href ? 'after:scale-x-100' : 'after:scale-x-0'}
         hover:after:scale-x-100
@@ -75,8 +75,8 @@ export default function Header() {
             {/* Main Header Bar - Hidden when mobile menu is open */}
             <div className={`container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}>
                 {/* Logo */}
-                <Link href="/" className="flex items-center text-2xl font-bold text-blue-600 dark:text-blue-400 hover:opacity-80 transition-opacity">
-                    <Image src="/logo.svg" alt="YourDealership Logo" width={40} height={40} className="mr-2" />
+                <Link href="/" className="flex items-center text-2xl font-bold text-primary dark:text-primary-400 hover:opacity-80 transition-opacity">
+                    <Image src="/logo.svg" alt="YourDealership Logo" width={80} height={80} className="mr-2" />
                     <span>YourDealership</span>
                 </Link>
 

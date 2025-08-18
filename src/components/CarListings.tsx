@@ -109,7 +109,7 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
             </div>
             <div className="w-2/3">
                 <h3 className="text-lg font-bold">{car.make} {car.model}</h3>
-                <p className="text-xl font-semibold text-blue-600 dark:text-blue-400">${car.price.toLocaleString()}</p>
+                <p className="text-xl font-semibold text-primary dark:text-primary-400">${car.price.toLocaleString()}</p>
                 <div className="text-sm text-gray-600 dark:text-gray-400 mt-2 grid grid-cols-2 gap-2">
                     <p><strong>Year:</strong> {car.year}</p>
                     <p><strong>Mileage:</strong> {car.mileage.toLocaleString()} mi</p>
@@ -134,10 +134,10 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
                             <button onClick={() => setIsFilterOpen(true)} className="lg:hidden p-2 rounded-md bg-gray-200 dark:bg-gray-700">
                                 <Filter />
                             </button>
-                            <button onClick={() => setView('grid')} className={`p-2 rounded-md ${view === 'grid' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700'}`}>
+                            <button onClick={() => setView('grid')} className={`p-2 rounded-md ${view === 'grid' ? 'bg-primary text-white' : 'bg-gray-200 dark:bg-gray-700'}`}>
                                 <Grid />
                             </button>
-                            <button onClick={() => setView('list')} className={`p-2 rounded-md ${view === 'list' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700'}`}>
+                            <button onClick={() => setView('list')} className={`p-2 rounded-md ${view === 'list' ? 'bg-primary text-white' : 'bg-gray-200 dark:bg-gray-700'}`}>
                                 <List />
                             </button>
                         </div>
@@ -165,7 +165,7 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
 
                             {visibleCount < cars.length && (
                                 <div className="text-center mt-12">
-                                    <button onClick={loadMore} className="bg-blue-600 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-500 transition-colors">
+                                    <button onClick={loadMore} className="bg-primary text-white font-bold py-3 px-8 rounded-full hover:bg-primary-500 transition-colors">
                                         Load More
                                     </button>
                                 </div>

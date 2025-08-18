@@ -36,7 +36,7 @@ export default function CompareBar() {
                         ))}
                     </div>
                 </div>
-                <Link href="/compare" className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors w-full sm:w-auto">
+                <Link href="/compare" className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary-700 transition-colors w-full sm:w-auto">
                     Compare
                 </Link>
             </div>

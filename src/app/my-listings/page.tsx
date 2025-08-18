@@ -47,7 +47,7 @@ export default async function MyListingsPage() {
                                 <h2 className="text-2xl font-bold">{car.make} {car.model}</h2>
                                 <p className="text-lg text-gray-700 dark:text-gray-300">${car.price.toLocaleString()}</p>
                                 <div className="mt-4 flex gap-4">
-                                    <Link href={`/admin/edit/${car.id}`} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                    <Link href={`/admin/edit/${car.id}`} className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors">
                                         Edit
                                     </Link>
                                     <form action={removeCar.bind(null, car.id)}>

@@ -47,7 +47,7 @@ function CarListItem({ car }: { car: CarWithImages }) {
                 />
                 <div>
                     <h3 className="font-bold text-lg">{car.make} {car.model} ({car.year})</h3>
-                    <p className="text-blue-600 font-semibold">${car.price.toLocaleString()}</p>
+                    <p className="text-primary font-semibold">${car.price.toLocaleString()}</p>
                 </div>
             </div>
             <div className="flex items-center gap-2">
