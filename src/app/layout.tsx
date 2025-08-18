@@ -22,7 +22,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" suppressHydrationWarning className="overflow-x-hidden">
+        <html lang="en" suppressHydrationWarning>
         <head>
             <link rel="manifest" href="/manifest.json" />
             <meta name="theme-color" content="#DC2626" />
@@ -36,18 +36,20 @@ export default function RootLayout({
                 crossOrigin="anonymous"
             />
         </head>
-        <body className={`${inter.className} bg-gray-50 dark:bg-gray-900 overflow-x-hidden`}>
-        <AppSessionProvider>
-            <ThemeProvider>
-                <CompareProvider>
-                    <Header />
-                    <main className="pb-24">{children}</main>
-                    <CompareBar />
-                    <Footer />
-                    <BackToTopButton />
-                </CompareProvider>
-            </ThemeProvider>
-        </AppSessionProvider>
+        <body className={`${inter.className} bg-gray-50 dark:bg-gray-900`}>
+        <div className="overflow-x-hidden">
+            <AppSessionProvider>
+                <ThemeProvider>
+                    <CompareProvider>
+                        <Header />
+                        <main className="pb-24">{children}</main>
+                        <CompareBar />
+                        <Footer />
+                        <BackToTopButton />
+                    </CompareProvider>
+                </ThemeProvider>
+            </AppSessionProvider>
+        </div>
         </body>
         </html>
     );
