@@ -49,7 +49,8 @@ export const authOptions: AuthOptions = {
         strategy: "jwt",
     },
     callbacks: {
-        async jwt({ token, user }) {
+        async jwt({ token, user, trigger }) {
+            // Initial sign in
             if (user?.id) {
                 const userInDb = await prisma.user.findUnique({
                     where: { id: user.id },
@@ -60,23 +61,40 @@ export const authOptions: AuthOptions = {
                     token.firstName = userInDb.firstName;
                     token.lastName = userInDb.lastName;
                     token.phone = userInDb.phone;
+                    token.image = userInDb.image;
                 } else {
+                    // This case is for the very first user signing up
                     const userCount = await prisma.user.count();
                     token.role = userCount === 0 ? "admin" : "user";
                 }
             }
+
+            // When the session is updated (e.g., profile change), refetch user data
+            if (trigger === "update" && token.sub) {
+                const userInDb = await prisma.user.findUnique({
+                    where: { id: token.sub },
+                });
+                if (userInDb) {
+                    // Update the token with the new data
+                    token.username = userInDb.username;
+                    token.firstName = userInDb.firstName;
+                    token.lastName = userInDb.lastName;
+                    token.phone = userInDb.phone;
+                    token.image = userInDb.image;
+                }
+            }
+
             return token;
         },
         async session({ session, token }) {
-            if (session.user) {
+            if (session.user && token.sub) {
+                session.user.id = token.sub;
                 session.user.role = token.role as string;
                 session.user.username = token.username as string;
                 session.user.firstName = token.firstName as string;
                 session.user.lastName = token.lastName as string;
                 session.user.phone = token.phone as string;
-                if (token.sub) {
-                    session.user.id = token.sub;
-                }
+                session.user.image = token.image as string;
             }
             return session;
         },
