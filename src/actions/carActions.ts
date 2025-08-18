@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
-import { getServerSession } from 'next/auth';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/auth.config';
 import { supabase } from '@/lib/supabase';
 
@@ -146,5 +146,33 @@ export async function updateCar(id: string, formData: FormData): Promise<ActionR
 
 // Server Action to remove a car
 export async function removeCar(id: string) {
-    // ... (existing removeCar logic)
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) throw new Error('Unauthorized');
+
+    const car = await prisma.car.findUnique({ where: { id }, include: { images: true } });
+    if (!car) throw new Error('Car not found');
+
+    // Authorization check: user must be admin or car owner
+    if (session.user.role !== 'admin' && car.userId !== session.user.id) {
+        throw new Error('Unauthorized');
+    }
+
+    const imagePaths = car.images.map(image => {
+        const parts = image.url.split('/');
+        return parts[parts.length - 1];
+    }).filter(Boolean) as string[];
+    
+    if (imagePaths.length > 0) {
+        const { error } = await supabase.storage.from('car-images').remove(imagePaths);
+        if (error) {
+            console.error('Error deleting images from Supabase:', error);
+            // We can choose to continue even if image deletion fails
+        }
+    }
+
+    await prisma.car.delete({ where: { id } });
+
+    revalidatePath('/admin');
+    revalidatePath('/cars');
+    revalidatePath('/my-listings');
 }
