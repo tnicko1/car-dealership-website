@@ -34,18 +34,18 @@ export default function Footer() {
     }, []);
 
     return (
-        <footer className="bg-gray-900 text-gray-300 relative">
+        <footer className="bg-gray-900 text-gray-400 relative">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="text-center md:text-left grid grid-cols-1 md:grid-cols-4 gap-8">
                     {/* About Section */}
                     <div className="col-span-1 md:col-span-2">
                         <h3 className="text-xl font-bold text-white mb-4">YourDealership</h3>
-                        <p className="text-gray-400 max-w-md mx-auto md:mx-0">
+                        <p className="max-w-md mx-auto md:mx-0">
                             Your premier destination for quality vehicles and exceptional service. We are committed to helping you find the car that is right for you.
                         </p>
                         <div className="flex justify-center md:justify-start space-x-4 mt-6">
                             {socialLinks.map((item) => (
-                                <a key={item.name} href={item.href} className="text-gray-400 hover:text-white transition-colors">
+                                <a key={item.name} href={item.href} className="hover:text-white transition-colors">
                                     <span className="sr-only">{item.name}</span>
                                     <item.icon className="h-6 w-6" />
                                 </a>
@@ -57,23 +57,23 @@ export default function Footer() {
                     <div>
                         <h3 className="text-lg font-semibold text-white mb-4">Quick Links</h3>
                         <ul className="space-y-2">
-                            <li><Link href="/cars" className="text-gray-400 hover:text-white transition-colors">Inventory</Link></li>
-                            <li><Link href="/about" className="text-gray-400 hover:text-white transition-colors">About Us</Link></li>
-                            <li><Link href="/contact" className="text-gray-400 hover:text-white transition-colors">Contact</Link></li>
+                            <li><Link href="/cars" className="hover:text-white transition-colors">Inventory</Link></li>
+                            <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
+                            <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
                         </ul>
                     </div>
 
                     {/* Contact Info */}
                     <div>
                         <h3 className="text-lg font-semibold text-white mb-4">Contact Us</h3>
-                        <ul className="space-y-2 text-gray-400">
+                        <ul className="space-y-2">
                             <li>123 Car Lane, Auto City</li>
                             <li>Phone: (123) 456-7890</li>
                             <li>Email: sales@yourdealership.com</li>
                         </ul>
                     </div>
                 </div>
-                <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-500">
+                <div className="mt-8 pt-8 border-t border-gray-800 text-center">
                     <p>&copy; {new Date().getFullYear()} YourDealership. All Rights Reserved.</p>
                 </div>
             </div>
@@ -81,6 +81,7 @@ export default function Footer() {
             {/* Back to Top Button */}
             <button
                 onClick={scrollToTop}
+                aria-label="Scroll to top"
                 className={`
                     fixed bottom-5 right-5 p-3 rounded-full bg-blue-600 text-white
                     hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2
