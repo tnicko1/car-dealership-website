@@ -1,10 +1,13 @@
 import prisma from '@/lib/prisma';
 import Image from 'next/image';
-import Testimonials from '@/components/Testimonials';
-import FeaturedSlider from '@/components/FeaturedSlider';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/auth.config';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
+
+// Dynamically import components that are not visible on initial load
+const Testimonials = dynamic(() => import('@/components/Testimonials'));
+const FeaturedSlider = dynamic(() => import('@/components/FeaturedSlider'));
 
 export const dynamic = 'force-dynamic';
 
@@ -32,7 +35,7 @@ export default async function Home() {
             <section className="relative text-center py-20 md:py-32 text-white overflow-hidden">
                 <div className="absolute inset-0 w-full h-full">
                     <Image
-                        src="/showroom-bg.png"
+                        src="/showroom-bg.webp"
                         alt="A modern car showroom"
                         fill
                         style={{ objectFit: 'cover' }}
