@@ -2,7 +2,16 @@ import withPWA from 'next-pwa';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    // Your existing Next.js config
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: '**.supabase.co',
+                port: '',
+                pathname: '**',
+            },
+        ],
+    },
 };
 
 const pwaConfig = {
