@@ -116,10 +116,14 @@ export default async function CarDetailsPage({ params }: { params: { id: string 
     const isWishlisted = user?.wishlist.some(item => item.id === car.id) || false;
 
     const ownerName = car.owner ? `${car.owner.firstName} ${car.owner.lastName}` : 'N/A';
+    const carWithOwnerName = {
+        ...car,
+        owner: car.owner ? { ...car.owner, name: ownerName } : null,
+    };
 
     return (
         <div className="container mx-auto px-4 py-12">
-            <CarDetailsClient car={{ ...car, owner: { ...car.owner, name: ownerName } }} isWishlisted={isWishlisted} similarCars={similarCars} />
+            <CarDetailsClient car={carWithOwnerName} isWishlisted={isWishlisted} similarCars={similarCars} />
         </div>
     );
 }
