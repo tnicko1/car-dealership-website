@@ -27,12 +27,6 @@ export async function generateMetadata({ params }: EditCarPageProps): Promise<Me
     };
 }
 
-// This function helps Next.js resolve dynamic paths and can fix type issues during build.
-// We return an empty array because we don't have any static paths to generate at build time.
-export async function generateStaticParams() {
-    return [];
-}
-
 export default async function EditCarPage({ params }: EditCarPageProps) {
     const car = await prisma.car.findUnique({
         where: { id: params.id },
