@@ -89,32 +89,45 @@ export default function Header() {
                     ))}
                 </nav>
 
-                {/* Right side icons */}
-                <div className="hidden md:flex items-center gap-4">
-                    <ThemeSwitcher />
-                    <UserMenu />
+                {/* Right side icons & Mobile menu button */}
+                <div className="flex items-center gap-4">
+                    <div className="hidden md:flex items-center gap-4">
+                        <ThemeSwitcher />
+                        <UserMenu />
+                    </div>
+                    <div className="md:hidden flex items-center gap-2">
+                        <ThemeSwitcher />
+                        <button
+                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            className="text-gray-800 dark:text-gray-200"
+                            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+                        >
+                            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                        </button>
+                    </div>
                 </div>
             </div>
 
             {/* Mobile Menu Button - Always present on mobile, positioned absolutely */}
-            <div className="md:hidden absolute top-4 right-4 flex items-center gap-2 z-50">
-                <ThemeSwitcher />
-                <button 
-                    onClick={() => setIsMenuOpen(!isMenuOpen)} 
-                    className="text-gray-800 dark:text-gray-200"
-                    aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-                >
-                    {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-                </button>
-            </div>
+            {isMenuOpen && (
+                <div className="md:hidden absolute top-4 right-4 z-50">
+                     <button
+                        onClick={() => setIsMenuOpen(false)}
+                        className="text-gray-800 dark:text-gray-200"
+                        aria-label="Close menu"
+                    >
+                        <X size={28} />
+                    </button>
+                </div>
+            )}
 
             {/* Mobile Menu Drawer */}
             <div
-                className={`md:hidden fixed top-0 left-0 w-full h-full bg-white dark:bg-gray-900 z-40 transition-opacity duration-300 ease-in-out ${
-                    isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+                className={`md:hidden fixed top-0 left-0 w-full h-full bg-white dark:bg-gray-900 z-40 transition-transform duration-300 ease-in-out ${
+                    isMenuOpen ? 'translate-x-0' : 'translate-x-full'
                 }`}
             >
-                <div className={`container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8 h-full flex flex-col transition-opacity duration-300 delay-100 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8 h-full flex flex-col">
                     <nav className="flex flex-col items-center space-y-6 text-xl">
                         {navLinks.map((link) => (
                             <Link key={link.href} href={link.href} className={linkClasses(link.href)}>
@@ -123,7 +136,7 @@ export default function Header() {
                         ))}
                     </nav>
                     <div className="mt-auto pt-8 flex justify-center">
-                        <UserMenu />
+                        <UserMenu direction="up" />
                     </div>
                 </div>
             </div>

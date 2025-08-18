@@ -8,7 +8,7 @@ import { LogIn, User, Settings, LogOut } from 'lucide-react';
 import LoginModal from './LoginModal';
 import { usePathname } from 'next/navigation';
 
-export default function UserMenu() {
+export default function UserMenu({ direction = 'down' }: { direction?: 'up' | 'down' }) {
     const { data: session, status } = useSession();
     const [isOpen, setIsOpen] = useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -63,7 +63,7 @@ export default function UserMenu() {
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50">
+                <div className={`absolute right-0 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50 ${direction === 'up' ? 'bottom-full mb-2' : 'mt-2'}`}>
                     <Link href="/account" onClick={() => setIsOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                         <Settings className="w-4 h-4 mr-2" />
                         Account Settings
