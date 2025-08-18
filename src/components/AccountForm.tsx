@@ -19,6 +19,7 @@ export default function AccountForm({ user }: { user: User }) {
     const [preview, setPreview] = useState(user.image || '');
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState<'success' | 'error' | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.[0]) {
@@ -40,6 +41,10 @@ export default function AccountForm({ user }: { user: User }) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsSubmitting(true);
+        setMessage('');
+        setMessageType(null);
+
         const formData = new FormData();
         formData.append('firstName', firstName);
         formData.append('lastName', lastName);
@@ -51,16 +56,19 @@ export default function AccountForm({ user }: { user: User }) {
         }
 
         const result = await updateUser(formData);
+
         if (result.success) {
             setMessage('Profile updated successfully!');
             setMessageType('success');
-            // Trigger session update
+            // Trigger session update to reflect the new avatar and name
             await update({
                 ...session,
                 user: {
                     ...session?.user,
-                    name: result.user?.username,
-                    email: result.user?.email,
+                    name: result.user?.username, // This should be username
+                    username: result.user?.username,
+                    firstName: result.user?.firstName,
+                    lastName: result.user?.lastName,
                     image: result.user?.image,
                 },
             });
@@ -68,6 +76,7 @@ export default function AccountForm({ user }: { user: User }) {
             setMessage(result.error || 'An error occurred.');
             setMessageType('error');
         }
+        setIsSubmitting(false);
     };
 
     return (
@@ -78,7 +87,7 @@ export default function AccountForm({ user }: { user: User }) {
                 </p>
             )}
             <div className="flex items-center gap-6">
-                <Image src={preview} alt="Profile preview" width={80} height={80} className="rounded-full" />
+                <Image src={preview || '/default-avatar.png'} alt="Profile preview" width={80} height={80} className="rounded-full" />
                 <div>
                     <label htmlFor="image" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                         Profile Picture
@@ -88,10 +97,12 @@ export default function AccountForm({ user }: { user: User }) {
                         id="image"
                         name="image"
                         onChange={handleImageChange}
+                        accept="image/*"
                         className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                     />
                 </div>
             </div>
+            {/* ... other form fields ... */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -156,9 +167,10 @@ export default function AccountForm({ user }: { user: User }) {
             <div>
                 <button
                     type="submit"
-                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    disabled={isSubmitting}
+                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400"
                 >
-                    Save Changes
+                    {isSubmitting ? 'Saving...' : 'Save Changes'}
                 </button>
             </div>
         </form>
