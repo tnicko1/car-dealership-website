@@ -33,7 +33,8 @@ export async function updateUser(formData: FormData): Promise<{ success: boolean
 
             if (error) {
                 console.error('Supabase avatar upload error:', error);
-                return { success: false, error: 'Failed to upload image.' };
+                // Return the specific error message from Supabase for debugging
+                return { success: false, error: `Upload failed: ${error.message}` };
             }
 
             const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(data.path);
