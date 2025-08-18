@@ -1,31 +1,15 @@
+import withPWA from 'next-pwa';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-        dangerouslyAllowSVG: true,
-        contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-        remotePatterns: [
-            {
-                protocol: 'https',
-                hostname: 'placehold.co',
-                port: '',
-                pathname: '/**',
-            },
-            {
-                // Add this new block to allow GitHub profile pictures
-                protocol: 'https',
-                hostname: 'avatars.githubusercontent.com',
-                port: '',
-                pathname: '/**',
-            },
-            {
-                // Add this new block to allow images from your Supabase Storage
-                protocol: 'https',
-                hostname: 'udpcbvigxnuwjvwwponb.supabase.co',
-                port: '',
-                pathname: '/**',
-            },
-        ],
-    },
+    // Your existing Next.js config
 };
 
-export default nextConfig;
+const pwaConfig = {
+    dest: 'public',
+    register: true,
+    skipWaiting: true,
+    disable: process.env.NODE_ENV === 'development',
+};
+
+export default withPWA(pwaConfig)(nextConfig);
