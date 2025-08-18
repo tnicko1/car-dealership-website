@@ -22,7 +22,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" suppressHydrationWarning>
+        <html lang="en" suppressHydrationWarning className="overflow-x-hidden">
         <head>
             <title>Your Car Dealership</title>
             <link
@@ -33,7 +33,7 @@ export default function RootLayout({
                 crossOrigin="anonymous"
             />
         </head>
-        <body className={`${inter.className} bg-gray-50 dark:bg-gray-900`}>
+        <body className={`${inter.className} bg-gray-50 dark:bg-gray-900 overflow-x-hidden`}>
         <AppSessionProvider>
             <ThemeProvider>
                 <CompareProvider>
