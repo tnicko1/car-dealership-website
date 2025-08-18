@@ -36,10 +36,10 @@ const getCarData = (formData: FormData) => {
         interiorMaterial: formData.get('interiorMaterial') as string,
         exchange: formData.get('exchange') === 'on',
         technicalInspection: formData.get('technicalInspection') === 'on',
-        comfort: (formData.get('comfort') as string).split(',').map(f => f.trim()).filter(f => f),
-        safety: (formData.get('safety') as string).split(',').map(f => f.trim()).filter(f => f),
-        multimedia: (formData.get('multimedia') as string).split(',').map(f => f.trim()).filter(f => f),
-        other: (formData.get('other') as string).split(',').map(f => f.trim()).filter(f => f),
+        comfort: (formData.get('comfort') as string)?.split(',').map(f => f.trim()).filter(f => f) || [],
+        safety: (formData.get('safety') as string)?.split(',').map(f => f.trim()).filter(f => f) || [],
+        multimedia: (formData.get('multimedia') as string)?.split(',').map(f => f.trim()).filter(f => f) || [],
+        other: (formData.get('other') as string)?.split(',').map(f => f.trim()).filter(f => f) || [],
     };
 };
 
