@@ -3,7 +3,7 @@
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/auth.config';
 import prisma from '@/lib/prisma';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabaseAdmin'; // Use the admin client
 import { User } from '@prisma/client';
 
 export async function updateUser(formData: FormData): Promise<{ success: boolean; error?: string, user?: User }> {
@@ -23,21 +23,21 @@ export async function updateUser(formData: FormData): Promise<{ success: boolean
         let imageUrl: string | undefined = undefined;
 
         if (imageFile && imageFile.size > 0) {
+            // Re-add the user ID to the path for organization and to work with RLS policies
             const fileName = `${session.user.id}/${Date.now()}-${imageFile.name}`;
-            const { data, error } = await supabase.storage
+            const { data, error } = await supabaseAdmin.storage
                 .from('avatars')
                 .upload(fileName, imageFile, {
-                    cacheControl: '3600',
+                    cacheControl: '36-00',
                     upsert: true,
                 });
 
             if (error) {
                 console.error('Supabase avatar upload error:', error);
-                // Return the specific error message from Supabase for debugging
                 return { success: false, error: `Upload failed: ${error.message}` };
             }
 
-            const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(data.path);
+            const { data: { publicUrl } } = supabaseAdmin.storage.from('avatars').getPublicUrl(data.path);
             imageUrl = publicUrl;
         }
 
