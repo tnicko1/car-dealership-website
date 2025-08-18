@@ -35,7 +35,7 @@ export default async function InventoryPage() {
                 </div>
             </section>
 
-            <CarListings cars={cars} filters={filters} wishlistedCarIds={wishlistedCarIds} />
+            <CarListings initialCars={cars} filters={filters} wishlistedCarIds={wishlistedCarIds} />
         </div>
     );
 }
