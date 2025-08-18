@@ -27,7 +27,7 @@ export async function updateUser(formData: FormData): Promise<{ success: boolean
             .from('avatars')
             .upload(fileName, imageFile, {
                 cacheControl: '3600',
-                upsert: false,
+                upsert: true, // Allow overwriting files
             });
 
         if (error) {

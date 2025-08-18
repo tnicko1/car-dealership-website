@@ -18,6 +18,7 @@ export default function AccountForm({ user }: { user: User }) {
     const [image, setImage] = useState<File | null>(null);
     const [preview, setPreview] = useState(user.image || '');
     const [message, setMessage] = useState('');
+    const [messageType, setMessageType] = useState<'success' | 'error' | null>(null);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.[0]) {
@@ -42,6 +43,7 @@ export default function AccountForm({ user }: { user: User }) {
         const result = await updateUser(formData);
         if (result.success) {
             setMessage('Profile updated successfully!');
+            setMessageType('success');
             // Trigger session update
             await update({
                 ...session,
@@ -54,12 +56,17 @@ export default function AccountForm({ user }: { user: User }) {
             });
         } else {
             setMessage(result.error || 'An error occurred.');
+            setMessageType('error');
         }
     };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
-            {message && <p className="text-green-500">{message}</p>}
+            {message && (
+                <p className={messageType === 'success' ? 'text-green-500' : 'text-red-500'}>
+                    {message}
+                </p>
+            )}
             <div className="flex items-center gap-6">
                 <Image src={preview} alt="Profile preview" width={80} height={80} className="rounded-full" />
                 <div>
