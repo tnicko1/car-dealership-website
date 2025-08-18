@@ -12,7 +12,9 @@ export async function updateUser(formData: FormData): Promise<{ success: boolean
         return { success: false, error: 'Not authenticated' };
     }
 
-    const name = formData.get('name') as string;
+    const firstName = formData.get('firstName') as string;
+    const lastName = formData.get('lastName') as string;
+    const username = formData.get('username') as string;
     const email = formData.get('email') as string;
     const phone = formData.get('phone') as string;
     const imageFile = formData.get('image') as File | null;
@@ -40,7 +42,9 @@ export async function updateUser(formData: FormData): Promise<{ success: boolean
         const updatedUser = await prisma.user.update({
             where: { id: session.user.id },
             data: {
-                name,
+                firstName,
+                lastName,
+                username,
                 email,
                 phone,
                 ...(imageUrl && { image: imageUrl }),
