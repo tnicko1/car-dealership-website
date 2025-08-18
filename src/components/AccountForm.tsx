@@ -57,21 +57,11 @@ export default function AccountForm({ user }: { user: User }) {
 
         const result = await updateUser(formData);
 
-        if (result.success && result.user) {
+        if (result.success) {
             setMessage('Profile updated successfully!');
             setMessageType('success');
-            // Trigger session update to reflect the new avatar and name
-            await update({
-                ...session,
-                user: {
-                    ...session?.user,
-                    username: result.user.username,
-                    firstName: result.user.firstName,
-                    lastName: result.user.lastName,
-                    image: result.user.image,
-                    phone: result.user.phone,
-                },
-            });
+            // Trigger a session update. The JWT callback on the server will handle refetching the data.
+            await update();
         } else {
             setMessage(result.error || 'An error occurred.');
             setMessageType('error');
