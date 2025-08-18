@@ -121,10 +121,10 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInte
                 {/* Desktop-only Arrow Controls */}
                 {isInteractive && car.images.length > 1 && (
                     <>
-                        <button onClick={scrollPrev} className="absolute top-1/2 left-2 z-20 -translate-y-1/2 bg-black/30 text-white p-1 rounded-full hover:bg-black/50 transition-all duration-200 opacity-0 md:group-hover:opacity-100 md:flex hidden items-center justify-center">
+                        <button onClick={scrollPrev} aria-label="Previous image" className="absolute top-1/2 left-2 z-20 -translate-y-1/2 bg-black/30 text-white p-1 rounded-full hover:bg-black/50 transition-all duration-200 opacity-0 md:group-hover:opacity-100 md:flex hidden items-center justify-center">
                             <ChevronLeft size={20} />
                         </button>
-                        <button onClick={scrollNext} className="absolute top-1/2 right-2 z-20 -translate-y-1/2 bg-black/30 text-white p-1 rounded-full hover:bg-black/50 transition-all duration-200 opacity-0 md:group-hover:opacity-100 md:flex hidden items-center justify-center">
+                        <button onClick={scrollNext} aria-label="Next image" className="absolute top-1/2 right-2 z-20 -translate-y-1/2 bg-black/30 text-white p-1 rounded-full hover:bg-black/50 transition-all duration-200 opacity-0 md:group-hover:opacity-100 md:flex hidden items-center justify-center">
                             <ChevronRight size={20} />
                         </button>
                     </>
@@ -139,7 +139,10 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInte
                 )}
 
                 <div className="absolute top-2 right-2 z-10">
-                    <button onClick={handleWishlistToggle} className={`p-2 rounded-full transition-colors
+                    <button 
+                        onClick={handleWishlistToggle} 
+                        aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+                        className={`p-2 rounded-full transition-colors
                         ${isWishlisted ? 'text-red-500 bg-red-100 dark:bg-gray-700' : 'text-gray-500 bg-white dark:bg-gray-800'}`}>
                         <Heart fill={isWishlisted ? 'currentColor' : 'none'} className="w-6 h-6" />
                     </button>
