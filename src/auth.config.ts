@@ -31,7 +31,7 @@ export const authOptions: AuthOptions = {
             server: {}, // Required, but empty as we override sendVerificationRequest
             from: "onboarding@resend.dev",
             sendVerificationRequest: async ({ identifier: email, url, provider: { from } }) => {
-                const { data, error } = await resend.emails.send({
+                const { error } = await resend.emails.send({
                     from: from,
                     to: email,
                     subject: "Sign in to Your Car Dealership",
@@ -73,6 +73,7 @@ export const authOptions: AuthOptions = {
                 session.user.username = token.username as string;
                 session.user.firstName = token.firstName as string;
                 session.user.lastName = token.lastName as string;
+                session.user.phone = token.phone as string;
                 if (token.sub) {
                     session.user.id = token.sub;
                 }
