@@ -1,12 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useCompare } from '@/providers/CompareProvider';
 
 export default function BackToTopButton() {
     const [isVisible, setIsVisible] = useState(false);
+    const { compareItems } = useCompare();
 
     const toggleVisibility = () => {
-        if (window.scrollY > 300) {
+        // Using a lower threshold for mobile
+        if (window.scrollY > 150) {
             setIsVisible(true);
         } else {
             setIsVisible(false);
@@ -25,15 +28,18 @@ export default function BackToTopButton() {
         return () => window.removeEventListener('scroll', toggleVisibility);
     }, []);
 
+    const isCompareBarActive = compareItems.length > 0;
+
     return (
         <button
             onClick={scrollToTop}
             aria-label="Scroll to top"
             className={`
-                fixed bottom-5 right-5 p-3 rounded-full bg-primary text-white
+                fixed right-5 p-3 rounded-full bg-primary text-white
                 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2
                 focus:ring-primary-500 transition-all duration-300 z-[100]
                 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}
+                ${isCompareBarActive ? 'bottom-24' : 'bottom-5'}
             `}
         >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
