@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useMemo, Fragment } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import { useState, useEffect, Fragment } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { CarWithImages } from '@/types/car';
 import CarCard from './CarCard';
 import FilterSidebar from './FilterSidebar';
 import { List, Grid, Filter, X } from 'lucide-react';
 import { Dialog, Transition } from '@headlessui/react';
+import Link from 'next/link';
+import Image from 'next/image';
 
 type FilterProps = {
     makes: string[];
@@ -16,41 +17,85 @@ type FilterProps = {
     transmissions: string[];
 };
 
-export default function CarListings({ cars, filters, wishlistedCarIds }: { cars: CarWithImages[], filters: FilterProps, wishlistedCarIds: string[] }) {
-    const [filtersState, setFiltersState] = useState({
-        make: '',
-        model: '',
-        maxPrice: 200000,
-        minYear: 1990,
-        maxYear: new Date().getFullYear(),
-        maxMileage: 300000,
-        bodyStyle: '',
-        fuelType: '',
-        transmission: '',
+export default function CarListings({ initialCars, filters, wishlistedCarIds }: { initialCars: CarWithImages[], filters: FilterProps, wishlistedCarIds: string[] }) {
+    const [cars, setCars] = useState(initialCars);
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
+    const [filtersState, setFiltersState] = useState(() => {
+        const params = new URLSearchParams(searchParams.toString());
+        return {
+            make: params.getAll('make') || [],
+            model: params.get('model') || '',
+            minPrice: params.get('minPrice') || '',
+            maxPrice: params.get('maxPrice') || '',
+            minYear: params.get('minYear') || '',
+            maxYear: params.get('maxYear') || '',
+            minMileage: params.get('minMileage') || '',
+            maxMileage: params.get('maxMileage') || '',
+            bodyStyle: params.getAll('bodyStyle') || [],
+            fuelType: params.getAll('fuelType') || [],
+            transmission: params.getAll('transmission') || [],
+        };
     });
+
     const [view, setView] = useState('grid');
     const [visibleCount, setVisibleCount] = useState(9);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-    const filteredCars = useMemo(() => {
-        return cars.filter(car => {
-            return (
-                (filtersState.make ? car.make === filtersState.make : true) &&
-                (filtersState.model ? car.model.toLowerCase().includes(filtersState.model.toLowerCase()) : true) &&
-                (car.price <= filtersState.maxPrice) &&
-                (car.year >= filtersState.minYear) &&
-                (car.year <= filtersState.maxYear) &&
-                (car.mileage <= filtersState.maxMileage) &&
-                (filtersState.bodyStyle ? car.bodyStyle === filtersState.bodyStyle : true) &&
-                (filtersState.fuelType ? car.fuelType === filtersState.fuelType : true) &&
-                (filtersState.transmission ? car.transmission === filtersState.transmission : true)
-            );
-        });
-    }, [cars, filtersState]);
+    useEffect(() => {
+        const fetchCars = async () => {
+            setIsLoading(true);
+            const params = new URLSearchParams();
+            Object.entries(filtersState).forEach(([key, value]) => {
+                if (Array.isArray(value)) {
+                    value.forEach(v => params.append(key, v));
+                } else if (value) {
+                    params.append(key, value);
+                }
+            });
 
-    const handleFilterChange = (value: string | number, name: string) => {
-        setFiltersState(prev => ({ ...prev, [name]: value }));
-        setVisibleCount(9); // Reset pagination on filter change
+            router.push(`${pathname}?${params.toString()}`, { scroll: false });
+
+            const res = await fetch(`/api/cars?${params.toString()}`);
+            const data = await res.json();
+            setCars(data);
+            setIsLoading(false);
+        };
+
+        fetchCars();
+    }, [filtersState, pathname, router]);
+
+    const handleFilterChange = (value: string, name: string, checked?: boolean) => {
+        setFiltersState(prev => {
+            const newState = { ...prev };
+            const key = name as keyof typeof newState;
+
+            if (Array.isArray(newState[key])) {
+                const list = newState[key] as string[];
+                if (checked) {
+                    // @ts-ignore
+                    newState[key] = [...list, value];
+                } else {
+                    // @ts-ignore
+                    newState[key] = list.filter(item => item !== value);
+                }
+            } else {
+                // @ts-ignore
+                newState[key] = value;
+            }
+            return newState;
+        });
+        setVisibleCount(9);
+    };
+
+    const handleReset = () => {
+        setFiltersState({
+            make: [], model: '', minPrice: '', maxPrice: '', minYear: '', maxYear: '',
+            minMileage: '', maxMileage: '', bodyStyle: [], fuelType: [], transmission: [],
+        });
     };
 
     const loadMore = () => {
@@ -78,16 +123,14 @@ export default function CarListings({ cars, filters, wishlistedCarIds }: { cars:
     return (
         <>
             <div className="container mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
-                {/* Desktop Sidebar */}
                 <div className="hidden lg:block lg:col-span-1 lg:sticky top-24">
-                    <FilterSidebar {...filters} onFilterChange={handleFilterChange} initialFilters={filtersState} />
+                    <FilterSidebar {...filters} onFilterChange={handleFilterChange} initialFilters={filtersState} onReset={handleReset} />
                 </div>
 
                 <div className="lg:col-span-3">
                     <div className="flex justify-between items-center mb-6">
-                        <p className="text-gray-600 dark:text-gray-400">Showing {Math.min(visibleCount, filteredCars.length)} of {filteredCars.length} results</p>
+                        <p className="text-gray-600 dark:text-gray-400">Showing {Math.min(visibleCount, cars.length)} of {cars.length} results</p>
                         <div className="flex gap-2">
-                            {/* Mobile Filter Button */}
                             <button onClick={() => setIsFilterOpen(true)} className="lg:hidden p-2 rounded-md bg-gray-200 dark:bg-gray-700">
                                 <Filter />
                             </button>
@@ -100,23 +143,27 @@ export default function CarListings({ cars, filters, wishlistedCarIds }: { cars:
                         </div>
                     </div>
 
-                    {filteredCars.length > 0 ? (
+                    {isLoading ? (
+                        <div className="text-center py-16">
+                            <p>Loading...</p>
+                        </div>
+                    ) : cars.length > 0 ? (
                         <>
                             {view === 'grid' ? (
                                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
-                                    {filteredCars.slice(0, visibleCount).map((car) => (
+                                    {cars.slice(0, visibleCount).map((car) => (
                                         <CarCard key={car.id} car={car} isWishlisted={wishlistedCarIds.includes(car.id)} />
                                     ))}
                                 </div>
                             ) : (
                                 <div className="space-y-4">
-                                    {filteredCars.slice(0, visibleCount).map((car) => (
+                                    {cars.slice(0, visibleCount).map((car) => (
                                         <CarListItem key={car.id} car={car} />
                                     ))}
                                 </div>
                             )}
 
-                            {visibleCount < filteredCars.length && (
+                            {visibleCount < cars.length && (
                                 <div className="text-center mt-12">
                                     <button onClick={loadMore} className="bg-blue-600 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-500 transition-colors">
                                         Load More
@@ -133,42 +180,20 @@ export default function CarListings({ cars, filters, wishlistedCarIds }: { cars:
                 </div>
             </div>
 
-            {/* Mobile Filter Modal */}
             <Transition appear show={isFilterOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-50 lg:hidden" onClose={() => setIsFilterOpen(false)}>
-                    <Transition.Child
-                        as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0"
-                        enterTo="opacity-100"
-                        leave="ease-in duration-200"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
-                    >
+                    <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
                         <div className="fixed inset-0 bg-black bg-opacity-25" />
                     </Transition.Child>
-
                     <div className="fixed inset-0 overflow-y-auto">
                         <div className="flex min-h-full items-center justify-center p-4 text-center">
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 scale-95"
-                                enterTo="opacity-100 scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 scale-100"
-                                leaveTo="opacity-0 scale-95"
-                            >
+                            <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95">
                                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
                                     <div className="flex justify-between items-center mb-4">
-                                        <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900 dark:text-white">
-                                            Filters
-                                        </Dialog.Title>
-                                        <button onClick={() => setIsFilterOpen(false)} className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
-                                            <X />
-                                        </button>
+                                        <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900 dark:text-white">Filters</Dialog.Title>
+                                        <button onClick={() => setIsFilterOpen(false)} className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"><X /></button>
                                     </div>
-                                    <FilterSidebar {...filters} onFilterChange={handleFilterChange} initialFilters={filtersState} />
+                                    <FilterSidebar {...filters} onFilterChange={handleFilterChange} initialFilters={filtersState} onReset={handleReset} />
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>
