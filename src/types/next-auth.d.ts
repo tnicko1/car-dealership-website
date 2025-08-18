@@ -13,6 +13,14 @@ declare module "next-auth" {
             id: string;
             /** The user's role (e.g., 'admin' or 'user'). */
             role: string;
+            /** The user's username. */
+            username?: string | null;
+            /** The user's first name. */
+            firstName?: string | null;
+            /** The user's last name. */
+            lastName?: string | null;
+            /** The user's phone number. */
+            phone?: string | null;
         } & DefaultSession["user"];
     }
 
@@ -21,5 +29,9 @@ declare module "next-auth" {
      */
     interface User {
         role: string;
+        username?: string | null;
+        firstName?: string | null;
+        lastName?: string | null;
+        phone?: string | null;
     }
 }
