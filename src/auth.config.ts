@@ -56,6 +56,10 @@ export const authOptions: AuthOptions = {
                 });
                 if (userInDb) {
                     token.role = userInDb.role;
+                    token.username = userInDb.username;
+                    token.firstName = userInDb.firstName;
+                    token.lastName = userInDb.lastName;
+                    token.phone = userInDb.phone;
                 } else {
                     const userCount = await prisma.user.count();
                     token.role = userCount === 0 ? "admin" : "user";
@@ -66,6 +70,9 @@ export const authOptions: AuthOptions = {
         async session({ session, token }) {
             if (session.user) {
                 session.user.role = token.role as string;
+                session.user.username = token.username as string;
+                session.user.firstName = token.firstName as string;
+                session.user.lastName = token.lastName as string;
                 if (token.sub) {
                     session.user.id = token.sub;
                 }
