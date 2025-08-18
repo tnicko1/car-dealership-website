@@ -37,9 +37,19 @@ export default function UserMenu({ direction = 'down' }: { direction?: 'up' | 'd
     if (!session) {
         return (
             <>
+                {/* Mobile: Link to login page */}
+                <Link
+                    href="/login"
+                    className="md:hidden flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
+                >
+                    <LogIn className="w-5 h-5" />
+                    Login
+                </Link>
+
+                {/* Desktop: Button to open modal */}
                 <button
                     onClick={() => setIsLoginModalOpen(true)}
-                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
+                    className="hidden md:flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
                 >
                     <LogIn className="w-5 h-5" />
                     Login
