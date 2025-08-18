@@ -78,21 +78,6 @@ export default function Footer() {
                 </div>
             </div>
             
-            {/* Back to Top Button */}
-            <button
-                onClick={scrollToTop}
-                aria-label="Scroll to top"
-                className={`
-                    fixed bottom-5 right-5 p-3 rounded-full bg-primary text-white
-                    hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2
-                    focus:ring-blue-500 transition-all duration-300
-                    ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}
-                `}
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                </svg>
-            </button>
-        </footer>
+            </footer>
     );
 }
