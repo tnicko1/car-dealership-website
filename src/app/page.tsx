@@ -3,11 +3,11 @@ import Image from 'next/image';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/auth.config';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
+import { default as dynamicImport } from 'next/dynamic';
 
 // Dynamically import components that are not visible on initial load
-const Testimonials = dynamic(() => import('@/components/Testimonials'));
-const FeaturedSlider = dynamic(() => import('@/components/FeaturedSlider'));
+const Testimonials = dynamicImport(() => import('@/components/Testimonials'));
+const FeaturedSlider = dynamicImport(() => import('@/components/FeaturedSlider'));
 
 export const dynamic = 'force-dynamic';
 
