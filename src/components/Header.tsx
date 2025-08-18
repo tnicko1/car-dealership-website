@@ -97,7 +97,11 @@ export default function Header() {
             {/* Mobile Menu Button - Always present on mobile, positioned absolutely */}
             <div className="md:hidden absolute top-4 right-4 flex items-center gap-2 z-50">
                 <ThemeSwitcher />
-                <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-800 dark:text-gray-200">
+                <button 
+                    onClick={() => setIsMenuOpen(!isMenuOpen)} 
+                    className="text-gray-800 dark:text-gray-200"
+                    aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+                >
                     {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
                 </button>
             </div>
