@@ -8,7 +8,9 @@ import Image from 'next/image';
 
 export default function AccountForm({ user }: { user: User }) {
     const { data: session, update } = useSession();
-    const [name, setName] = useState(user.name || '');
+    const [firstName, setFirstName] = useState(user.firstName || '');
+    const [lastName, setLastName] = useState(user.lastName || '');
+    const [username, setUsername] = useState(user.username || '');
     const [email, setEmail] = useState(user.email || '');
     const [phone, setPhone] = useState(user.phone || '');
     const [image, setImage] = useState<File | null>(null);
@@ -26,7 +28,9 @@ export default function AccountForm({ user }: { user: User }) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append('name', name);
+        formData.append('firstName', firstName);
+        formData.append('lastName', lastName);
+        formData.append('username', username);
         formData.append('email', email);
         formData.append('phone', phone);
         if (image) {
@@ -41,7 +45,7 @@ export default function AccountForm({ user }: { user: User }) {
                 ...session,
                 user: {
                     ...session?.user,
-                    name: result.user?.name,
+                    name: result.user?.username,
                     email: result.user?.email,
                     image: result.user?.image,
                 },
@@ -69,15 +73,41 @@ export default function AccountForm({ user }: { user: User }) {
                     />
                 </div>
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        First Name
+                    </label>
+                    <input
+                        type="text"
+                        id="firstName"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Last Name
+                    </label>
+                    <input
+                        type="text"
+                        id="lastName"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    />
+                </div>
+            </div>
             <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Name
+                <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Username
                 </label>
                 <input
                     type="text"
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    id="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 />
             </div>
