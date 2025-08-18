@@ -21,24 +21,26 @@ export async function updateUser(formData: FormData): Promise<{ success: boolean
 
     let imageUrl: string | undefined = undefined;
 
-    if (imageFile && imageFile.size > 0) {
-        const fileName = `${session.user.id}-${Date.now()}`;
-        const { data, error } = await supabase.storage
-            .from('avatars')
-            .upload(fileName, imageFile, {
-                cacheControl: '3600',
-                upsert: true, // Allow overwriting files
-            });
+    try {
+        if (imageFile && imageFile.size > 0) {
+            // The policy requires the path to be prefixed with the user's ID.
+            const fileName = `${session.user.id}/${Date.now()}-${imageFile.name}`;
+            const { data, error } = await supabase.storage
+                .from('avatars')
+                .upload(fileName, imageFile, {
+                    cacheControl: '3600',
+                    upsert: true, // Allow overwriting to update the avatar
+                });
 
-        if (error) {
-            return { success: false, error: 'Failed to upload image.' };
+            if (error) {
+                console.error('Supabase avatar upload error:', error);
+                return { success: false, error: 'Failed to upload image.' };
+            }
+
+            const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(data.path);
+            imageUrl = publicUrl;
         }
 
-        const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(data.path);
-        imageUrl = publicUrl;
-    }
-
-    try {
         const updatedUser = await prisma.user.update({
             where: { id: session.user.id },
             data: {
@@ -47,11 +49,12 @@ export async function updateUser(formData: FormData): Promise<{ success: boolean
                 username,
                 email,
                 phone,
+                // Only update the image if a new one was uploaded
                 ...(imageUrl && { image: imageUrl }),
             },
         });
         return { success: true, user: updatedUser };
     } catch (error) {
-        return { success: false, error: 'Failed to update user.' };
+        return { success: false, error: (error as Error).message };
     }
 }
