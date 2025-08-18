@@ -5,6 +5,8 @@ import { User } from '@prisma/client';
 import { updateUser } from '@/actions/userActions';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 
 export default function AccountForm({ user }: { user: User }) {
     const { data: session, update } = useSession();
@@ -127,11 +129,10 @@ export default function AccountForm({ user }: { user: User }) {
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Phone
                 </label>
-                <input
-                    type="tel"
+                <PhoneInput
                     id="phone"
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    onChange={(value) => setPhone(value || '')}
                     className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 />
             </div>
