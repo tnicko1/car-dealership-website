@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react';
 import ThemeSwitcher from './ThemeSwitcher';
 import UserMenu from './UserMenu';
 import { Menu, X } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Header() {
     const { data: session } = useSession();
@@ -74,8 +75,9 @@ export default function Header() {
             {/* Main Header Bar - Hidden when mobile menu is open */}
             <div className={`container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}>
                 {/* Logo */}
-                <Link href="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400 hover:opacity-80 transition-opacity">
-                    YourDealership
+                <Link href="/" className="flex items-center text-2xl font-bold text-blue-600 dark:text-blue-400 hover:opacity-80 transition-opacity">
+                    <Image src="/logo.svg" alt="YourDealership Logo" width={40} height={40} className="mr-2" />
+                    <span>YourDealership</span>
                 </Link>
 
                 {/* Desktop Navigation */}
