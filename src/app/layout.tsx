@@ -8,7 +8,6 @@ import AppSessionProvider from "@/providers/SessionProvider";
 import { CompareProvider } from "@/providers/CompareProvider";
 import CompareBar from "@/components/CompareBar";
 import BackToTopButton from "@/components/BackToTopButton";
-import ServiceWorkerRegistrar from "@/components/ServiceWorkerRegistrar";
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -41,7 +40,6 @@ export default function RootLayout({
         <AppSessionProvider>
             <ThemeProvider>
                 <CompareProvider>
-                    <ServiceWorkerRegistrar />
                     <Header />
                     <main className="pb-24">{children}</main>
                     <CompareBar />
