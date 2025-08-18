@@ -23,8 +23,18 @@ export default function AccountForm({ user }: { user: User }) {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.[0]) {
             const file = e.target.files[0];
+            const fiveMB = 5 * 1024 * 1024; // Size in bytes
+
+            if (file.size > fiveMB) {
+                setMessage('File size cannot exceed 5MB.');
+                setMessageType('error');
+                return;
+            }
+
             setImage(file);
             setPreview(URL.createObjectURL(file));
+            setMessage(''); // Clear previous messages
+            setMessageType(null);
         }
     };
 

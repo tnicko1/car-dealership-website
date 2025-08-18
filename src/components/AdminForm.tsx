@@ -11,6 +11,8 @@ export default function AdminForm({ car }: { car?: CarWithImages }) {
     const [imageFiles, setImageFiles] = useState<File[]>([]);
     const [imageUrls, setImageUrls] = useState<string[]>(car?.images?.map(i => i.url) || []);
     const [draggedImage, setDraggedImage] = useState<string | null>(null);
+    const [message, setMessage] = useState('');
+    const [messageType, setMessageType] = useState<'success' | 'error' | null>(null);
 
     // Function to handle removing an image URL
     const handleRemoveImage = (urlToRemove: string) => {
@@ -71,12 +73,30 @@ export default function AdminForm({ car }: { car?: CarWithImages }) {
 
     const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            setImageFiles(Array.from(e.target.files));
+            const files = Array.from(e.target.files);
+            const tenMB = 10 * 1024 * 1024; // Size in bytes
+
+            for (const file of files) {
+                if (file.size > tenMB) {
+                    setMessage('Each file size cannot exceed 10MB.');
+                    setMessageType('error');
+                    return; // Stop the function if a file is too large
+                }
+            }
+
+            setImageFiles(files);
+            setMessage(''); // Clear previous messages
+            setMessageType(null);
         }
     };
 
     return (
         <form action={action} className="space-y-8">
+            {message && (
+                <p className={`p-4 rounded-md ${messageType === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                    {message}
+                </p>
+            )}
             <div className="p-6 border rounded-lg dark:border-gray-700">
                 <h2 className="text-xl font-semibold mb-4">Main Details</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
