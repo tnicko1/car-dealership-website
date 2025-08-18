@@ -24,6 +24,7 @@
     "next-auth": "^4.24.11",
     "react": "^18",
     "react-dom": "^18",
+    "react-phone-number-input": "^3.4.12",
     "resend": "^4.7.0",
     "use-debounce": "^10.0.5",
     "yet-another-react-lightbox": "^3.25.0"
