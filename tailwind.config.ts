@@ -8,6 +8,12 @@ const config: Config = {
     ],
     darkMode: "class",
     theme: {
+        screens: {
+            'sm': '640px',
+            'md': '992px', // Increased from 768px
+            'lg': '1280px',
+            'xl': '1536px',
+        },
         extend: {
             // Add custom animations and keyframes
             keyframes: {
