@@ -25,7 +25,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
 
     useEffect(() => {
         const triggerElement = ctaTriggerRef.current;
-        if (!triggerElement) return;
+        if (!triggerElement || window.innerWidth < 768) return;
 
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -85,9 +85,17 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                         <h2 className="font-bold text-lg">{car.year} {car.make} {car.model}</h2>
                         <p className="text-primary dark:text-primary-400 font-semibold">${car.price.toLocaleString()}</p>
                     </div>
-                    <button onClick={() => setIsModalOpen(true)} className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary-700 transition-colors">
-                        Inquire Now
-                    </button>
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={handleWishlistToggle}
+                            className={`p-2 rounded-full transition-colors ${isWishlisted ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
+                        >
+                            <Heart fill={isWishlisted ? 'currentColor' : 'none'} className="w-5 h-5" />
+                        </button>
+                        <button onClick={() => setIsModalOpen(true)} className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary-700 transition-colors">
+                            Inquire Now
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -135,7 +143,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                             {car.description}
                         </p>
                         <div className="mt-auto pt-6 flex flex-col sm:flex-row gap-4">
-                            <button onClick={() => setIsModalOpen(true)} className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors w-full">
+                            <button onClick={() => setIsModalOpen(true)} className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors w-full hidden md:block">
                                 Inquire Now
                             </button>
                             <button

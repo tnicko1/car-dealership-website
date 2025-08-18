@@ -32,7 +32,7 @@ export default function BackToTopButton() {
             className={`
                 fixed bottom-5 right-5 p-3 rounded-full bg-primary text-white
                 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2
-                focus:ring-primary-500 transition-all duration-300 z-50
+                focus:ring-primary-500 transition-all duration-300 z-[100]
                 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}
             `}
         >
