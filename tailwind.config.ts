@@ -18,8 +18,8 @@ const config: Config = {
             // Add custom animations and keyframes
             keyframes: {
                 'button-glow': {
-                    '0%, 100%': { boxShadow: '0 0 5px 2px theme(colors.primary.DEFAULT / 40%)' },
-                    '50%': { boxShadow: '0 0 12px 5px theme(colors.primary.DEFAULT / 20%)' },
+                    '0%, 100%': { boxShadow: '0 0 5px 2px rgba(220, 38, 38, 0.4)' },
+                    '50%': { boxShadow: '0 0 12px 5px rgba(220, 38, 38, 0.2)' },
                 },
                 shine: {
                     '0%': { backgroundPosition: '200% center' },
