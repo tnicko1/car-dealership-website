@@ -104,7 +104,6 @@ model User {
   firstName     String?
   lastName      String?
   username      String?   @unique
-  name          String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
