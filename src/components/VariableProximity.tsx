@@ -78,8 +78,10 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
     const lastPositionRef = useRef<{ x: number | null; y: number | null }>({ x: null, y: null });
 
     useLayoutEffect(() => {
+        let isMounted = true;
+
         const calculateLetterPositions = () => {
-            if (!containerRef.current) return;
+            if (!containerRef.current || !isMounted) return;
             const containerRect = containerRef.current.getBoundingClientRect();
             letterPositionsRef.current = letterRefs.current.map(letterRef => {
                 if (!letterRef) return { x: 0, y: 0 };
@@ -91,10 +93,17 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
             });
         };
 
-        calculateLetterPositions();
+        document.fonts.ready.then(() => {
+            if (isMounted) {
+                calculateLetterPositions();
+            }
+        });
 
         window.addEventListener("resize", calculateLetterPositions);
-        return () => window.removeEventListener("resize", calculateLetterPositions);
+        return () => {
+            isMounted = false;
+            window.removeEventListener("resize", calculateLetterPositions);
+        }
     }, [containerRef, label]);
 
 
