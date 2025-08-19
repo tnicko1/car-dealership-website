@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, useMemo, useRef, useEffect, MutableRefObject, CSSProperties, HTMLAttributes } from "react";
+import { forwardRef, useMemo, useRef, useEffect, MutableRefObject, CSSProperties, HTMLAttributes, useLayoutEffect } from "react";
 import { motion } from "motion/react";
 
 function useAnimationFrame(callback: () => void) {
@@ -72,9 +72,31 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
     } = props;
 
     const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
+    const letterPositionsRef = useRef<{ x: number; y: number }[]>([]);
     const interpolatedSettingsRef = useRef<string[]>([]);
     const mousePositionRef = useMousePositionRef(containerRef);
     const lastPositionRef = useRef<{ x: number | null; y: number | null }>({ x: null, y: null });
+
+    useLayoutEffect(() => {
+        const calculateLetterPositions = () => {
+            if (!containerRef.current) return;
+            const containerRect = containerRef.current.getBoundingClientRect();
+            letterPositionsRef.current = letterRefs.current.map(letterRef => {
+                if (!letterRef) return { x: 0, y: 0 };
+                const rect = letterRef.getBoundingClientRect();
+                return {
+                    x: rect.left + rect.width / 2 - containerRect.left,
+                    y: rect.top + rect.height / 2 - containerRect.top,
+                };
+            });
+        };
+
+        calculateLetterPositions();
+
+        window.addEventListener("resize", calculateLetterPositions);
+        return () => window.removeEventListener("resize", calculateLetterPositions);
+    }, [containerRef, label]);
+
 
     const parsedSettings = useMemo(() => {
         const parseSettings = (settingsStr: string) =>
@@ -117,14 +139,11 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
           return;
         }
         lastPositionRef.current = { x, y };
-        const containerRect = containerRef.current.getBoundingClientRect();
 
         letterRefs.current.forEach((letterRef, index) => {
             if (!letterRef) return;
 
-            const rect = letterRef.getBoundingClientRect();
-            const letterCenterX = rect.left + rect.width / 2 - containerRect.left;
-            const letterCenterY = rect.top + rect.height / 2 - containerRect.top;
+            const { x: letterCenterX, y: letterCenterY } = letterPositionsRef.current[index] || { x: 0, y: 0 };
 
             const distance = calculateDistance(
                 mousePositionRef.current.x,
@@ -134,7 +153,9 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
             );
 
             if (distance >= radius) {
-                letterRef.style.fontVariationSettings = fromFontVariationSettings;
+                if (letterRef.style.fontVariationSettings !== fromFontVariationSettings) {
+                    letterRef.style.fontVariationSettings = fromFontVariationSettings;
+                }
                 return;
             }
 
@@ -146,8 +167,10 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
                 })
                 .join(", ");
 
-            interpolatedSettingsRef.current[index] = newSettings;
-            letterRef.style.fontVariationSettings = newSettings;
+            if (interpolatedSettingsRef.current[index] !== newSettings) {
+                interpolatedSettingsRef.current[index] = newSettings;
+                letterRef.style.fontVariationSettings = newSettings;
+            }
         });
     });
 
@@ -177,6 +200,7 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
                                     display: "inline-block",
                                     fontVariationSettings:
                                         interpolatedSettingsRef.current[currentLetterIndex],
+                                    willChange: 'font-variation-settings',
                                 }}
                                 aria-hidden="true"
                             >
