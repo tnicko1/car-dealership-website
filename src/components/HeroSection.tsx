@@ -26,16 +26,30 @@ export default function HeroSection() {
         setIsHovering(false);
     };
 
-    const textStyle = {
-        '--mouse-x': `${mousePosition.x}px`,
-        '--mouse-y': `${mousePosition.y}px`,
-        '--circle-size': isHovering ? '150px' : '0px',
-        backgroundImage: `radial-gradient(circle var(--circle-size) at var(--mouse-x) var(--mouse-y), theme(colors.primary.400) 0%, transparent 100%), linear-gradient(white, white)`,
-        backgroundClip: 'text',
-        WebkitBackgroundClip: 'text',
-        color: 'transparent',
-        transition: 'background-image 0.3s ease-out',
-    } as React.CSSProperties;
+    // Define styles for the heading and paragraph
+    const createTextStyle = (baseColor: string, highlightColor: string) => {
+        const size = isHovering ? '300px' : '0px';
+        const halfSize = isHovering ? 150 : 0;
+
+        return {
+            '--mouse-x': `${mousePosition.x}px`,
+            '--mouse-y': `${mousePosition.y}px`,
+            backgroundImage: `
+                radial-gradient(circle, ${highlightColor} 50%, transparent 51%),
+                linear-gradient(${baseColor}, ${baseColor})
+            `,
+            backgroundSize: `${size} ${size}, 100% 100%`,
+            backgroundPosition: `
+                calc(var(--mouse-x) - ${halfSize}px) calc(var(--mouse-y) - ${halfSize}px),
+                0 0
+            `,
+            backgroundRepeat: 'no-repeat, no-repeat',
+            backgroundClip: 'text, text',
+            WebkitBackgroundClip: 'text, text',
+            color: 'transparent',
+            transition: 'background-size 0.3s ease-out',
+        } as React.CSSProperties;
+    };
 
     return (
         <section
@@ -62,13 +76,13 @@ export default function HeroSection() {
                 >
                     <h1
                         className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4"
-                        style={!isTouchDevice ? textStyle : {}}
+                        style={!isTouchDevice ? createTextStyle('#FFFFFF', '#F87171') : {}}
                     >
                         Find Your Next Dream Car
                     </h1>
                     <p
                         className="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto"
-                        style={!isTouchDevice ? textStyle : {}}
+                        style={!isTouchDevice ? createTextStyle('#D1D5DB', '#FCA5A5') : {}}
                     >
                         We offer a curated selection of high-quality new and pre-owned vehicles. Your journey to the perfect ride starts here.
                     </p>
