@@ -33,9 +33,6 @@ export default function HeroSection() {
 
     return (
         <section
-            ref={heroRef}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
             className="relative text-center py-20 md:py-32 text-white overflow-hidden"
         >
             <div className="absolute inset-0 w-full h-full">
@@ -51,7 +48,12 @@ export default function HeroSection() {
             <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-indigo-900/70"></div>
 
             <div className="relative container mx-auto px-4">
-                <div className="relative">
+                <div
+                    ref={heroRef}
+                    onMouseMove={handleMouseMove}
+                    onMouseLeave={handleMouseLeave}
+                    className="relative"
+                >
                     {/* Masked (Top) Layer */}
                     {!isTouchDevice && (
                         <div
