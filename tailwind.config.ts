@@ -18,8 +18,8 @@ const config: Config = {
             // Add custom animations and keyframes
             keyframes: {
                 shine: {
-                    '0%': { backgroundPosition: '-200% center' },
-                    '100%': { backgroundPosition: '200% center' },
+                    '0%': { backgroundPosition: '200% center' },
+                    '100%': { backgroundPosition: '-200% center' },
                 },
                 fadeIn: {
                     '0%': { opacity: '0' },
@@ -31,7 +31,7 @@ const config: Config = {
                 },
             },
             animation: {
-                shine: 'shine 4s linear infinite',
+                shine: 'shine 3s linear infinite',
                 'fade-in': 'fadeIn 0.5s ease-out forwards',
                 'slide-in-up': 'slideInUp 0.5s ease-out forwards',
             },

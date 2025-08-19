@@ -17,7 +17,7 @@ export default function Footer() {
                     {/* About Section */}
                     <div className="col-span-1 md:col-span-2">
                         <h3 className="text-xl font-bold text-white mb-4">
-                            <span className="animate-shine bg-[linear-gradient(110deg,theme(colors.red.500),45%,theme(colors.white),55%,theme(colors.red.500))] bg-[length:250%_100%] bg-clip-text text-transparent">
+                            <span className="animate-shine bg-[linear-gradient(110deg,theme(colors.red.500),45%,theme(colors.white),55%,theme(colors.red.500))] bg-[length:200%_100%] bg-clip-text text-transparent">
                                 DriveHaus
                             </span>
                         </h3>

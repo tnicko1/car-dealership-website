@@ -77,7 +77,7 @@ export default function Header() {
                 {/* Logo */}
                 <Link href="/" className="flex items-center text-2xl font-bold text-primary dark:text-primary-400 hover:opacity-80 transition-opacity">
                     <Image src="/logo.svg" alt="DriveHaus Logo" width={80} height={80} className="mr-2 drop-shadow-md -mt-2" />
-                    <span className="animate-shine bg-[linear-gradient(110deg,theme(colors.red.600),45%,theme(colors.white),55%,theme(colors.red.600))] dark:bg-[linear-gradient(110deg,theme(colors.red.500),45%,theme(colors.white),55%,theme(colors.red.500))] bg-[length:250%_100%] bg-clip-text text-transparent text-3xl font-extrabold tracking-tight">
+                    <span className="animate-shine bg-[linear-gradient(110deg,theme(colors.red.600),45%,theme(colors.white),55%,theme(colors.red.600))] dark:bg-[linear-gradient(110deg,theme(colors.red.500),45%,theme(colors.white),55%,theme(colors.red.500))] bg-[length:200%_100%] bg-clip-text text-transparent text-3xl font-extrabold tracking-tight">
                         DriveHaus
                     </span>
                 </Link>
