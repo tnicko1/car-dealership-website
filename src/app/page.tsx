@@ -46,7 +46,7 @@ export default async function Home() {
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-indigo-900/70"></div>
 
                 <div className="relative container mx-auto px-4">
-                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 animate-shine bg-[linear-gradient(110deg,theme(colors.white),45%,theme(colors.primary.300),55%,theme(colors.white))] bg-[length:250%_100%] bg-clip-text text-transparent">
                         Find Your Next Dream Car
                     </h1>
                     <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
@@ -54,8 +54,7 @@ export default async function Home() {
                     </p>
                     <Link
                         href="/cars"
-                        className="bg-primary text-white font-bold py-3 px-8 rounded-full hover:bg-primary-500 transform hover:scale-105 transition-all duration-300 ease-in-out inline-block animate-fade-in-up"
-                        style={{ animationDelay: '0.6s' }}
+                        className="bg-primary text-white font-bold py-3 px-8 rounded-full hover:bg-primary-500 transform hover:scale-105 transition-all duration-300 ease-in-out inline-block animate-pulse"
                     >
                         Explore Inventory
                     </Link>

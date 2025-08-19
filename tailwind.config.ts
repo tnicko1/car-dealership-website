@@ -17,6 +17,10 @@ const config: Config = {
         extend: {
             // Add custom animations and keyframes
             keyframes: {
+                pulse: {
+                    '0%, 100%': { boxShadow: '0 0 0 0 theme(colors.primary.DEFAULT / 70%)' },
+                    '50%': { boxShadow: '0 0 0 12px theme(colors.primary.DEFAULT / 0%)' },
+                },
                 shine: {
                     '0%': { backgroundPosition: '200% center' },
                     '100%': { backgroundPosition: '-200% center' },
@@ -31,6 +35,7 @@ const config: Config = {
                 },
             },
             animation: {
+                pulse: 'pulse 2.5s infinite',
                 shine: 'shine 3s linear infinite',
                 'fade-in': 'fadeIn 0.5s ease-out forwards',
                 'slide-in-up': 'slideInUp 0.5s ease-out forwards',
