@@ -22,7 +22,7 @@ export default function HeroSection() {
                 <div>
                     <VariableProximity
                         label="We offer a curated selection of high-quality new and pre-owned vehicles. Your journey to the perfect ride starts here."
-                        className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto block"
+                        className="font-roboto-flex text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto block"
                         fromFontVariationSettings="'wght' 400, 'opsz' 9"
                         toFontVariationSettings="'wght' 1000, 'opsz' 40"
                         containerRef={containerRef}
