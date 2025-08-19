@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 // You can replace these with your actual social media links
@@ -11,35 +10,15 @@ const socialLinks = [
 ];
 
 export default function Footer() {
-    const [isVisible, setIsVisible] = useState(false);
-
-    const toggleVisibility = () => {
-        if (window.scrollY > 300) {
-            setIsVisible(true);
-        } else {
-            setIsVisible(false);
-        }
-    };
-
-    const scrollToTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
-        });
-    };
-
-    useEffect(() => {
-        window.addEventListener('scroll', toggleVisibility);
-        return () => window.removeEventListener('scroll', toggleVisibility);
-    }, []);
-
     return (
         <footer className="bg-gray-900 text-gray-400 relative">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="text-center md:text-left grid grid-cols-1 md:grid-cols-4 gap-8">
                     {/* About Section */}
                     <div className="col-span-1 md:col-span-2">
-                        <h3 className="text-xl font-bold text-white mb-4">YourDealership</h3>
+                        <h3 className="text-xl font-bold text-white mb-4">
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600">DriveHaus</span>
+                        </h3>
                         <p className="max-w-md mx-auto md:mx-0">
                             Your premier destination for quality vehicles and exceptional service. We are committed to helping you find the car that is right for you.
                         </p>
@@ -69,12 +48,12 @@ export default function Footer() {
                         <ul className="space-y-2">
                             <li>123 Car Lane, Auto City</li>
                             <li>Phone: (123) 456-7890</li>
-                            <li>Email: sales@yourdealership.com</li>
+                            <li>Email: sales@drivehaus.com</li>
                         </ul>
                     </div>
                 </div>
                 <div className="mt-8 pt-8 border-t border-gray-800 text-center">
-                    <p>&copy; {new Date().getFullYear()} YourDealership. All Rights Reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} DriveHaus. All Rights Reserved.</p>
                 </div>
             </div>
             

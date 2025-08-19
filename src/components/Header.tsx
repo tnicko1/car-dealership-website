@@ -76,8 +76,10 @@ export default function Header() {
             <div className={`container mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}>
                 {/* Logo */}
                 <Link href="/" className="flex items-center text-2xl font-bold text-primary dark:text-primary-400 hover:opacity-80 transition-opacity">
-                    <Image src="/logo.svg" alt="YourDealership Logo" width={80} height={80} className="mr-2 drop-shadow-md -mt-2" />
-                    <span>YourDealership</span>
+                    <Image src="/logo.svg" alt="DriveHaus Logo" width={80} height={80} className="mr-2 drop-shadow-md -mt-2" />
+                    <span className="text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-blue-400 dark:to-indigo-500 hover:opacity-90 transition-opacity">
+                        DriveHaus
+                    </span>
                 </Link>
 
                 {/* Desktop Navigation */}
