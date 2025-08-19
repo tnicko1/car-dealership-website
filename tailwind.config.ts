@@ -17,13 +17,13 @@ const config: Config = {
         extend: {
             // Add custom animations and keyframes
             keyframes: {
+                shine: {
+                    '0%': { 'background-position': '100%' },
+                    '100%': { 'background-position': '-100%' },
+                },
                 'button-glow': {
                     '0%, 100%': { boxShadow: '0 0 6px 1px #DC2626' },
                     '50%': { boxShadow: '0 0 12px 3px #B91C1C' },
-                },
-                shine: {
-                    '0%': { backgroundPosition: '200% center' },
-                    '100%': { backgroundPosition: '-200% center' },
                 },
                 fadeIn: {
                     '0%': { opacity: '0' },
@@ -35,8 +35,8 @@ const config: Config = {
                 },
             },
             animation: {
+                shine: 'shine 5s linear infinite',
                 'button-glow': 'button-glow 3s infinite',
-                shine: 'shine 3s linear infinite',
                 'fade-in': 'fadeIn 0.5s ease-out forwards',
                 'slide-in-up': 'slideInUp 0.5s ease-out forwards',
             },
