@@ -26,14 +26,16 @@ export default function HeroSection() {
         setIsHovering(false);
     };
 
-    const maskStyle = {
+    const textStyle = {
         '--mouse-x': `${mousePosition.x}px`,
         '--mouse-y': `${mousePosition.y}px`,
-        maskImage: 'radial-gradient(circle 150px at var(--mouse-x) var(--mouse-y), black 100%, transparent 100%)',
-        WebkitMaskImage: 'radial-gradient(circle 150px at var(--mouse-x) var(--mouse-y), black 100%, transparent 100%)',
+        '--circle-size': isHovering ? '150px' : '0px',
+        backgroundImage: `radial-gradient(circle var(--circle-size) at var(--mouse-x) var(--mouse-y), theme(colors.primary.400) 0%, transparent 100%), linear-gradient(white, white)`,
+        backgroundClip: 'text',
+        WebkitBackgroundClip: 'text',
+        color: 'transparent',
+        transition: 'background-image 0.3s ease-out',
     } as React.CSSProperties;
-
-    const transformOrigin = `${mousePosition.x}px ${mousePosition.y}px`;
 
     return (
         <section
@@ -58,35 +60,18 @@ export default function HeroSection() {
                     onMouseLeave={handleMouseLeave}
                     className="relative"
                 >
-                    {/* Masked (Top) Layer */}
-                    {!isTouchDevice && (
-                        <div
-                            className="pointer-events-none absolute inset-0"
-                            style={{
-                                ...maskStyle,
-                                transformOrigin: transformOrigin,
-                                transform: isHovering ? 'scale(1)' : 'scale(0)',
-                                transition: 'transform 0.3s ease-out',
-                            }}
-                        >
-                            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-primary-400" style={{ transform: 'scale(1.02)'}}>
-                                Find Your Next Dream Car
-                            </h1>
-                            <p className="text-lg md:text-xl text-primary-300 mb-8 max-w-3xl mx-auto" style={{ transform: 'scale(1.02)'}}>
-                                We offer a curated selection of high-quality new and pre-owned vehicles. Your journey to the perfect ride starts here.
-                            </p>
-                        </div>
-                    )}
-
-                    {/* Base (Bottom) Layer */}
-                    <div>
-                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4">
-                            Find Your Next Dream Car
-                        </h1>
-                        <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-                            We offer a curated selection of high-quality new and pre-owned vehicles. Your journey to the perfect ride starts here.
-                        </p>
-                    </div>
+                    <h1
+                        className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4"
+                        style={!isTouchDevice ? textStyle : {}}
+                    >
+                        Find Your Next Dream Car
+                    </h1>
+                    <p
+                        className="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto"
+                        style={!isTouchDevice ? textStyle : {}}
+                    >
+                        We offer a curated selection of high-quality new and pre-owned vehicles. Your journey to the perfect ride starts here.
+                    </p>
                 </div>
 
                 <Link
