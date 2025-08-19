@@ -6,6 +6,7 @@ import Image from 'next/image';
 
 export default function HeroSection() {
     const [mousePosition, setMousePosition] = useState({ x: -1000, y: -1000 });
+    const [isHovering, setIsHovering] = useState(false);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
     const heroRef = useRef<HTMLDivElement>(null);
 
@@ -15,12 +16,14 @@ export default function HeroSection() {
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         if (isTouchDevice || !heroRef.current) return;
+        setIsHovering(true);
         const rect = heroRef.current.getBoundingClientRect();
         setMousePosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
     };
 
     const handleMouseLeave = () => {
         if (isTouchDevice) return;
+        setIsHovering(false);
         setMousePosition({ x: -1000, y: -1000 });
     };
 
@@ -57,13 +60,19 @@ export default function HeroSection() {
                     {/* Masked (Top) Layer */}
                     {!isTouchDevice && (
                         <div
-                            className="pointer-events-none absolute inset-0"
-                            style={maskStyle}
+                            className="pointer-events-none absolute inset-0 transition-opacity duration-300"
+                            style={{ ...maskStyle, opacity: isHovering ? 1 : 0 }}
                         >
-                            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-primary-400">
+                            <h1
+                                className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-primary-400"
+                                style={{ textShadow: '0 0 2px #F87171' }} // Subtle glow to cover white border
+                            >
                                 Find Your Next Dream Car
                             </h1>
-                            <p className="text-lg md:text-xl text-primary-300 mb-8 max-w-3xl mx-auto">
+                            <p
+                                className="text-lg md:text-xl text-primary-300 mb-8 max-w-3xl mx-auto"
+                                style={{ textShadow: '0 0 2px #FCA5A5' }} // Subtle glow to cover white border
+                            >
                                 We offer a curated selection of high-quality new and pre-owned vehicles. Your journey to the perfect ride starts here.
                             </p>
                         </div>
