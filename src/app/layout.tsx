@@ -9,7 +9,10 @@ import { CompareProvider } from "@/providers/CompareProvider";
 import CompareBar from "@/components/CompareBar";
 import BackToTopButton from "@/components/BackToTopButton";
 
-const inter = Inter({ subsets: ['latin'] });
+import { Inter, Roboto_Flex } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const robotoFlex = Roboto_Flex({ subsets: ['latin'], variable: '--font-roboto-flex' });
 
 export const metadata: Metadata = {
     title: "Your Car Dealership",
@@ -36,7 +39,7 @@ export default function RootLayout({
                 crossOrigin="anonymous"
             />
         </head>
-        <body className={`${inter.className} bg-gray-50 dark:bg-gray-900`}>
+        <body className={`${inter.variable} ${robotoFlex.variable} font-sans bg-gray-50 dark:bg-gray-900`}>
         <AppSessionProvider>
             <ThemeProvider>
                 <CompareProvider>
