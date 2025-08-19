@@ -28,9 +28,9 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
   interactive = true,
 }) => {
   const text = useMemo(() => {
-    const hasTrailing = /s|u00A0$/.test(marqueeText);
+    const hasTrailing = /\s|\u00A0$/.test(marqueeText);
     return (
-      (hasTrailing ? marqueeText.replace(/s+$/, "") : marqueeText) + "u00A0"
+      (hasTrailing ? marqueeText.replace(/\s+$/, "") : marqueeText) + "\u00A0"
     );
   }, [marqueeText]);
 
@@ -130,7 +130,7 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center w-full"
+      className="w-full"
       style={{ visibility: ready ? "visible" : "hidden", cursor: cursorStyle }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
