@@ -26,31 +26,6 @@ export default function HeroSection() {
         setIsHovering(false);
     };
 
-    // Define styles for the heading and paragraph
-    const createTextStyle = (baseColor: string, highlightColor: string) => {
-        const size = isHovering ? '300px' : '0px';
-        const halfSize = isHovering ? 150 : 0;
-
-        return {
-            '--mouse-x': `${mousePosition.x}px`,
-            '--mouse-y': `${mousePosition.y}px`,
-            backgroundImage: `
-                radial-gradient(circle, ${highlightColor} 50%, transparent 51%),
-                linear-gradient(${baseColor}, ${baseColor})
-            `,
-            backgroundSize: `${size} ${size}, 100% 100%`,
-            backgroundPosition: `
-                calc(var(--mouse-x) - ${halfSize}px) calc(var(--mouse-y) - ${halfSize}px),
-                0 0
-            `,
-            backgroundRepeat: 'no-repeat, no-repeat',
-            backgroundClip: 'text, text',
-            WebkitBackgroundClip: 'text, text',
-            color: 'transparent',
-            transition: 'background-size 0.3s ease-out',
-        } as React.CSSProperties;
-    };
-
     return (
         <section
             className="relative text-center py-20 md:py-32 text-white overflow-hidden"
@@ -74,16 +49,30 @@ export default function HeroSection() {
                     onMouseLeave={handleMouseLeave}
                     className="relative"
                 >
-                    <h1
-                        className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4"
-                        style={!isTouchDevice ? createTextStyle('#FFFFFF', '#F87171') : {}}
-                    >
+                    {/* The Spotlight Div */}
+                    {!isTouchDevice && (
+                        <div
+                            className="pointer-events-none absolute"
+                            style={{
+                                top: mousePosition.y,
+                                left: mousePosition.x,
+                                width: '300px',
+                                height: '300px',
+                                background: '#DC2626', // Solid red matching the button
+                                borderRadius: '50%',
+                                mixBlendMode: 'color-dodge', // This mode colorizes the white text
+                                transform: 'translate(-50%, -50%)',
+                                opacity: isHovering ? 1 : 0,
+                                transition: 'opacity 0.3s ease-out',
+                            }}
+                        />
+                    )}
+
+                    {/* Single, Base Text Layer */}
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4">
                         Find Your Next Dream Car
                     </h1>
-                    <p
-                        className="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto"
-                        style={!isTouchDevice ? createTextStyle('#D1D5DB', '#FCA5A5') : {}}
-                    >
+                    <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
                         We offer a curated selection of high-quality new and pre-owned vehicles. Your journey to the perfect ride starts here.
                     </p>
                 </div>
