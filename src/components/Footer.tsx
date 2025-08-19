@@ -17,7 +17,7 @@ export default function Footer() {
                     {/* About Section */}
                     <div className="col-span-1 md:col-span-2">
                         <h3 className="text-xl font-bold text-white mb-4">
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600">DriveHaus</span>
+                            <span className="shine-effect text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700">DriveHaus</span>
                         </h3>
                         <p className="max-w-md mx-auto md:mx-0">
                             Your premier destination for quality vehicles and exceptional service. We are committed to helping you find the car that is right for you.
