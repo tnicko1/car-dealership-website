@@ -26,14 +26,12 @@ export default function HeroSection() {
         setIsHovering(false);
     };
 
-    const maskSize = isHovering ? '300px' : '0px';
-
     const maskStyle = {
         '--mouse-x': `${mousePosition.x}px`,
         '--mouse-y': `${mousePosition.y}px`,
-        maskImage: `radial-gradient(${maskSize} ${maskSize} at var(--mouse-x) var(--mouse-y), black, transparent)`,
-        WebkitMaskImage: `radial-gradient(${maskSize} ${maskSize} at var(--mouse-x) var(--mouse-y), black, transparent)`,
-        transition: 'mask-image 0.3s ease-out, -webkit-mask-image 0.3s ease-out',
+        // Use a sharp-edged circle for the mask
+        maskImage: 'radial-gradient(circle 150px at var(--mouse-x) var(--mouse-y), black 100%, transparent 100%)',
+        WebkitMaskImage: 'radial-gradient(circle 150px at var(--mouse-x) var(--mouse-y), black 100%, transparent 100%)',
     } as React.CSSProperties;
 
     return (
@@ -63,18 +61,16 @@ export default function HeroSection() {
                     {!isTouchDevice && (
                         <div
                             className="pointer-events-none absolute inset-0"
-                            style={maskStyle}
+                            style={{
+                                ...maskStyle,
+                                transform: isHovering ? 'scale(1)' : 'scale(0)',
+                                transition: 'transform 0.3s ease-out',
+                            }}
                         >
-                            <h1
-                                className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-primary-400"
-                                style={{ textShadow: '0 0 2px #F87171' }} // Subtle glow to cover white border
-                            >
+                            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-primary-400">
                                 Find Your Next Dream Car
                             </h1>
-                            <p
-                                className="text-lg md:text-xl text-primary-300 mb-8 max-w-3xl mx-auto"
-                                style={{ textShadow: '0 0 2px #FCA5A5' }} // Subtle glow to cover white border
-                            >
+                            <p className="text-lg md:text-xl text-primary-300 mb-8 max-w-3xl mx-auto">
                                 We offer a curated selection of high-quality new and pre-owned vehicles. Your journey to the perfect ride starts here.
                             </p>
                         </div>
