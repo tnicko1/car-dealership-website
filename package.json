@@ -20,6 +20,7 @@
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^0.525.0",
+    "motion": "^12.23.12",
     "next": "^14.2.31",
     "next-auth": "^4.24.11",
     "react": "^18",
