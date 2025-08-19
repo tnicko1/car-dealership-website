@@ -24,14 +24,16 @@ export default function HeroSection() {
     const handleMouseLeave = () => {
         if (isTouchDevice) return;
         setIsHovering(false);
-        setMousePosition({ x: -1000, y: -1000 });
     };
+
+    const maskSize = isHovering ? '300px' : '0px';
 
     const maskStyle = {
         '--mouse-x': `${mousePosition.x}px`,
         '--mouse-y': `${mousePosition.y}px`,
-        maskImage: 'radial-gradient(300px 300px at var(--mouse-x) var(--mouse-y), black, transparent)',
-        WebkitMaskImage: 'radial-gradient(300px 300px at var(--mouse-x) var(--mouse-y), black, transparent)',
+        maskImage: `radial-gradient(${maskSize} ${maskSize} at var(--mouse-x) var(--mouse-y), black, transparent)`,
+        WebkitMaskImage: `radial-gradient(${maskSize} ${maskSize} at var(--mouse-x) var(--mouse-y), black, transparent)`,
+        transition: 'mask-image 0.3s ease-out, -webkit-mask-image 0.3s ease-out',
     } as React.CSSProperties;
 
     return (
@@ -60,8 +62,8 @@ export default function HeroSection() {
                     {/* Masked (Top) Layer */}
                     {!isTouchDevice && (
                         <div
-                            className="pointer-events-none absolute inset-0 transition-opacity duration-300"
-                            style={{ ...maskStyle, opacity: isHovering ? 1 : 0 }}
+                            className="pointer-events-none absolute inset-0"
+                            style={maskStyle}
                         >
                             <h1
                                 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-primary-400"
