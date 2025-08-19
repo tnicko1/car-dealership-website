@@ -15,6 +15,10 @@ const config: Config = {
             'xl': '1536px',
         },
         extend: {
+            fontFamily: {
+                sans: ['var(--font-inter)'],
+                'roboto-flex': ['var(--font-roboto-flex)'],
+            },
             // Add custom animations and keyframes
             keyframes: {
                 shine: {
