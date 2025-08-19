@@ -19,7 +19,7 @@ export default function HeroSection() {
                 <div className="w-full absolute top-[-155px] md:top-[-205px] left-0">
                     <CurvedLoop marqueeText="Find ✦ Your ✦ Next ✦ Dream ✦ Car ✦" />
                 </div>
-                <div className="mt-16 md:mt-24">
+                <div className="mt-24 md:mt-32">
                     <VariableProximity
                         label="We offer a curated selection of high-quality new and pre-owned vehicles. Your journey to the perfect ride starts here."
                         className="font-roboto-flex text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto block"
