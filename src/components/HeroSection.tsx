@@ -24,6 +24,13 @@ export default function HeroSection() {
         setMousePosition({ x: -1000, y: -1000 });
     };
 
+    const maskStyle = {
+        '--mouse-x': `${mousePosition.x}px`,
+        '--mouse-y': `${mousePosition.y}px`,
+        maskImage: 'radial-gradient(300px 300px at var(--mouse-x) var(--mouse-y), black, transparent)',
+        WebkitMaskImage: 'radial-gradient(300px 300px at var(--mouse-x) var(--mouse-y), black, transparent)',
+    } as React.CSSProperties;
+
     return (
         <section
             ref={heroRef}
@@ -31,18 +38,6 @@ export default function HeroSection() {
             onMouseLeave={handleMouseLeave}
             className="relative text-center py-20 md:py-32 text-white overflow-hidden"
         >
-            {/* Mouse Glow Effect */}
-            {!isTouchDevice && (
-                <div
-                    className="pointer-events-none absolute -inset-px rounded-full transition-opacity duration-500"
-                    style={{
-                        opacity: mousePosition.x === -1000 ? 0 : 1,
-                        background: `radial-gradient(400px at ${mousePosition.x}px ${mousePosition.y}px, rgba(220, 38, 38, 0.2), transparent 80%)`,
-                        mixBlendMode: 'screen',
-                    }}
-                />
-            )}
-
             <div className="absolute inset-0 w-full h-full">
                 <Image
                     src="/showroom-bg.webp"
@@ -56,6 +51,22 @@ export default function HeroSection() {
             <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-indigo-900/70"></div>
 
             <div className="relative container mx-auto px-4">
+                {/* The duplicated text with the mask */}
+                {!isTouchDevice && (
+                    <div
+                        className="pointer-events-none absolute inset-0 py-20 md:py-32"
+                        style={maskStyle}
+                    >
+                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-primary-400">
+                            Find Your Next Dream Car
+                        </h1>
+                        <p className="text-lg md:text-xl text-primary-300 mb-8 max-w-3xl mx-auto">
+                            We offer a curated selection of high-quality new and pre-owned vehicles. Your journey to the perfect ride starts here.
+                        </p>
+                    </div>
+                )}
+
+                {/* The base, visible text */}
                 <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4">
                     Find Your Next Dream Car
                 </h1>
