@@ -29,10 +29,11 @@ export default function HeroSection() {
     const maskStyle = {
         '--mouse-x': `${mousePosition.x}px`,
         '--mouse-y': `${mousePosition.y}px`,
-        // Use a sharp-edged circle for the mask
         maskImage: 'radial-gradient(circle 150px at var(--mouse-x) var(--mouse-y), black 100%, transparent 100%)',
         WebkitMaskImage: 'radial-gradient(circle 150px at var(--mouse-x) var(--mouse-y), black 100%, transparent 100%)',
     } as React.CSSProperties;
+
+    const transformOrigin = `${mousePosition.x}px ${mousePosition.y}px`;
 
     return (
         <section
@@ -63,14 +64,15 @@ export default function HeroSection() {
                             className="pointer-events-none absolute inset-0"
                             style={{
                                 ...maskStyle,
+                                transformOrigin: transformOrigin,
                                 transform: isHovering ? 'scale(1)' : 'scale(0)',
                                 transition: 'transform 0.3s ease-out',
                             }}
                         >
-                            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-primary-400">
+                            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-primary-400" style={{ transform: 'scale(1.02)'}}>
                                 Find Your Next Dream Car
                             </h1>
-                            <p className="text-lg md:text-xl text-primary-300 mb-8 max-w-3xl mx-auto">
+                            <p className="text-lg md:text-xl text-primary-300 mb-8 max-w-3xl mx-auto" style={{ transform: 'scale(1.02)'}}>
                                 We offer a curated selection of high-quality new and pre-owned vehicles. Your journey to the perfect ride starts here.
                             </p>
                         </div>
