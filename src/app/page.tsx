@@ -23,7 +23,7 @@ export default async function Home() {
         }),
         session?.user?.id ? prisma.user.findUnique({
             where: { id: session.user.id },
-            include: { wishlist: { select: { id: true } } },
+            select: { wishlist: { select: { id: true } } },
         }) : null
     ]);
 
