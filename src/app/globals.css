@@ -41,17 +41,6 @@ body {
 }
 
 @layer utilities {
-    .hero-text-glow {
-        /* Define default off-screen coordinates to satisfy linters */
-        --mouse-x: -1000px;
-        --mouse-y: -1000px;
-
-        background: radial-gradient(350px circle at var(--mouse-x) var(--mouse-y), theme(colors.white) 0%, theme(colors.gray.400) 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        transition: color 0.2s ease-out;
-    }
 }
 
  
