@@ -22,8 +22,8 @@ const config: Config = {
             // Add custom animations and keyframes
             keyframes: {
                 shine: {
-                    '0%': { 'background-position': '100%' },
-                    '100%': { 'background-position': '-100%' },
+                    '0%': { 'background-position': '200% center' },
+                    '100%': { 'background-position': '-200% center' },
                 },
                 'button-glow': {
                     '0%, 100%': { boxShadow: '0 0 6px 1px #DC2626' },
