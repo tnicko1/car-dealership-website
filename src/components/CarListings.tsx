@@ -57,6 +57,7 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
                     params.append(key, value);
                 }
             });
+            params.append('sort', sortOrder);
 
             router.push(`${pathname}?${params.toString()}`, { scroll: false });
 
@@ -67,41 +68,7 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
         };
 
         fetchCars();
-    }, [filtersState, pathname, router]);
-
-    useEffect(() => {
-        const sortCars = (carsToSort: CarWithImages[]) => {
-            const [sortBy, sortDirection] = sortOrder.split('-');
-            return [...carsToSort].sort((a, b) => {
-                let valA: any;
-                let valB: any;
-
-                switch (sortBy) {
-                    case 'price':
-                        valA = a.price;
-                        valB = b.price;
-                        break;
-                    case 'mileage':
-                        valA = a.mileage;
-                        valB = b.mileage;
-                        break;
-                    case 'year':
-                        valA = a.year;
-                        valB = b.year;
-                        break;
-                    default:
-                        return 0;
-                }
-
-                if (sortDirection === 'asc') {
-                    return valA - valB;
-                } else {
-                    return valB - valA;
-                }
-            });
-        };
-        setCars(prevCars => sortCars(prevCars));
-    }, [sortOrder]);
+    }, [filtersState, sortOrder, pathname, router]);
 
     const handleFilterChange = (value: string, name: string, checked?: boolean) => {
         setFiltersState(prev => {
@@ -172,6 +139,7 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
                                     onChange={(e) => setSortOrder(e.target.value)}
                                     className="appearance-none bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 pl-3 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                                 >
+                                    <option value="createdAt-desc">Newest</option>
                                     <option value="price-asc">Price: Low to High</option>
                                     <option value="price-desc">Price: High to Low</option>
                                     <option value="mileage-asc">Mileage: Low to High</option>
