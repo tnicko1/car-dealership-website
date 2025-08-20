@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { CarWithImages } from '@/types/car';
 import CarCard from './CarCard';
 import FilterSidebar from './FilterSidebar';
-import { List, Grid, Filter, X } from 'lucide-react';
+import { List, Grid, Filter, X, ArrowUpDown } from 'lucide-react';
 import { Dialog, Transition } from '@headlessui/react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -45,6 +45,8 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
     const [sortOrder, setSortOrder] = useState('createdAt-desc');
     const [visibleCount, setVisibleCount] = useState(9);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+    const isSortActive = sortOrder !== 'createdAt-desc';
 
     useEffect(() => {
         const fetchCars = async () => {
@@ -98,6 +100,7 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
             make: [], model: '', minPrice: '', maxPrice: '', minYear: '', maxYear: '',
             minMileage: '', maxMileage: '', bodyStyle: [], fuelType: [], transmission: [],
         });
+        setSortOrder('createdAt-desc');
     };
 
     const loadMore = () => {
@@ -133,11 +136,11 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
                     <div className="flex justify-between items-center mb-6">
                         <p className="text-gray-600 dark:text-gray-400">Showing {Math.min(visibleCount, cars.length)} of {cars.length} results</p>
                         <div className="flex gap-2 items-center">
-                            <div className="relative">
+                            <div className={`relative rounded-md transition-all duration-300 ${isSortActive ? 'animate-button-glow' : ''}`}>
                                 <select
                                     value={sortOrder}
                                     onChange={(e) => setSortOrder(e.target.value)}
-                                    className="appearance-none bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 pl-3 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                                    className="appearance-none bg-gray-200 dark:bg-gray-700 border-none rounded-md py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                                 >
                                     <option value="createdAt-desc">Newest</option>
                                     <option value="price-asc">Price: Low to High</option>
@@ -145,7 +148,13 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
                                     <option value="mileage-asc">Mileage: Low to High</option>
                                     <option value="year-desc">Year: Newest First</option>
                                 </select>
+                                <ArrowUpDown size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 pointer-events-none" />
                             </div>
+                            {isSortActive && (
+                                <button onClick={() => setSortOrder('createdAt-desc')} className="p-2 rounded-md bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Remove sort">
+                                    <X size={20} />
+                                </button>
+                            )}
                             <button onClick={() => setIsFilterOpen(true)} className="lg:hidden p-2 rounded-md bg-gray-200 dark:bg-gray-700">
                                 <Filter />
                             </button>
@@ -167,7 +176,7 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
                             {view === 'grid' ? (
                                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
                                     {cars.slice(0, visibleCount).map((car) => (
-                                        <CarCard key={car.id} car={car} isWishlisted={wishlistedCarIds.includes(car.id)} />
+                                        <CarCard key={car.id} car={car} isWishlisted={wishlistedCarIds.includes(car.id)} showMileage={sortOrder.startsWith('mileage')} />
                                     ))}
                                 </div>
                             ) : (
