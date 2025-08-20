@@ -127,7 +127,7 @@ export default function Header() {
             <div
                 className={`md:hidden fixed top-0 left-0 w-full h-full bg-white dark:bg-gray-900 z-40 transition-transform duration-300 ease-in-out ${
                     isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-                }`}
+                } ${!isMenuOpen && 'hidden'}`}
             >
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8 h-full flex flex-col">
                     <nav className="flex flex-col items-center space-y-6 text-xl">
