@@ -31,12 +31,12 @@ export default function RootLayout({
             <title>Your Car Dealership</title>
             
         </head>
-        <body className={`${inter.variable} ${robotoFlex.variable} font-sans bg-gray-50 dark:bg-gray-900`}>
+        <body className={`${inter.variable} ${robotoFlex.variable} font-sans bg-gray-50 dark:bg-gray-900 overflow-x-hidden`}>
         <AppSessionProvider>
             <ThemeProvider>
                 <CompareProvider>
                     <Header />
-                    <main className="pb-24 overflow-x-hidden">{children}</main>
+                    <main className="pb-24">{children}</main>
                     <CompareBar />
                     <Footer />
                     <BackToTopButton />
