@@ -7,9 +7,7 @@ import { useSession } from 'next-auth/react';
 import ThemeSwitcher from './ThemeSwitcher';
 import UserMenu from './UserMenu';
 import { Menu, X } from 'lucide-react';
-import Image from 'next/image';
-
-
+import AnimatedLogo from './AnimatedLogo';
 
 export default function Header() {
     const { data: session } = useSession();
@@ -78,8 +76,8 @@ export default function Header() {
             <div className={`container mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}>
                 {/* Logo */}
                 <Link href="/" className="flex items-center text-2xl font-bold text-primary dark:text-primary-400 hover:opacity-80 transition-opacity">
-                    <Image src="/logo.svg" alt="DriveHaus Logo" width={80} height={80} className="mr-2 drop-shadow-md -mt-2" />
-                    <span className="glare-effect text-3xl font-extrabold tracking-tight bg-red-600 dark:bg-red-500">DriveHaus</span>
+                    <AnimatedLogo />
+                    <span className="glare-effect text-3xl font-extrabold tracking-tight bg-red-600 dark:bg-red-500 ml-2">DriveHaus</span>
                 </Link>
 
                 {/* Desktop Navigation */}
