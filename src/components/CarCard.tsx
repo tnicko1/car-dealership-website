@@ -8,9 +8,9 @@ import { toggleWishlist } from "@/actions/wishlistActions";
 import { useSession } from "next-auth/react";
 import { useCompare } from "@/providers/CompareProvider";
 import useEmblaCarousel from 'embla-carousel-react';
-import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Heart, ChevronLeft, ChevronRight, Gauge } from 'lucide-react';
 
-export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInteractive = true }: { car: CarWithImages, isWishlisted?: boolean, isInteractive?: boolean }) {
+export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInteractive = true, showMileage = false }: { car: CarWithImages, isWishlisted?: boolean, isInteractive?: boolean, showMileage?: boolean }) {
     const { data: session } = useSession();
     const { addToCompare } = useCompare();
     const [isWishlisted, setIsWishlisted] = useState(initialIsWishlisted);
@@ -99,6 +99,12 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInte
             className="block bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-200 ease-out group"
         >
             <div className="relative">
+                {showMileage && (
+                    <div className="absolute top-2 left-2 z-10 bg-black/50 text-white text-xs font-semibold px-2 py-1 rounded-full flex items-center gap-1">
+                        <Gauge size={14} />
+                        <span>{car.mileage.toLocaleString()} mi</span>
+                    </div>
+                )}
                 {/* Image Carousel */}
                 <div className="overflow-hidden" ref={emblaRef}>
                     <div className="flex">
