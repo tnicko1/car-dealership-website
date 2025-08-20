@@ -32,19 +32,19 @@ export default function RootLayout({
             
         </head>
         <body className={`${inter.variable} ${robotoFlex.variable} font-sans bg-gray-50 dark:bg-gray-900`}>
-        <div className="overflow-x-hidden">
-            <AppSessionProvider>
-                <ThemeProvider>
-                    <CompareProvider>
-                        <Header />
+        <AppSessionProvider>
+            <ThemeProvider>
+                <CompareProvider>
+                    <Header />
+                    <div className="overflow-x-hidden">
                         <main className="pb-24">{children}</main>
                         <CompareBar />
                         <Footer />
                         <BackToTopButton />
-                    </CompareProvider>
-                </ThemeProvider>
-            </AppSessionProvider>
-        </div>
+                    </div>
+                </CompareProvider>
+            </ThemeProvider>
+        </AppSessionProvider>
         </body>
         </html>
     );
