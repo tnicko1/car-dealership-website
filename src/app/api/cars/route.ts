@@ -18,9 +18,19 @@ export async function GET(request: NextRequest) {
     const maxYear = searchParams.get('maxYear');
     const minMileage = searchParams.get('minMileage');
     const maxMileage = searchParams.get('maxMileage');
+    const sort = searchParams.get('sort') || 'createdAt-desc';
+
+    const [sortBy, sortDirection] = sort.split('-');
 
     const where: any = {};
+    const orderBy: any = {};
 
+    if (sortBy && sortDirection) {
+        orderBy[sortBy] = sortDirection;
+    } else {
+        orderBy.createdAt = 'desc'; // Default sort
+    }
+    
     // Handle multi-select filters
     if (make.length > 0) where.make = { in: make };
     if (bodyStyle.length > 0) where.bodyStyle = { in: bodyStyle };
@@ -39,7 +49,7 @@ export async function GET(request: NextRequest) {
     try {
         const cars = await prisma.car.findMany({
             where,
-            orderBy: { createdAt: 'desc' },
+            orderBy,
             include: { images: true },
         });
         return NextResponse.json(cars);
