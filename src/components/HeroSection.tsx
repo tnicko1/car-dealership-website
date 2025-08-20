@@ -16,16 +16,16 @@ export default function HeroSection() {
 
             <div className="relative container mx-auto px-4 h-full flex flex-col justify-center">
                 <div className="mt-24 md:mt-32">
-                    <VariableProximity
-                        as="h1"
-                        label="Find Your Dream Car"
-                        className="font-roboto-flex text-5xl md:text-7xl font-bold text-white mb-4"
-                        fromFontVariationSettings="'wght' 400, 'opsz' 9"
-                        toFontVariationSettings="'wght' 1000, 'opsz' 40"
-                        containerRef={containerRef}
-                        radius={200}
-                        falloff="linear"
-                    />
+                    <h1 className="font-roboto-flex text-5xl md:text-7xl font-bold text-white mb-4">
+                        <VariableProximity
+                            label="Find Your Dream Car"
+                            fromFontVariationSettings="'wght' 400, 'opsz' 9"
+                            toFontVariationSettings="'wght' 1000, 'opsz' 40"
+                            containerRef={containerRef}
+                            radius={200}
+                            falloff="linear"
+                        />
+                    </h1>
                     <VariableProximity
                         label="We offer a curated selection of high-quality new and pre-owned vehicles. Your journey to the perfect ride starts here."
                         className="font-roboto-flex text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto block"
