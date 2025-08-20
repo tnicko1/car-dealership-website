@@ -66,9 +66,8 @@ body {
   }
 
   .static-glow {
-    @apply shadow-[0_0_8px_2px_theme(colors.primary.DEFAULT)];
+    box-shadow: 0 0 8px 2px #DC2626; /* Corresponds to theme's primary color */
   }
-}
 }
 
  
