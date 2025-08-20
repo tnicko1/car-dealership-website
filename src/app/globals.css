@@ -19,10 +19,7 @@
   --secondary-rgb: 156, 163, 175; /* gray-400 */
 }
 
-html,
-body {
-  overflow-x: hidden;
-}
+
 
 body {
   color: rgb(var(--foreground-rgb));
