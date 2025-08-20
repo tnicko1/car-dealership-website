@@ -136,7 +136,7 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
                     <div className="flex justify-between items-center mb-6">
                         <p className="text-gray-600 dark:text-gray-400">Showing {Math.min(visibleCount, cars.length)} of {cars.length} results</p>
                         <div className="flex gap-2 items-center">
-                            <div className={`relative rounded-md transition-all duration-300 ${isSortActive ? 'animate-button-glow' : ''}`}>
+                            <div className={`relative rounded-md transition-all duration-300 ${isSortActive ? 'static-glow' : ''}`}>
                                 <select
                                     value={sortOrder}
                                     onChange={(e) => setSortOrder(e.target.value)}
