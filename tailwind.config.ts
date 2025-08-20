@@ -29,6 +29,10 @@ const config: Config = {
                     '0%, 100%': { boxShadow: '0 0 6px 1px #DC2626' },
                     '50%': { boxShadow: '0 0 12px 3px #B91C1C' },
                 },
+                'ken-burns': {
+                    '0%': { transform: 'scale(1) translate(0, 0)' },
+                    '100%': { transform: 'scale(1.1) translate(-2%, 2%)' },
+                },
                 fadeIn: {
                     '0%': { opacity: '0' },
                     '100%': { opacity: '1' },
@@ -41,6 +45,7 @@ const config: Config = {
             animation: {
                 shine: 'shine 5s linear infinite',
                 'button-glow': 'button-glow 3s infinite',
+                'ken-burns': 'ken-burns 15s ease-out forwards',
                 'fade-in': 'fadeIn 0.5s ease-out forwards',
                 'slide-in-up': 'slideInUp 0.5s ease-out forwards',
             },

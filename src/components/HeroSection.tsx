@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRef } from 'react';
 import VariableProximity from './VariableProximity';
+import Image from 'next/image';
 
 export default function HeroSection() {
     const containerRef = useRef(null);
@@ -12,6 +13,15 @@ export default function HeroSection() {
             ref={containerRef}
             className="relative text-center py-20 md:py-32 text-white overflow-hidden h-[50vh]"
         >
+            <div className="absolute inset-0">
+                <Image
+                    src="/hero-background.avif"
+                    alt="Luxury cars in a modern dealership"
+                    fill
+                    className="object-cover animate-ken-burns"
+                    priority
+                />
+            </div>
             <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-indigo-900/70"></div>
 
             <div className="relative container mx-auto px-4 h-full flex flex-col justify-center">
