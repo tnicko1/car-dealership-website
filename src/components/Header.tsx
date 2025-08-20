@@ -9,7 +9,7 @@ import UserMenu from './UserMenu';
 import { Menu, X } from 'lucide-react';
 import Image from 'next/image';
 
-import ShinyText from './ShinyText';
+
 
 export default function Header() {
     const { data: session } = useSession();
@@ -79,7 +79,7 @@ export default function Header() {
                 {/* Logo */}
                 <Link href="/" className="flex items-center text-2xl font-bold text-primary dark:text-primary-400 hover:opacity-80 transition-opacity">
                     <Image src="/logo.svg" alt="DriveHaus Logo" width={80} height={80} className="mr-2 drop-shadow-md -mt-2" />
-                    <ShinyText text="DriveHaus" speed={3} className="text-3xl font-extrabold tracking-tight !text-red-600 dark:!text-red-500" />
+                    <span className="glare-effect text-3xl font-extrabold tracking-tight text-red-600 dark:text-red-500">DriveHaus</span>
                 </Link>
 
                 {/* Desktop Navigation */}
