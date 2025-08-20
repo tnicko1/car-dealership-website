@@ -1,32 +1,69 @@
-import { withAuth } from "next-auth/middleware"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-export default withAuth(
-    function middleware(req) {
-        const isAdminRoute = req.nextUrl.pathname.startsWith("/admin");
-        const isUserAdmin = req.nextauth.token?.role === "admin";
+export async function middleware(req: NextRequest) {
+    const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+    const cspHeader = `
+    default-src 'self';
+    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${process.env.NODE_ENV === 'development' ? "'unsafe-eval'" : ''};
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' blob: data:;
+    font-src 'self';
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    frame-ancestors 'none';
+    upgrade-insecure-requests;
+`.replace(/\s{2,}/g, ' ').trim();
 
-        if (isAdminRoute && !isUserAdmin) {
+    const requestHeaders = new Headers(req.headers);
+    requestHeaders.set('x-nonce', nonce);
+    requestHeaders.set('Content-Security-Policy', cspHeader);
+
+    const response = NextResponse.next({
+        request: {
+            headers: requestHeaders,
+        },
+    });
+
+    response.headers.set('Content-Security-Policy', cspHeader);
+    response.headers.set('x-nonce', nonce);
+
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    const protectedRoutes = ["/admin", "/account", "/my-listings", "/wishlist"];
+    const isAdminRoute = req.nextUrl.pathname.startsWith("/admin");
+
+    if (protectedRoutes.some(route => req.nextUrl.pathname.startsWith(route))) {
+        if (!token) {
+            return NextResponse.redirect(new URL('/login', req.url));
+        }
+
+        if (isAdminRoute && token.role !== "admin") {
             return NextResponse.redirect(new URL("/", req.url));
         }
 
         const isAccountPage = req.nextUrl.pathname.startsWith("/account");
-        const user = req.nextauth.token;
-
-        if (user && !isAccountPage) {
-            const { firstName, lastName, phone } = user;
+        if (token && !isAccountPage) {
+            const { firstName, lastName, phone } = token as { firstName?: string, lastName?: string, phone?: string, role?: string };
             if (!firstName || !lastName || !phone) {
                 return NextResponse.redirect(new URL("/account", req.url));
             }
         }
-
-        return NextResponse.next();
-    },
-    {
-        callbacks: {
-            authorized: ({ token }) => !!token,
-        },
     }
-);
 
-export const config = { matcher: ["/admin/:path*", "/account", "/my-listings", "/wishlist"] };
+    return response;
+}
+
+export const config = {
+    matcher: [
+        /*
+         * Match all request paths except for the ones starting with:
+         * - api (API routes)
+         * - _next/static (static files)
+         * - _next/image (image optimization files)
+         * - favicon.ico (favicon file)
+         */
+        '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    ],
+};
