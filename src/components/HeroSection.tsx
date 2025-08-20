@@ -25,7 +25,7 @@ export default function HeroSection() {
             <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-indigo-900/70"></div>
 
             <div className="relative container mx-auto px-4 h-full flex flex-col justify-center">
-                <div className="mt-24 md:mt-32">
+                <div>
                     <h1 className="font-roboto-flex text-5xl md:text-7xl font-bold text-white mb-4">
                         <VariableProximity
                             label="Find Your Dream Car"
