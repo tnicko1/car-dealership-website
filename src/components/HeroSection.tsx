@@ -22,7 +22,7 @@ export default function HeroSection() {
                     priority
                 />
             </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-red-900/40 to-red-700/30"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-red-900/20 to-red-700/10"></div>
 
             <div className="relative container mx-auto px-4 h-full flex flex-col justify-center">
                 <div>
