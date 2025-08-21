@@ -76,7 +76,7 @@ export default function Header() {
             <div className={`container mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}>
                 {/* Logo */}
                 <Link href="/" className="flex items-center text-2xl font-bold text-primary dark:text-primary-400 hover:opacity-80 transition-opacity">
-                    <AnimatedLogo key="animated-logo" />
+                    <AnimatedLogo />
                     <span className="glare-effect text-3xl font-extrabold tracking-tight bg-red-600 dark:bg-red-500 ml-2">DriveHaus</span>
                 </Link>
 
