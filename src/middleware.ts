@@ -12,6 +12,7 @@ export async function middleware(req: NextRequest) {
     object-src 'none';
     base-uri 'self';
     form-action 'self';
+    frame-src 'self' https://www.google.com;
     frame-ancestors 'none';
     upgrade-insecure-requests;
 `.replace(/\s{2,}/g, ' ').trim();
