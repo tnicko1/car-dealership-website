@@ -40,15 +40,4 @@
 #path14 { animation-delay: 1.3s; }
 #path15 { animation-delay: 1.4s; }
 
-/* Hover effects for devices that support it */
-@media (hover: hover) {
-    .logoContainer:hover .logoGroup1 {
-        transform: translateX(-5px) rotate(-2deg);
-    }
-    .logoContainer:hover .logoGroup2 {
-        transform: translateX(5px) rotate(2deg);
-    }
-    .logoGroup1, .logoGroup2 {
-        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-}
+
