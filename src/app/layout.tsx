@@ -27,6 +27,7 @@ export default function RootLayout({
         <head>
             <link rel="manifest" href="/manifest.json" />
             <meta name="theme-color" content="#DC2626" />
+            <link rel="icon" href="/icons/favicon.ico" />
             <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
             <title>TorqueTown</title>
             
