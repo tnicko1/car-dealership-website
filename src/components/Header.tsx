@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
@@ -8,6 +8,7 @@ import ThemeSwitcher from './ThemeSwitcher';
 import UserMenu from './UserMenu';
 import { Menu, X } from 'lucide-react';
 import AnimatedLogo from './AnimatedLogo';
+import { Dialog, Transition } from '@headlessui/react';
 
 export default function Header() {
     const { data: session } = useSession();
@@ -72,8 +73,8 @@ export default function Header() {
 
     return (
         <header className={headerClasses}>
-            {/* Main Header Bar - Hidden when mobile menu is open */}
-            <div className={`container mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}>
+            {/* Main Header Bar */}
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between" aria-hidden={isMenuOpen}>
                 {/* Logo */}
                 <Link href="/" className="flex items-center text-2xl font-bold text-primary dark:text-primary-400 hover:opacity-80 transition-opacity">
                     <AnimatedLogo />
@@ -101,45 +102,67 @@ export default function Header() {
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                             className="text-gray-800 dark:text-gray-200"
                             aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+                            aria-expanded={isMenuOpen}
                         >
-                            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                            <Menu size={28} />
                         </button>
                     </div>
                 </div>
             </div>
 
-            {/* Mobile Menu Button - Always present on mobile, positioned absolutely */}
-            {isMenuOpen && (
-                <div className="md:hidden absolute top-4 right-4 z-50">
-                     <button
-                        onClick={() => setIsMenuOpen(false)}
-                        className="text-gray-800 dark:text-gray-200"
-                        aria-label="Close menu"
-                    >
-                        <X size={28} />
-                    </button>
-                </div>
-            )}
-
             {/* Mobile Menu Drawer */}
-            <div
-                className={`md:hidden fixed top-0 left-0 w-full h-full bg-white dark:bg-gray-900 z-40 transition-transform duration-300 ease-in-out ${
-                    isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-                } ${!isMenuOpen && 'hidden'}`}
-            >
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8 h-full flex flex-col">
-                    <nav className="flex flex-col items-center space-y-6 text-xl">
-                        {navLinks.map((link) => (
-                            <Link key={link.href} href={link.href} className={linkClasses(link.href)}>
-                                {link.label}
-                            </Link>
-                        ))}
-                    </nav>
-                    <div className="mt-auto pt-8 flex justify-center">
-                        <UserMenu direction="up" />
+            <Transition appear show={isMenuOpen} as={Fragment}>
+                <Dialog as="div" className="md:hidden" onClose={setIsMenuOpen}>
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                    >
+                        <div className="fixed inset-0 bg-black bg-opacity-25" />
+                    </Transition.Child>
+
+                    <div className="fixed inset-0 z-40 flex">
+                        <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="translate-x-full"
+                            enterTo="translate-x-0"
+                            leave="ease-in duration-200"
+                            leaveFrom="translate-x-0"
+                            leaveTo="translate-x-full"
+                        >
+                            <Dialog.Panel className="ml-auto relative w-full max-w-xs h-full bg-white dark:bg-gray-900 shadow-xl flex flex-col">
+                                <div className="flex items-center justify-between px-4 py-2 border-b dark:border-gray-700">
+                                    <Dialog.Title className="text-lg font-medium text-gray-900 dark:text-white">Menu</Dialog.Title>
+                                    <button
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="text-gray-800 dark:text-gray-200"
+                                        aria-label="Close menu"
+                                    >
+                                        <X size={28} />
+                                    </button>
+                                </div>
+                                <div className="p-4">
+                                    <nav className="flex flex-col items-start space-y-6 text-xl">
+                                        {navLinks.map((link) => (
+                                            <Link key={link.href} href={link.href} className={linkClasses(link.href)}>
+                                                {link.label}
+                                            </Link>
+                                        ))}
+                                    </nav>
+                                </div>
+                                <div className="mt-auto p-4 border-t dark:border-gray-700">
+                                    <UserMenu direction="up" />
+                                </div>
+                            </Dialog.Panel>
+                        </Transition.Child>
                     </div>
-                </div>
-            </div>
+                </Dialog>
+            </Transition>
         </header>
     );
 }
