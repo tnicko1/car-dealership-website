@@ -1,0 +1,13 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin and private pages
+Disallow: /admin/
+Disallow: /account/
+Disallow: /my-listings/
+Disallow: /login/
+Disallow: /wishlist/
+
+# Point to the sitemap
+Sitemap: https://your-domain.com/sitemap.xml
