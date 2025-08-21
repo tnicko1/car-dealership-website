@@ -6,8 +6,8 @@
 .logoPathRed, .logoPathSilver {
     fill-opacity: 0;
     stroke-width: 50;
-    stroke-dasharray: 4000;
-    stroke-dashoffset: 4000;
+    stroke-dasharray: 10000;
+    stroke-dashoffset: 10000;
     animation: draw-in 2.5s ease-in-out 0.5s forwards;
 }
 
