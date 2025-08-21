@@ -18,7 +18,7 @@ export default function HeroSection() {
                     src="/hero-background.avif"
                     alt="Luxury cars in a modern dealership"
                     fill
-                    className="object-cover animate-ken-burns"
+                    className="object-cover animate-ken-burns blur-sm"
                     priority
                 />
             </div>
