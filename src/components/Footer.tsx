@@ -18,7 +18,7 @@ export default function Footer() {
                     {/* About Section */}
                     <div className="col-span-1 md:col-span-2">
                         <h3 className="text-xl font-bold text-white mb-4">
-                            <span className="glare-effect !bg-red-500">DriveHaus</span>
+                            <span className="glare-effect !bg-red-500">TorqueTown</span>
                         </h3>
                         <p className="max-w-md mx-auto md:mx-0">
                             Your premier destination for quality vehicles and exceptional service. We are committed to helping you find the car that is right for you.
@@ -49,12 +49,12 @@ export default function Footer() {
                         <ul className="space-y-2">
                             <li>123 Car Lane, Auto City</li>
                             <li>Phone: (123) 456-7890</li>
-                            <li>Email: sales@drivehaus.com</li>
+                            <li>Email: sales@torquetown.com</li>
                         </ul>
                     </div>
                 </div>
                 <div className="mt-8 pt-8 border-t border-gray-800 text-center">
-                    <p>&copy; {new Date().getFullYear()} DriveHaus. All Rights Reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} TorqueTown. All Rights Reserved.</p>
                 </div>
             </div>
         </footer>

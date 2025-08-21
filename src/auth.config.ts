@@ -34,7 +34,7 @@ export const authOptions: AuthOptions = {
                 const { error } = await resend.emails.send({
                     from: from,
                     to: email,
-                    subject: "Sign in to Your Car Dealership",
+                    subject: "Sign in to TorqueTown",
                     html: `<p>Click the magic link to sign in: <a href="${url}"><strong>Sign in</strong></a></p>`,
                 });
 

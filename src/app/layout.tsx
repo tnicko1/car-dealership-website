@@ -13,7 +13,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const robotoFlex = Roboto_Flex({ subsets: ['latin'], variable: '--font-roboto-flex' });
 
 export const metadata: Metadata = {
-    title: "Your Car Dealership",
+    title: "TorqueTown",
     description: "Find your next dream car with us.",
 };
 
@@ -28,7 +28,7 @@ export default function RootLayout({
             <link rel="manifest" href="/manifest.json" />
             <meta name="theme-color" content="#DC2626" />
             <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
-            <title>Your Car Dealership</title>
+            <title>TorqueTown</title>
             
         </head>
         <body className={`${inter.variable} ${robotoFlex.variable} font-sans bg-gray-50 dark:bg-gray-900`}>

@@ -78,7 +78,7 @@ export default function Header() {
                 {/* Logo */}
                 <Link href="/" className="flex items-center text-2xl font-bold text-primary dark:text-primary-400 hover:opacity-80 transition-opacity">
                     <AnimatedLogo />
-                    <span className="glare-effect text-3xl font-extrabold tracking-tight bg-red-600 dark:bg-red-500 ml-2">DriveHaus</span>
+                    <span className="glare-effect text-3xl font-extrabold tracking-tight bg-red-600 dark:bg-red-500 ml-2">TorqueTown</span>
                 </Link>
 
                 {/* Desktop Navigation */}

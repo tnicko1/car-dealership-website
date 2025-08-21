@@ -1,6 +1,6 @@
 {
-  "name": "YourDealership",
-  "short_name": "Dealership",
+  "name": "TorqueTown",
+  "short_name": "TorqueTown",
   "description": "Find your next dream car with us.",
   "start_url": "/",
   "display": "standalone",
