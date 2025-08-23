@@ -6,9 +6,9 @@ import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import ThemeSwitcher from './ThemeSwitcher';
 import UserMenu from './UserMenu';
-import { Menu, X } from 'lucide-react';
 import AnimatedLogo from './AnimatedLogo';
 import { Dialog, Transition } from '@headlessui/react';
+import AnimatedHamburgerIcon from './AnimatedHamburgerIcon';
 
 export default function Header() {
     const { data: session } = useSession();
@@ -29,16 +29,15 @@ export default function Header() {
         setIsMenuOpen(false);
     }, [pathname]);
 
-    // Add/remove class to body to prevent scrolling & add blur when mobile menu is open
+    // Add/remove class to body to prevent scrolling when mobile menu is open
     useEffect(() => {
         if (isMenuOpen) {
-            document.body.classList.add('overflow-hidden', 'menu-open');
+            document.body.classList.add('overflow-hidden');
         } else {
-            document.body.classList.remove('overflow-hidden', 'menu-open');
+            document.body.classList.remove('overflow-hidden');
         }
-        // Cleanup on component unmount
         return () => {
-            document.body.classList.remove('overflow-hidden', 'menu-open');
+            document.body.classList.remove('overflow-hidden');
         };
     }, [isMenuOpen]);
 
@@ -52,7 +51,7 @@ export default function Header() {
     ];
 
     const headerClasses = `
-        sticky top-0 z-50 transition-all duration-300
+        sticky top-0 z-50 transition-all duration-300 h-20
         ${isMenuOpen
 ? 'bg-silver-100 dark:bg-gray-900 shadow-md'
 : isScrolled
@@ -74,7 +73,7 @@ export default function Header() {
     return (
         <header className={headerClasses}>
             {/* Main Header Bar */}
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between" aria-hidden={isMenuOpen}>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
                 <div className="flex-1">
                     {/* Logo */}
                     <Link href="/" className="flex items-center text-2xl font-bold text-primary dark:text-primary-400 hover:opacity-80 transition-opacity">
@@ -99,16 +98,13 @@ export default function Header() {
                         <ThemeSwitcher />
                         <UserMenu />
                     </div>
-                    <div className="md:hidden flex items-center gap-2">
+                    <div className="md:hidden flex items-center">
                         <ThemeSwitcher />
-                        <button
+                        <AnimatedHamburgerIcon 
+                            isOpen={isMenuOpen} 
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                             className="text-gray-800 dark:text-gray-200"
-                            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-                            aria-expanded={isMenuOpen}
-                        >
-                            <Menu size={28} />
-                        </button>
+                        />
                     </div>
                 </div>
             </div>
@@ -125,45 +121,32 @@ export default function Header() {
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <div className="fixed inset-0 bg-black bg-opacity-25" />
+                        {/* This is the overlay */}
+                        <div className="fixed inset-0 bg-black bg-opacity-25 z-40" />
                     </Transition.Child>
 
-                    <div className="fixed inset-0 z-40 flex">
-                        <Transition.Child
-                            as={Fragment}
-                            enter="ease-out duration-300"
-                            enterFrom="translate-x-full"
-                            enterTo="translate-x-0"
-                            leave="ease-in duration-200"
-                            leaveFrom="translate-x-0"
-                            leaveTo="translate-x-full"
-                        >
-                            <Dialog.Panel className="ml-auto relative w-full max-w-xs h-full bg-white dark:bg-gray-900 shadow-xl flex flex-col">
-                                <div className="flex items-center justify-between px-4 py-2 border-b dark:border-gray-700">
-                                    <Dialog.Title className="text-lg font-medium text-gray-900 dark:text-white">Menu</Dialog.Title>
-                                    <button
-                                        onClick={() => setIsMenuOpen(false)}
-                                        className="text-gray-800 dark:text-gray-200"
-                                        aria-label="Close menu"
-                                    >
-                                        <X size={28} />
-                                    </button>
-                                </div>
-                                <div className="p-4">
-                                    <nav className="flex flex-col items-start space-y-6 text-xl">
-                                        {navLinks.map((link) => (
-                                            <Link key={link.href} href={link.href} className={linkClasses(link.href)}>
-                                                {link.label}
-                                            </Link>
-                                        ))}
-                                    </nav>
-                                </div>
-                                <div className="mt-auto p-4 border-t dark:border-gray-700">
-                                    <UserMenu direction="up" />
-                                </div>
-                            </Dialog.Panel>
-                        </Transition.Child>
-                    </div>
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="-translate-y-full"
+                        enterTo="translate-y-0"
+                        leave="ease-in duration-200"
+                        leaveFrom="translate-y-0"
+                        leaveTo="-translate-y-full"
+                    >
+                        <Dialog.Panel className="fixed top-20 left-0 w-full h-[calc(100vh-5rem)] bg-white dark:bg-gray-900 shadow-xl flex flex-col z-50 p-6">
+                            <nav className="flex flex-col items-start space-y-6 text-xl">
+                                {navLinks.map((link) => (
+                                    <Link key={link.href} href={link.href} className={linkClasses(link.href)}>
+                                        {link.label}
+                                    </Link>
+                                ))}
+                            </nav>
+                            <div className="mt-auto pt-6 border-t dark:border-gray-700">
+                                <UserMenu direction="up" />
+                            </div>
+                        </Dialog.Panel>
+                    </Transition.Child>
                 </Dialog>
             </Transition>
         </header>
