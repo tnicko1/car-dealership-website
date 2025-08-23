@@ -39,7 +39,7 @@ export default function ComparePage() {
                 <h1 className="text-3xl font-bold mb-4">Compare Cars</h1>
                 <p className="text-lg text-gray-600 dark:text-gray-400">You haven't added any cars to compare yet.</p>
                 <Link href="/cars" className="mt-6 inline-block bg-primary text-white font-bold py-3 px-8 rounded-full hover:bg-primary-500 transition-colors">
-                    Explore Inventory
+                    Explore Vehicles
                 </Link>
             </div>
         );

@@ -5,7 +5,7 @@ import { authOptions } from '@/auth.config';
 
 export const dynamic = 'force-dynamic';
 
-export default async function InventoryPage() {
+export default async function VehiclesPage() {
     const session = await getServerSession(authOptions);
 
     const [cars, makes, bodyStyles, fuelTypes, transmissions, user] = await Promise.all([
@@ -30,7 +30,7 @@ export default async function InventoryPage() {
         <div className="animate-fade-in">
             <section className="bg-gray-100 dark:bg-gray-800 py-12">
                 <div className="container mx-auto px-4">
-                    <h1 className="text-4xl font-bold text-center text-gray-900 dark:text-white">Our Inventory</h1>
+                    <h1 className="text-4xl font-bold text-center text-gray-900 dark:text-white">Our Vehicles</h1>
                     <p className="text-lg text-center text-gray-600 dark:text-gray-400 mt-2">Find the perfect vehicle for you.</p>
                 </div>
             </section>

@@ -21,7 +21,7 @@ export default async function AdminPage() {
             </div>
 
             <div>
-                <h2 className="text-2xl font-bold mb-4">Current Inventory</h2>
+                <h2 className="text-2xl font-bold mb-4">Current Vehicles</h2>
                 <div className="space-y-4">
                     {cars.map((car) => (
                         <CarListItem key={car.id} car={car} />

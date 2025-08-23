@@ -44,7 +44,7 @@ export default function Header() {
 
     const navLinks = [
         { href: '/', label: 'Home' },
-        { href: '/cars', label: 'Inventory' },
+        { href: '/cars', label: 'Vehicles' },
         { href: '/about', label: 'About Us' },
         { href: '/wishlist', label: 'Wishlist' },
         ...(session ? [{ href: '/my-listings', label: 'My Listings' }] : []),

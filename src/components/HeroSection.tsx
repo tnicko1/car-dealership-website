@@ -49,7 +49,7 @@ export default function HeroSection() {
                         href="/cars"
                         className="bg-primary text-white font-bold py-3 px-8 rounded-full hover:bg-primary-500 transform hover:scale-105 transition-all duration-300 ease-in-out inline-block animate-button-glow"
                     >
-                        Explore Inventory
+                        Explore Vehicles
                     </Link>
                 </div>
             </div>
