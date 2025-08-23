@@ -127,22 +127,25 @@ export default function Header() {
 
                     <Transition.Child
                         as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="-translate-y-full"
-                        enterTo="translate-y-0"
-                        leave="ease-in duration-200"
-                        leaveFrom="translate-y-0"
-                        leaveTo="-translate-y-full"
+                        enter="transition ease-in-out duration-300 transform"
+                        enterFrom="translate-x-full"
+                        enterTo="translate-x-0"
+                        leave="transition ease-in-out duration-300 transform"
+                        leaveFrom="translate-x-0"
+                        leaveTo="translate-x-full"
                     >
-                        <Dialog.Panel className="fixed top-20 left-0 w-full h-[calc(100vh-5rem)] bg-white dark:bg-gray-900 shadow-xl flex flex-col z-50 p-6">
-                            <nav className="flex flex-col items-start space-y-6 text-xl">
-                                {navLinks.map((link) => (
-                                    <Link key={link.href} href={link.href} className={linkClasses(link.href)}>
-                                        {link.label}
-                                    </Link>
-                                ))}
-                            </nav>
-                            <div className="mt-auto pt-6 border-t dark:border-gray-700">
+                        <Dialog.Panel className="fixed top-0 right-0 w-full max-w-xs h-full bg-white dark:bg-gray-900 shadow-xl flex flex-col z-50">
+                            {/* The header of the menu is now implicitly the main site header */}
+                            <div className="pt-24 p-6"> {/* Add padding to push content below the visible header */}
+                                <nav className="flex flex-col items-start space-y-6 text-xl">
+                                    {navLinks.map((link) => (
+                                        <Link key={link.href} href={link.href} className={linkClasses(link.href)}>
+                                            {link.label}
+                                        </Link>
+                                    ))}
+                                </nav>
+                            </div>
+                            <div className="mt-auto p-6 border-t dark:border-gray-700">
                                 <UserMenu direction="up" />
                             </div>
                         </Dialog.Panel>
