@@ -12,10 +12,14 @@ import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import SpecTabs from './SpecTabs';
 import SimilarCarsSlider from './SimilarCarsSlider';
+import TestDriveModal from './TestDriveModal';
+import TradeInModal from './TradeInModal';
 
 export default function CarDetailsClient({ car, isWishlisted: initialIsWishlisted, similarCars }: { car: CarWithOwnerAndImages, isWishlisted?: boolean, similarCars: CarWithImages[] }) {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
+    const [isTestDriveModalOpen, setIsTestDriveModalOpen] = useState(false);
+    const [isTradeInModalOpen, setIsTradeInModalOpen] = useState(false);
     const { data: session } = useSession();
     const [isWishlisted, setIsWishlisted] = useState(initialIsWishlisted);
     const [openLightbox, setOpenLightbox] = useState(false);
@@ -85,7 +89,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                         <h2 className="font-bold text-lg">{car.year} {car.make} {car.model}</h2>
                         <p className="text-primary dark:text-primary-400 font-semibold">${car.price.toLocaleString()}</p>
                     </div>
-                    <button onClick={() => setIsModalOpen(true)} className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary-700 transition-colors">
+                    <button onClick={() => setIsInquiryModalOpen(true)} className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary-700 transition-colors">
                         Inquire Now
                     </button>
                 </div>
@@ -145,14 +149,14 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                                     View Vehicle History
                                 </a>
                             )}
-                            <button onClick={() => setIsModalOpen(true)} className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors w-full">
+                            <button onClick={() => setIsTestDriveModalOpen(true)} className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors w-full">
                                 Book Test Drive
                             </button>
-                             <button onClick={() => setIsModalOpen(true)} className="bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-900 transition-colors w-full">
+                             <button onClick={() => setIsTradeInModalOpen(true)} className="bg-secondary dark:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-secondary-700 dark:hover:bg-gray-600 transition-colors w-full">
                                 Value Your Trade-In
                             </button>
                             <div className="flex flex-col sm:flex-row gap-4">
-                                <button onClick={() => setIsModalOpen(true)} className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors w-full">
+                                <button onClick={() => setIsInquiryModalOpen(true)} className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors w-full">
                                     Inquire Now
                                 </button>
                                 <button
@@ -202,7 +206,9 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                     </div>
                 )}
             </div>
-            <InquiryModal car={car} isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+            <InquiryModal car={car} isOpen={isInquiryModalOpen} setIsOpen={setIsInquiryModalOpen} />
+            <TestDriveModal car={car} isOpen={isTestDriveModalOpen} setIsOpen={setIsTestDriveModalOpen} />
+            <TradeInModal carOfInterest={car} isOpen={isTradeInModalOpen} setIsOpen={setIsTradeInModalOpen} />
             <Lightbox
                 open={openLightbox}
                 close={() => setOpenLightbox(false)}

@@ -23,6 +23,7 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const searchQuery = searchParams.get('search');
 
     const [filtersState, setFiltersState] = useState(() => {
         const params = new URLSearchParams(searchParams.toString());
@@ -48,7 +49,17 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
 
     const isSortActive = sortOrder !== 'createdAt-desc';
 
+    // This effect now correctly handles updates from server-side filtering (via initialCars)
+    // and client-side filtering.
     useEffect(() => {
+        // If there's a search query, the initialCars are the source of truth.
+        if (searchQuery) {
+            setCars(initialCars);
+            // We could optionally apply client-side sorting/filtering on top of search results here
+            // For now, we just display the server results.
+            return;
+        }
+
         const fetchCars = async () => {
             setIsLoading(true);
             const params = new URLSearchParams();
@@ -61,6 +72,7 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
             });
             params.append('sort', sortOrder);
 
+            // Update URL without full navigation
             router.push(`${pathname}?${params.toString()}`, { scroll: false });
 
             const res = await fetch(`/api/cars?${params.toString()}`);
@@ -70,9 +82,16 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
         };
 
         fetchCars();
-    }, [filtersState, sortOrder, pathname, router]);
+    }, [filtersState, sortOrder, pathname, router, searchQuery, initialCars]);
 
     const handleFilterChange = (value: string, name: string, checked?: boolean) => {
+        // When a filter is changed, we should clear the search query to avoid confusion
+        if (searchQuery) {
+            const params = new URLSearchParams(searchParams.toString());
+            params.delete('search');
+            router.push(`${pathname}?${params.toString()}`);
+        }
+        
         setFiltersState(prev => {
             const newState = { ...prev };
             const key = name as keyof typeof newState;
@@ -101,6 +120,11 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
             minMileage: '', maxMileage: '', bodyStyle: [], fuelType: [], transmission: [],
         });
         setSortOrder('createdAt-desc');
+        
+        // Also clear the search query from the URL
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete('search');
+        router.push(`${pathname}?${params.toString()}`);
     };
 
     const loadMore = () => {

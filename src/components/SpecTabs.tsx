@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { Car } from '@prisma/client';
 import { 
-    CheckCircle, Gauge, Fuel, SlidersHorizontal, User, Zap, Car as CarIcon, Hash, Palette, 
-    ChevronsRightLeft, Milestone, Calendar, Paintbrush, DoorOpen, Shield, Circle,
-    Thermometer, GitCommit, Box, ArrowUp, Maximize, MoveHorizontal, MoveVertical, 
-    Clock, Cog, Tag, Info
+    CheckCircle, Gauge, Fuel, SlidersHorizontal, Zap, Car as CarIcon, Hash, Palette, 
+    ChevronsRightLeft, Calendar, Paintbrush, DoorOpen,
+    Box, ArrowUp, Maximize, MoveHorizontal, MoveVertical, 
+    Clock, Cog, Factory, ClipboardSignature, Disc3, SwatchBook, Scaling, Cylinder
 } from 'lucide-react';
 
 type SpecTabsProps = {
@@ -15,24 +15,24 @@ type SpecTabsProps = {
 
 const iconMap = {
     // Overview
-    Make: <Milestone className="w-5 h-5 mr-2 text-gray-500" />,
-    Model: <Tag className="w-5 h-5 mr-2 text-gray-500" />,
+    Make: <Factory className="w-5 h-5 mr-2 text-gray-500" />,
+    Model: <ClipboardSignature className="w-5 h-5 mr-2 text-gray-500" />,
     Year: <Calendar className="w-5 h-5 mr-2 text-gray-500" />,
     Mileage: <Gauge className="w-5 h-5 mr-2 text-blue-500" />,
     'Body Style': <CarIcon className="w-5 h-5 mr-2 text-indigo-500" />,
     Color: <Palette className="w-5 h-5 mr-2 text-pink-500" />,
     'Interior Color': <Palette className="w-5 h-5 mr-2 text-fuchsia-500" />,
-    'Interior Material': <Info className="w-5 h-5 mr-2 text-gray-500" />,
+    'Interior Material': <SwatchBook className="w-5 h-5 mr-2 text-gray-500" />,
     Doors: <DoorOpen className="w-5 h-5 mr-2 text-amber-500" />,
-    Wheel: <Circle className="w-5 h-5 mr-2 text-gray-500" />,
+    Wheel: <Disc3 className="w-5 h-5 mr-2 text-gray-500" />,
     'VIN': <Hash className="w-5 h-5 mr-2 text-red-500" />,
     'Stock #': <Hash className="w-5 h-5 mr-2 text-teal-500" />,
     'Paint Code': <Paintbrush className="w-5 h-5 mr-2 text-purple-500" />,
     
     // Performance
     Horsepower: <Zap className="w-5 h-5 mr-2 text-yellow-500" />,
-    'Engine Volume': <Thermometer className="w-5 h-5 mr-2 text-orange-500" />,
-    Cylinders: <GitCommit className="w-5 h-5 mr-2 text-gray-500" />,
+    'Engine Volume': <Scaling className="w-5 h-5 mr-2 text-orange-500" />,
+    Cylinders: <Cylinder className="w-5 h-5 mr-2 text-gray-500" />,
     Transmission: <SlidersHorizontal className="w-5 h-5 mr-2 text-purple-500" />,
     'Drive Wheels': <ChevronsRightLeft className="w-5 h-5 mr-2 text-lime-500" />,
     'Top Speed': <Gauge className="w-5 h-5 mr-2 text-red-500" />,
