@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, Fragment } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useState, Fragment, useMemo } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { CarWithImages } from '@/types/car';
 import CarCard from './CarCard';
 import FilterSidebar from './FilterSidebar';
@@ -18,12 +18,7 @@ type FilterProps = {
 };
 
 export default function CarListings({ initialCars, filters, wishlistedCarIds }: { initialCars: CarWithImages[], filters: FilterProps, wishlistedCarIds: string[] }) {
-    const [cars, setCars] = useState(initialCars);
-    const [isLoading, setIsLoading] = useState(false);
-    const router = useRouter();
-    const pathname = usePathname();
     const searchParams = useSearchParams();
-    const searchQuery = searchParams.get('search');
 
     const [filtersState, setFiltersState] = useState(() => {
         const params = new URLSearchParams(searchParams.toString());
@@ -49,69 +44,74 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
 
     const isSortActive = sortOrder !== 'createdAt-desc';
 
-    // This effect now correctly handles updates from server-side filtering (via initialCars)
-    // and client-side filtering.
-    useEffect(() => {
-        // If there's a search query, the initialCars are the source of truth.
-        if (searchQuery) {
-            setCars(initialCars);
-            // We could optionally apply client-side sorting/filtering on top of search results here
-            // For now, we just display the server results.
-            return;
-        }
+    // This hook performs client-side filtering and sorting
+    const displayedCars = useMemo(() => {
+        let filteredCars = [...initialCars];
 
-        const fetchCars = async () => {
-            setIsLoading(true);
-            const params = new URLSearchParams();
-            Object.entries(filtersState).forEach(([key, value]) => {
-                if (Array.isArray(value)) {
-                    value.forEach(v => params.append(key, v));
-                } else if (value) {
-                    params.append(key, value);
-                }
-            });
-            params.append('sort', sortOrder);
+        // Apply filters
+        filteredCars = filteredCars.filter(car => {
+            const { make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage, bodyStyle, fuelType, transmission } = filtersState;
+            if (make.length > 0 && !make.includes(car.make)) return false;
+            if (minPrice && car.price < parseInt(minPrice)) return false;
+            if (maxPrice && car.price > parseInt(maxPrice)) return false;
+            if (minYear && car.year < parseInt(minYear)) return false;
+            if (maxYear && car.year > parseInt(maxYear)) return false;
+            if (minMileage && car.mileage < parseInt(minMileage)) return false;
+            if (maxMileage && car.mileage > parseInt(maxMileage)) return false;
+            if (bodyStyle.length > 0 && !bodyStyle.includes(car.bodyStyle)) return false;
+            if (fuelType.length > 0 && !fuelType.includes(car.fuelType)) return false;
+            return !(transmission.length > 0 && !transmission.includes(car.transmission));
 
-            // Update URL without full navigation
-            router.push(`${pathname}?${params.toString()}`, { scroll: false });
+        });
 
-            const res = await fetch(`/api/cars?${params.toString()}`);
-            const data = await res.json();
-            setCars(data);
-            setIsLoading(false);
-        };
+        // Apply sorting
+        const [sortBy, sortDirection] = sortOrder.split('-');
+        filteredCars.sort((a, b) => {
+            let valA: any;
+            let valB: any;
 
-        fetchCars();
-    }, [filtersState, sortOrder, pathname, router, searchQuery, initialCars]);
+            switch (sortBy) {
+                case 'price':
+                    valA = a.price;
+                    valB = b.price;
+                    break;
+                case 'mileage':
+                    valA = a.mileage;
+                    valB = b.mileage;
+                    break;
+                case 'year':
+                    valA = a.year;
+                    valB = b.year;
+                    break;
+                default: // createdAt
+                    valA = new Date(a.createdAt).getTime();
+                    valB = new Date(b.createdAt).getTime();
+                    break;
+            }
+
+            return sortDirection === 'asc' ? valA - valB : valB - valA;
+        });
+
+        return filteredCars;
+    }, [initialCars, filtersState, sortOrder]);
 
     const handleFilterChange = (value: string, name: string, checked?: boolean) => {
-        // When a filter is changed, we should clear the search query to avoid confusion
-        if (searchQuery) {
-            const params = new URLSearchParams(searchParams.toString());
-            params.delete('search');
-            router.push(`${pathname}?${params.toString()}`);
-        }
-        
         setFiltersState(prev => {
             const newState = { ...prev };
             const key = name as keyof typeof newState;
 
             if (Array.isArray(newState[key])) {
                 const list = newState[key] as string[];
-                if (checked) {
-                    // @ts-ignore
-                    newState[key] = [...list, value];
-                } else {
-                    // @ts-ignore
-                    newState[key] = list.filter(item => item !== value);
-                }
+                // Simplified logic: add if checked, otherwise remove.
+                // @ts-ignore
+                newState[key] = checked ? [...list, value] : list.filter(item => item !== value);
             } else {
                 // @ts-ignore
                 newState[key] = value;
             }
             return newState;
         });
-        setVisibleCount(9);
+        setVisibleCount(9); // Reset visible count on filter change
     };
 
     const handleReset = () => {
@@ -120,11 +120,6 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
             minMileage: '', maxMileage: '', bodyStyle: [], fuelType: [], transmission: [],
         });
         setSortOrder('createdAt-desc');
-        
-        // Also clear the search query from the URL
-        const params = new URLSearchParams(searchParams.toString());
-        params.delete('search');
-        router.push(`${pathname}?${params.toString()}`);
     };
 
     const loadMore = () => {
@@ -158,7 +153,7 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
 
                 <div className="lg:col-span-3">
                     <div className="flex justify-between items-center mb-6">
-                        <p className="text-gray-600 dark:text-gray-400">Showing {Math.min(visibleCount, cars.length)} of {cars.length} results</p>
+                        <p className="text-gray-600 dark:text-gray-400">Showing {Math.min(visibleCount, displayedCars.length)} of {displayedCars.length} results</p>
                         <div className="flex gap-2 items-center">
                             <div className={`relative rounded-md transition-all duration-300 ${isSortActive ? 'static-glow' : ''}`}>
                                 <select
@@ -191,27 +186,23 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
                         </div>
                     </div>
 
-                    {isLoading ? (
-                        <div className="text-center py-16">
-                            <p>Loading...</p>
-                        </div>
-                    ) : cars.length > 0 ? (
+                    {displayedCars.length > 0 ? (
                         <>
                             {view === 'grid' ? (
                                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
-                                    {cars.slice(0, visibleCount).map((car) => (
+                                    {displayedCars.slice(0, visibleCount).map((car) => (
                                         <CarCard key={car.id} car={car} isWishlisted={wishlistedCarIds.includes(car.id)} showMileage={sortOrder.startsWith('mileage')} />
                                     ))}
                                 </div>
                             ) : (
                                 <div className="space-y-4">
-                                    {cars.slice(0, visibleCount).map((car) => (
+                                    {displayedCars.slice(0, visibleCount).map((car) => (
                                         <CarListItem key={car.id} car={car} />
                                     ))}
                                 </div>
                             )}
 
-                            {visibleCount < cars.length && (
+                            {visibleCount < displayedCars.length && (
                                 <div className="text-center mt-12">
                                     <button onClick={loadMore} className="bg-primary text-white font-bold py-3 px-8 rounded-full hover:bg-primary-500 transition-colors">
                                         Load More
@@ -222,7 +213,7 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
                     ) : (
                         <div className="text-center py-16">
                             <h2 className="text-2xl font-bold">No Cars Found</h2>
-                            <p className="text-gray-500 mt-2">Try adjusting your filters.</p>
+                            <p className="text-gray-500 mt-2">Try adjusting your filters or clearing your search.</p>
                         </div>
                     )}
                 </div>

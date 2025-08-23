@@ -4,6 +4,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/auth.config';
 import SearchBar from '@/components/SearchBar';
 import { Prisma } from '@prisma/client';
+import Link from 'next/link';
+import { X } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -54,8 +56,13 @@ export default async function VehiclesPage({ searchParams }: VehiclesPageProps) 
                     <p className="text-lg text-center text-gray-600 dark:text-gray-400 mt-2">
                         {searchQuery ? `Showing results for "${searchQuery}"` : 'Find the perfect vehicle for you.'}
                     </p>
-                    <div className="mt-8">
+                    <div className="mt-8 flex justify-center items-center gap-4">
                         <SearchBar />
+                        {searchQuery && (
+                            <Link href="/cars" className="flex items-center gap-2 bg-red-600 text-white px-4 py-3 rounded-full hover:bg-red-700 transition-colors" title="Clear search">
+                                <X size={20} />
+                            </Link>
+                        )}
                     </div>
                 </div>
             </section>
