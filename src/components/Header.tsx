@@ -134,9 +134,8 @@ export default function Header() {
                         leaveFrom="translate-x-0"
                         leaveTo="translate-x-full"
                     >
-                        <Dialog.Panel className="fixed top-0 right-0 w-full max-w-xs h-full bg-white dark:bg-gray-900 shadow-xl flex flex-col z-50">
-                            {/* The header of the menu is now implicitly the main site header */}
-                            <div className="pt-24 p-6"> {/* Add padding to push content below the visible header */}
+                        <Dialog.Panel className="fixed top-20 right-0 w-full max-w-xs h-[calc(100vh-5rem)] bg-white dark:bg-gray-900 shadow-xl flex flex-col z-50">
+                            <div className="p-6">
                                 <nav className="flex flex-col items-start space-y-6 text-xl">
                                     {navLinks.map((link) => (
                                         <Link key={link.href} href={link.href} className={linkClasses(link.href)}>
