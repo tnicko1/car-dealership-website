@@ -43,6 +43,21 @@ model Car {
   exchange          Boolean?
   technicalInspection Boolean?
 
+  // New Fields from our discussion
+  vin               String? @unique
+  stockNumber       String? @unique
+  engineCode        String?
+  paintCode         String?
+  topSpeed          Int?
+  zeroToSixty       Float? // 0-60 mph
+  length            Float? // in inches
+  width             Float? // in inches
+  height            Float? // in inches
+  wheelbase         Float? // in inches
+  cargoCapacity     Float? // in cubic feet
+  groundClearance   Float? // in inches
+  vehicleHistoryUrl String?
+
   // General Specifications (Comfort, Safety, Multimedia, Other)
   comfort           String[]
   safety            String[]
