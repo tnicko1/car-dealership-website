@@ -203,6 +203,45 @@ export default function AdminForm({ car }: { car?: CarWithImages }) {
                 </div>
             </div>
 
+            {/* Vehicle Identification Section */}
+            <div className="p-6 border rounded-lg dark:border-gray-700">
+                <h2 className="text-xl font-semibold mb-4">Vehicle Identification</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" name="vin" defaultValue={car?.vin || ''} placeholder="VIN" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input type="text" name="stockNumber" defaultValue={car?.stockNumber || ''} placeholder="Stock Number" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input type="text" name="engineCode" defaultValue={car?.engineCode || ''} placeholder="Engine Code" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input type="text" name="paintCode" defaultValue={car?.paintCode || ''} placeholder="Paint Code" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                </div>
+            </div>
+
+            {/* Performance Section */}
+            <div className="p-6 border rounded-lg dark:border-gray-700">
+                <h2 className="text-xl font-semibold mb-4">Performance</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="number" name="topSpeed" defaultValue={car?.topSpeed || ''} placeholder="Top Speed (mph)" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input type="number" name="zeroToSixty" defaultValue={car?.zeroToSixty || ''} placeholder="0-60 mph (seconds)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                </div>
+            </div>
+
+            {/* Dimensions Section */}
+            <div className="p-6 border rounded-lg dark:border-gray-700">
+                <h2 className="text-xl font-semibold mb-4">Dimensions</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <input type="number" name="length" defaultValue={car?.length || ''} placeholder="Length (in)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input type="number" name="width" defaultValue={car?.width || ''} placeholder="Width (in)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input type="number" name="height" defaultValue={car?.height || ''} placeholder="Height (in)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input type="number" name="wheelbase" defaultValue={car?.wheelbase || ''} placeholder="Wheelbase (in)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input type="number" name="cargoCapacity" defaultValue={car?.cargoCapacity || ''} placeholder="Cargo Capacity (cu ft)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input type="number" name="groundClearance" defaultValue={car?.groundClearance || ''} placeholder="Ground Clearance (in)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                </div>
+            </div>
+
+            {/* Vehicle History Section */}
+            <div className="p-6 border rounded-lg dark:border-gray-700">
+                <h2 className="text-xl font-semibold mb-4">Vehicle History</h2>
+                <input type="url" name="vehicleHistoryUrl" defaultValue={car?.vehicleHistoryUrl || ''} placeholder="Vehicle History Report URL" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+            </div>
+
             {/* Features & Options Section */}
             <div className="p-6 border rounded-lg dark:border-gray-700">
                 <h2 className="text-xl font-semibold mb-4">Features & Options</h2>

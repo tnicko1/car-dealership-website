@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Car } from '@prisma/client';
-import { CheckCircle, Gauge, Fuel, SlidersHorizontal, User, Zap } from 'lucide-react';
+import { CheckCircle, Gauge, Fuel, SlidersHorizontal, User, Zap, Car as CarIcon, Hash, Palette, ChevronsRightLeft } from 'lucide-react';
 
 type SpecTabsProps = {
     car: Car;
@@ -12,19 +12,24 @@ const iconMap = {
     Mileage: <Gauge className="w-5 h-5 mr-2 text-blue-500" />,
     'Fuel Type': <Fuel className="w-5 h-5 mr-2 text-green-500" />,
     Transmission: <SlidersHorizontal className="w-5 h-5 mr-2 text-purple-500" />,
-    'Engine Volume': <Zap className="w-5 h-5 mr-2 text-yellow-500" />, // Changed icon
+    'Engine Volume': <Zap className="w-5 h-5 mr-2 text-yellow-500" />,
     'Seller': <User className="w-5 h-5 mr-2 text-gray-500" />,
+    'Body Style': <CarIcon className="w-5 h-5 mr-2 text-indigo-500" />,
+    'VIN': <Hash className="w-5 h-5 mr-2 text-red-500" />,
+    'Stock #': <Hash className="w-5 h-5 mr-2 text-teal-500" />,
+    'Color': <Palette className="w-5 h-5 mr-2 text-pink-500" />,
+    'Drive Wheels': <ChevronsRightLeft className="w-5 h-5 mr-2 text-orange-500" />,
 };
 
 const SpecItem = ({ label, value }: { label: keyof typeof iconMap | string; value: string | number | boolean | null | undefined }) => {
-    if (!value) return null;
+    if (value === null || value === undefined || value === '') return null;
     const icon = label in iconMap ? iconMap[label as keyof typeof iconMap] : <div className="w-5 h-5 mr-2" />;
     return (
         <div className="flex items-center bg-gray-100 dark:bg-gray-900 p-3 rounded-lg">
             {icon}
             <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
-                <p className="font-semibold">{String(value)}</p>
+                <p className="font-semibold break-all">{String(value)}</p>
             </div>
         </div>
     );
@@ -47,6 +52,7 @@ export default function SpecTabs({ car }: SpecTabsProps) {
     const tabs = [
         { id: 'overview', label: 'Overview' },
         { id: 'performance', label: 'Performance' },
+        { id: 'dimensions', label: 'Dimensions' },
         { id: 'features', label: 'Features' },
     ];
 
@@ -55,28 +61,43 @@ export default function SpecTabs({ car }: SpecTabsProps) {
             case 'overview':
                 return (
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <SpecItem label="Mileage" value={`${car.mileage.toLocaleString()} mi`} />
-                        <SpecItem label="Fuel Type" value={car.fuelType} />
-                        <SpecItem label="Transmission" value={car.transmission} />
-                        <SpecItem label="Engine Volume" value={car.engineVolume ? `${car.engineVolume}L` : null} />
                         <SpecItem label="Make" value={car.make} />
                         <SpecItem label="Model" value={car.model} />
                         <SpecItem label="Year" value={car.year} />
+                        <SpecItem label="Mileage" value={`${car.mileage.toLocaleString()} mi`} />
                         <SpecItem label="Body Style" value={car.bodyStyle} />
                         <SpecItem label="Color" value={car.color} />
-                        <SpecItem label="Drive Wheels" value={car.driveWheels} />
+                        <SpecItem label="Interior Color" value={car.interiorColor} />
+                        <SpecItem label="Interior Material" value={car.interiorMaterial} />
                         <SpecItem label="Doors" value={car.doors} />
                         <SpecItem label="Wheel" value={car.wheel} />
+                        <SpecItem label="VIN" value={car.vin} />
+                        <SpecItem label="Stock #" value={car.stockNumber} />
+                        <SpecItem label="Paint Code" value={car.paintCode} />
                     </div>
                 );
             case 'performance':
                 return (
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        <SpecItem label="Horsepower" value={car.horsepower} />
+                        <SpecItem label="Horsepower" value={car.horsepower ? `${car.horsepower} hp` : null} />
                         <SpecItem label="Engine Volume" value={car.engineVolume ? `${car.engineVolume}L` : null} />
                         <SpecItem label="Cylinders" value={car.cylinders} />
-                        <SpecItem label="Drive Wheels" value={car.driveWheels} />
                         <SpecItem label="Transmission" value={car.transmission} />
+                        <SpecItem label="Drive Wheels" value={car.driveWheels} />
+                        <SpecItem label="Top Speed" value={car.topSpeed ? `${car.topSpeed} mph` : null} />
+                        <SpecItem label="0-60 mph" value={car.zeroToSixty ? `${car.zeroToSixty}s` : null} />
+                        <SpecItem label="Engine Code" value={car.engineCode} />
+                    </div>
+                );
+            case 'dimensions':
+                return (
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <SpecItem label="Length" value={car.length ? `${car.length} in` : null} />
+                        <SpecItem label="Width" value={car.width ? `${car.width} in` : null} />
+                        <SpecItem label="Height" value={car.height ? `${car.height} in` : null} />
+                        <SpecItem label="Wheelbase" value={car.wheelbase ? `${car.wheelbase} in` : null} />
+                        <SpecItem label="Cargo Capacity" value={car.cargoCapacity ? `${car.cargoCapacity} cu ft` : null} />
+                        <SpecItem label="Ground Clearance" value={car.groundClearance ? `${car.groundClearance} in` : null} />
                     </div>
                 );
             case 'features':

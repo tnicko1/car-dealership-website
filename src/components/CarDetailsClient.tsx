@@ -134,17 +134,35 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                         <p className="text-gray-700 dark:text-gray-300 mb-6 flex-grow">
                             {car.description}
                         </p>
-                        <div className="mt-auto pt-6 flex flex-col sm:flex-row gap-4">
+                        <div className="mt-auto pt-6 space-y-4">
+                            {car.vehicleHistoryUrl && (
+                                <a
+                                    href={car.vehicleHistoryUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-colors bg-blue-600 text-white hover:bg-blue-700 w-full"
+                                >
+                                    View Vehicle History
+                                </a>
+                            )}
                             <button onClick={() => setIsModalOpen(true)} className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors w-full">
-                                Inquire Now
+                                Book Test Drive
                             </button>
-                            <button
-                                onClick={handleWishlistToggle}
-                                className={`flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-colors w-full ${isWishlisted ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
-                            >
-                                <Heart fill={isWishlisted ? 'currentColor' : 'none'} className="w-5 h-5" />
-                                {isWishlisted ? 'Wishlisted' : 'Add to Wishlist'}
+                             <button onClick={() => setIsModalOpen(true)} className="bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-900 transition-colors w-full">
+                                Value Your Trade-In
                             </button>
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <button onClick={() => setIsModalOpen(true)} className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors w-full">
+                                    Inquire Now
+                                </button>
+                                <button
+                                    onClick={handleWishlistToggle}
+                                    className={`flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-colors w-full ${isWishlisted ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
+                                >
+                                    <Heart fill={isWishlisted ? 'currentColor' : 'none'} className="w-5 h-5" />
+                                    {isWishlisted ? 'Wishlisted' : 'Add to Wishlist'}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
