@@ -2,23 +2,51 @@
 
 import { useState } from 'react';
 import { Car } from '@prisma/client';
-import { CheckCircle, Gauge, Fuel, SlidersHorizontal, User, Zap, Car as CarIcon, Hash, Palette, ChevronsRightLeft } from 'lucide-react';
+import { 
+    CheckCircle, Gauge, Fuel, SlidersHorizontal, User, Zap, Car as CarIcon, Hash, Palette, 
+    ChevronsRightLeft, Milestone, Calendar, Paintbrush, DoorOpen, Shield, Circle,
+    Thermometer, GitCommit, Box, ArrowUp, Maximize, MoveHorizontal, MoveVertical, 
+    Clock, Cog, Tag, Info
+} from 'lucide-react';
 
 type SpecTabsProps = {
     car: Car;
 };
 
 const iconMap = {
+    // Overview
+    Make: <Milestone className="w-5 h-5 mr-2 text-gray-500" />,
+    Model: <Tag className="w-5 h-5 mr-2 text-gray-500" />,
+    Year: <Calendar className="w-5 h-5 mr-2 text-gray-500" />,
     Mileage: <Gauge className="w-5 h-5 mr-2 text-blue-500" />,
-    'Fuel Type': <Fuel className="w-5 h-5 mr-2 text-green-500" />,
-    Transmission: <SlidersHorizontal className="w-5 h-5 mr-2 text-purple-500" />,
-    'Engine Volume': <Zap className="w-5 h-5 mr-2 text-yellow-500" />,
-    'Seller': <User className="w-5 h-5 mr-2 text-gray-500" />,
     'Body Style': <CarIcon className="w-5 h-5 mr-2 text-indigo-500" />,
+    Color: <Palette className="w-5 h-5 mr-2 text-pink-500" />,
+    'Interior Color': <Palette className="w-5 h-5 mr-2 text-fuchsia-500" />,
+    'Interior Material': <Info className="w-5 h-5 mr-2 text-gray-500" />,
+    Doors: <DoorOpen className="w-5 h-5 mr-2 text-amber-500" />,
+    Wheel: <Circle className="w-5 h-5 mr-2 text-gray-500" />,
     'VIN': <Hash className="w-5 h-5 mr-2 text-red-500" />,
     'Stock #': <Hash className="w-5 h-5 mr-2 text-teal-500" />,
-    'Color': <Palette className="w-5 h-5 mr-2 text-pink-500" />,
-    'Drive Wheels': <ChevronsRightLeft className="w-5 h-5 mr-2 text-orange-500" />,
+    'Paint Code': <Paintbrush className="w-5 h-5 mr-2 text-purple-500" />,
+    
+    // Performance
+    Horsepower: <Zap className="w-5 h-5 mr-2 text-yellow-500" />,
+    'Engine Volume': <Thermometer className="w-5 h-5 mr-2 text-orange-500" />,
+    Cylinders: <GitCommit className="w-5 h-5 mr-2 text-gray-500" />,
+    Transmission: <SlidersHorizontal className="w-5 h-5 mr-2 text-purple-500" />,
+    'Drive Wheels': <ChevronsRightLeft className="w-5 h-5 mr-2 text-lime-500" />,
+    'Top Speed': <Gauge className="w-5 h-5 mr-2 text-red-500" />,
+    '0-60 mph': <Clock className="w-5 h-5 mr-2 text-blue-500" />,
+    'Engine Code': <Cog className="w-5 h-5 mr-2 text-gray-500" />,
+    'Fuel Type': <Fuel className="w-5 h-5 mr-2 text-green-500" />,
+
+    // Dimensions
+    Length: <MoveHorizontal className="w-5 h-5 mr-2 text-sky-500" />,
+    Width: <MoveHorizontal className="w-5 h-5 mr-2 text-sky-500" />,
+    Height: <MoveVertical className="w-5 h-5 mr-2 text-sky-500" />,
+    Wheelbase: <Maximize className="w-5 h-5 mr-2 text-sky-500" />,
+    'Cargo Capacity': <Box className="w-5 h-5 mr-2 text-amber-600" />,
+    'Ground Clearance': <ArrowUp className="w-5 h-5 mr-2 text-green-600" />,
 };
 
 const SpecItem = ({ label, value }: { label: keyof typeof iconMap | string; value: string | number | boolean | null | undefined }) => {
