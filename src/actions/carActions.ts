@@ -13,6 +13,11 @@ interface ActionResult {
 
 // Helper function to parse form data
 const getCarData = (formData: FormData) => {
+    const getNumber = (key: string) => {
+        const value = formData.get(key) as string;
+        return value ? Number(value) : null;
+    };
+
     return {
         make: formData.get('make') as string,
         model: formData.get('model') as string,
@@ -24,22 +29,37 @@ const getCarData = (formData: FormData) => {
         transmission: formData.get('transmission') as string,
         bodyStyle: formData.get('bodyStyle') as string,
         description: formData.get('description') as string,
-        category: formData.get('category') as string,
-        engineVolume: Number(formData.get('engineVolume')),
-        cylinders: Number(formData.get('cylinders')),
-        driveWheels: formData.get('driveWheels') as string,
-        doors: Number(formData.get('doors')),
-        airbags: Number(formData.get('airbags')),
-        wheel: formData.get('wheel') as string,
-        color: formData.get('color') as string,
-        interiorColor: formData.get('interiorColor') as string,
-        interiorMaterial: formData.get('interiorMaterial') as string,
+        category: formData.get('category') as string || null,
+        engineVolume: getNumber('engineVolume'),
+        cylinders: getNumber('cylinders'),
+        driveWheels: formData.get('driveWheels') as string || null,
+        doors: getNumber('doors'),
+        airbags: getNumber('airbags'),
+        wheel: formData.get('wheel') as string || null,
+        color: formData.get('color') as string || null,
+        interiorColor: formData.get('interiorColor') as string || null,
+        interiorMaterial: formData.get('interiorMaterial') as string || null,
         exchange: formData.get('exchange') === 'on',
         technicalInspection: formData.get('technicalInspection') === 'on',
         comfort: (formData.get('comfort') as string)?.split(',').map(f => f.trim()).filter(f => f) || [],
         safety: (formData.get('safety') as string)?.split(',').map(f => f.trim()).filter(f => f) || [],
         multimedia: (formData.get('multimedia') as string)?.split(',').map(f => f.trim()).filter(f => f) || [],
         other: (formData.get('other') as string)?.split(',').map(f => f.trim()).filter(f => f) || [],
+        
+        // New fields
+        vin: formData.get('vin') as string || null,
+        stockNumber: formData.get('stockNumber') as string || null,
+        engineCode: formData.get('engineCode') as string || null,
+        paintCode: formData.get('paintCode') as string || null,
+        topSpeed: getNumber('topSpeed'),
+        zeroToSixty: getNumber('zeroToSixty'),
+        length: getNumber('length'),
+        width: getNumber('width'),
+        height: getNumber('height'),
+        wheelbase: getNumber('wheelbase'),
+        cargoCapacity: getNumber('cargoCapacity'),
+        groundClearance: getNumber('groundClearance'),
+        vehicleHistoryUrl: formData.get('vehicleHistoryUrl') as string || null,
     };
 };
 
