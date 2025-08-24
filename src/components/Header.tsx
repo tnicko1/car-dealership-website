@@ -134,7 +134,7 @@ export default function Header() {
                         leaveFrom="translate-x-0"
                         leaveTo="translate-x-full"
                     >
-                        <Dialog.Panel className="fixed top-20 right-0 w-full max-w-xs h-[calc(100vh-5rem)] bg-white dark:bg-gray-900 shadow-xl flex flex-col z-50">
+                        <Dialog.Panel className="fixed top-20 right-0 w-full max-w-xs h-[calc(100dvh-5rem)] bg-white dark:bg-gray-900 shadow-xl flex flex-col z-50 overflow-y-auto">
                             <div className="p-6">
                                 <nav className="flex flex-col items-start space-y-6 text-xl">
                                     {navLinks.map((link) => (

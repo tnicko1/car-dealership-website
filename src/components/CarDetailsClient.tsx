@@ -152,7 +152,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                             <button onClick={() => setIsTestDriveModalOpen(true)} className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors w-full">
                                 Book Test Drive
                             </button>
-                             <button onClick={() => setIsTradeInModalOpen(true)} className="bg-secondary dark:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-secondary-700 dark:hover:bg-gray-600 transition-colors w-full">
+                             <button onClick={() => setIsTradeInModalOpen(true)} className="bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-full">
                                 Value Your Trade-In
                             </button>
                             <div className="flex flex-col sm:flex-row gap-4">
