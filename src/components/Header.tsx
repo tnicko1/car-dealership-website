@@ -66,6 +66,16 @@ export default function Header() {
         return `${baseClasses} bg-transparent`;
     };
 
+    const linkClasses = (href: string) => `
+        relative font-medium text-gray-600 dark:text-gray-300 whitespace-nowrap
+        transition-colors duration-300 hover:text-primary dark:hover:text-primary-400
+        after:content-[''] after:absolute after:left-0 after:bottom-[-2px]
+        after:w-full after:h-[2px] after:bg-primary dark:after:bg-primary-400
+        after:transition-transform after:duration-300
+        ${pathname === href ? 'after:scale-x-100' : 'after:scale-x-0'}
+        hover:after:scale-x-100
+    `;
+
     return (
         <header className={getHeaderClasses()}>
             {/* Main Header Bar */}
