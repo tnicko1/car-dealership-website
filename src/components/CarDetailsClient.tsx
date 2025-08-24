@@ -152,22 +152,30 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                                         priority
                                     />
                                     <motion.div
-                                        className="absolute top-0 left-0 w-40 h-40 rounded-full border-4 border-white shadow-2xl pointer-events-none backdrop-blur-sm"
-                                        style={{
-                                            backgroundImage: `url(${currentImageUrl})`,
-                                            backgroundRepeat: 'no-repeat',
-                                        }}
+                                        className="absolute top-0 left-0 w-48 h-48 rounded-full border-4 border-white shadow-2xl pointer-events-none overflow-hidden"
                                         initial={{ opacity: 0, scale: 0.5 }}
                                         animate={{
                                             opacity: isHovering ? 1 : 0,
                                             scale: isHovering ? 1 : 0.5,
-                                            x: mousePos.x + 15,
-                                            y: mousePos.y + 15,
-                                            backgroundSize: `${(imageContainerRef.current?.offsetWidth || 0) * 2.5}px ${(imageContainerRef.current?.offsetHeight || 0) * 2.5}px`,
-                                            backgroundPosition: `-${mousePos.x * 2.5 - 80}px -${mousePos.y * 2.5 - 80}px`,
+                                            x: mousePos.x - 96, // Center the loupe on the cursor
+                                            y: mousePos.y - 200, // Position above the cursor
                                         }}
-                                        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                                    />
+                                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                                    >
+                                        <Image
+                                            src={currentImageUrl}
+                                            alt="Zoomed image"
+                                            width={(imageContainerRef.current?.offsetWidth || 0) * 2}
+                                            height={(imageContainerRef.current?.offsetHeight || 0) * 2}
+                                            style={{
+                                                objectFit: 'cover',
+                                                position: 'absolute',
+                                                top: -mousePos.y * 2 + 96,
+                                                left: -mousePos.x * 2 + 96,
+                                                maxWidth: 'none',
+                                            }}
+                                        />
+                                    </motion.div>
                                 </>
                             ) : (
                                 <div className="flex items-center justify-center h-full bg-gray-200 dark:bg-gray-700">

@@ -29,7 +29,7 @@
     "react-swipeable": "^7.0.2",
     "resend": "^4.7.0",
     "use-debounce": "^10.0.5",
-    "yet-another-react-lightbox": "^3.25.0"
+    "yet-another-react-lightbox": "^3.19.0"
   },
   "devDependencies": {
     "@types/node": "^20",
