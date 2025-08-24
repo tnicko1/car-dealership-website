@@ -54,28 +54,20 @@ export default function Header() {
         { href: '/contact', label: 'Contact' },
     ];
 
-    const headerClasses = `
-        sticky top-0 z-50 transition-all duration-300 h-20
-        ${isMenuOpen
-? 'bg-silver-100 dark:bg-gray-900 shadow-md'
-: isScrolled
-    ? 'bg-silver-100/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md'
-    : 'bg-transparent'
-}
-    `;
+    const getHeaderClasses = () => {
+        const baseClasses = "sticky top-0 z-50 transition-all duration-300 h-20";
 
-    const linkClasses = (href: string) => `
-        relative font-medium text-gray-600 dark:text-gray-300 whitespace-nowrap
-        transition-colors duration-300 hover:text-primary dark:hover:text-primary-400
-        after:content-[''] after:absolute after:left-0 after:bottom-[-2px]
-        after:w-full after:h-[2px] after:bg-primary dark:after:bg-primary-400
-        after:transition-transform after:duration-300
-        ${pathname === href ? 'after:scale-x-100' : 'after:scale-x-0'}
-        hover:after:scale-x-100
-    `;
+        if (isMenuOpen) {
+            return `${baseClasses} bg-silver-100 dark:bg-gray-900 shadow-md`;
+        }
+        if (isScrolled) {
+            return `${baseClasses} bg-silver-100/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md`;
+        }
+        return `${baseClasses} bg-transparent`;
+    };
 
     return (
-        <header className={headerClasses}>
+        <header className={getHeaderClasses()}>
             {/* Main Header Bar */}
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
                 <div className="flex-1">
