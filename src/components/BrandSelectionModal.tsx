@@ -1,20 +1,25 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Search } from 'lucide-react';
 import CarLogo from './CarLogo';
 
 export default function BrandSelectionModal({ isOpen, onClose, brands, selectedBrands, onBrandChange }: any) {
     const [searchTerm, setSearchTerm] = useState('');
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+        return () => setIsMounted(false);
+    }, []);
 
     const filteredBrands = useMemo(() => {
         return brands.filter((brand: string) => brand.toLowerCase().includes(searchTerm.toLowerCase()));
     }, [brands, searchTerm]);
 
-    if (!isOpen) return null;
-
-    return (
-        <div className="fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center p-4" onClick={onClose}>
+    const modalContent = (
+        <div className="fixed inset-0 bg-black/50 z-100 flex items-center justify-center p-4" onClick={onClose}>
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
                 <div className="p-6 border-b dark:border-gray-700 flex justify-between items-center">
                     <h2 className="text-2xl font-bold">Select Brands</h2>
@@ -55,4 +60,9 @@ export default function BrandSelectionModal({ isOpen, onClose, brands, selectedB
             </div>
         </div>
     );
+
+    if (!isOpen || !isMounted) return null;
+
+    const modalRoot = document.getElementById('modal-root');
+    return modalRoot ? createPortal(modalContent, modalRoot) : null;
 }

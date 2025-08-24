@@ -10,6 +10,8 @@ import { Dialog, Transition } from '@headlessui/react';
 import Link from 'next/link';
 import Image from 'next/image';
 
+import { useModal } from '@/providers/ModalProvider';
+
 type FilterProps = {
     makes: string[];
     bodyStyles: string[];
@@ -19,6 +21,7 @@ type FilterProps = {
 
 export default function CarListings({ initialCars, filters, wishlistedCarIds }: { initialCars: CarWithImages[], filters: FilterProps, wishlistedCarIds: string[] }) {
     const searchParams = useSearchParams();
+    const { isBrandModalOpen, setIsBrandModalOpen } = useModal();
 
     const [filtersState, setFiltersState] = useState(() => {
         const params = new URLSearchParams(searchParams.toString());
@@ -146,9 +149,9 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
 
     return (
         <>
-            <div className="container mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
+            <div className={`container mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-4 gap-8 items-start ${isBrandModalOpen ? 'pointer-events-none blur-sm' : ''}`}>
                 <div className="hidden lg:block lg:col-span-1 lg:sticky top-24">
-                    <FilterSidebar {...filters} onFilterChange={handleFilterChange} initialFilters={filtersState} onReset={handleReset} />
+                    <FilterSidebar {...filters} onFilterChange={handleFilterChange} initialFilters={filtersState} onReset={handleReset} isBrandModalOpen={isBrandModalOpen} setIsBrandModalOpen={setIsBrandModalOpen} />
                 </div>
 
                 <div className="lg:col-span-3">
@@ -232,7 +235,7 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
                                         <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900 dark:text-white">Filters</Dialog.Title>
                                         <button onClick={() => setIsFilterOpen(false)} className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"><X /></button>
                                     </div>
-                                    <FilterSidebar {...filters} onFilterChange={handleFilterChange} initialFilters={filtersState} onReset={handleReset} />
+                                    <FilterSidebar {...filters} onFilterChange={handleFilterChange} initialFilters={filtersState} onReset={handleReset} isBrandModalOpen={isBrandModalOpen} setIsBrandModalOpen={setIsBrandModalOpen} />
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>

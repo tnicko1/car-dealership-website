@@ -1,4 +1,5 @@
 import type { Car } from '@prisma/client';
+import { motion } from 'framer-motion';
 
 const SpecItem = ({ label, value }: { label: string; value: string | number | null | undefined }) => {
     if (!value) return null;
@@ -26,14 +27,44 @@ export default function OverviewSpecs({ car }: { car: Car }) {
         { label: 'Paint Code', value: car.paintCode },
     ];
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.05,
+            },
+        },
+    };
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: {
+            y: 0,
+            opacity: 1,
+            transition: {
+                type: 'spring',
+                stiffness: 100,
+            },
+        },
+    };
+
     return (
-        <div>
+        <div className="h-full flex flex-col">
             <h3 className="text-xl font-bold mb-4">Overview</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+            <motion.div
+                className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 flex-grow"
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+            >
                 {overviewSpecs.map(spec => (
-                    <SpecItem key={spec.label} label={spec.label} value={spec.value} />
+                    <motion.div key={spec.label} variants={itemVariants}>
+                        <SpecItem label={spec.label} value={spec.value} />
+                    </motion.div>
                 ))}
-            </div>
+            </motion.div>
         </div>
     );
 }

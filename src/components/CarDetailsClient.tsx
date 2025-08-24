@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, MouseEvent } from 'react';
 import type { CarWithOwnerAndImages, CarWithImages } from "@/types/car";
 import Image from "next/image";
 import { Heart, Mail, Phone, User } from 'lucide-react';
-import WhatsappIcon from './icons/WhatsappIcon';
+import WhatsAppLogo from './icons/WhatsAppLogo';
 import InquiryModal from './InquiryModal';
 import FinancingCalculator from './FinancingCalculator';
 import { useSession } from 'next-auth/react';
@@ -272,8 +272,9 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                                         <a href={`tel:${car.owner.phone}`} className="p-3 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white transition-colors">
                                             <Phone className="w-5 h-5" />
                                         </a>
-                                        <a href={`https://wa.me/${car.owner.phone}`} target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-green-500 hover:text-white transition-colors">
-                                            <WhatsappIcon className="w-5 h-5" />
+                                        <a href={`https://wa.me/${car.owner.phone}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-green-500 text-white pl-3 pr-4 py-1 rounded-lg font-semibold hover:bg-green-600 transition-colors">
+                                            <WhatsAppLogo className="w-8 h-8" />
+                                            <span className="text-sm">Message on WhatsApp</span>
                                         </a>
                                     </>
                                 )}

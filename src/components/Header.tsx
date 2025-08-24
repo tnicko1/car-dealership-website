@@ -10,12 +10,14 @@ import AnimatedLogo from './AnimatedLogo';
 import { Dialog, Transition } from '@headlessui/react';
 import AnimatedHamburgerIcon from './AnimatedHamburgerIcon';
 import { useMenu } from '@/providers/MenuProvider';
+import { useModal } from '@/providers/ModalProvider';
 
 export default function Header() {
     const { data: session } = useSession();
     const pathname = usePathname();
     const [isScrolled, setIsScrolled] = useState(false);
     const { isMenuOpen, toggleMenu } = useMenu();
+    const { isBrandModalOpen } = useModal();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -48,9 +50,9 @@ export default function Header() {
     const navLinks = [
         { href: '/', label: 'Home' },
         { href: '/cars', label: 'Vehicles' },
-        { href: '/about', label: 'About Us' },
         { href: '/wishlist', label: 'Wishlist' },
         ...(session ? [{ href: '/my-listings', label: 'My Listings' }] : []),
+        { href: '/about', label: 'About Us' },
         { href: '/contact', label: 'Contact' },
     ];
 
@@ -78,7 +80,7 @@ export default function Header() {
 
     return (
         <>
-            <header className={getHeaderClasses()}>
+            <header className={`${getHeaderClasses()} ${isBrandModalOpen ? 'pointer-events-none blur-sm' : ''}`}>
                 {/* Main Header Bar */}
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
                     <div className="flex-1">

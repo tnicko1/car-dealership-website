@@ -10,7 +10,7 @@ const makeToLogoName: { [key: string]: keyof typeof Logos } = {
     'aston martin': 'AstonMartinLogo',
     'audi': 'AudiIcon',
     'bentley': 'BentleyIcon',
-    'bmw': 'BMWLogoHorizontal',
+    'bmw': 'BMWLogo',
     'cadillac': 'CadillacIcon',
     'chevrolet': 'ChevroletIcon',
     'chrysler': 'ChryslerIcon',

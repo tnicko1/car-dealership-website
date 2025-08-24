@@ -9,6 +9,7 @@ import { CompareProvider } from "@/providers/CompareProvider";
 import CompareBar from "@/components/CompareBar";
 import BackToTopButton from "@/components/BackToTopButton";
 import { MenuProvider } from "@/providers/MenuProvider";
+import { ModalProvider } from '@/providers/ModalProvider';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const robotoFlex = Roboto_Flex({ subsets: ['latin'], variable: '--font-roboto-flex' });
@@ -38,15 +39,18 @@ export default function RootLayout({
             <ThemeProvider>
                 <CompareProvider>
                     <MenuProvider>
-                        <Header />
-                        <main className="pb-24">{children}</main>
-                        <CompareBar />
-                        <Footer />
-                        <BackToTopButton />
+                        <ModalProvider>
+                            <Header />
+                            <main>{children}</main>
+                            <Footer />
+                            <CompareBar />
+                            <BackToTopButton />
+                        </ModalProvider>
                     </MenuProvider>
                 </CompareProvider>
             </ThemeProvider>
         </AppSessionProvider>
+        <div id="modal-root" />
         </body>
         </html>
     );
