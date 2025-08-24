@@ -28,7 +28,6 @@ const getCarData = (formData: FormData) => {
         fuelType: formData.get('fuelType') as string,
         transmission: formData.get('transmission') as string,
         bodyStyle: formData.get('bodyStyle') as string,
-        description: formData.get('description') as string,
         category: formData.get('category') as string || null,
         engineVolume: getNumber('engineVolume'),
         cylinders: getNumber('cylinders'),

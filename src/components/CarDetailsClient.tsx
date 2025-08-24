@@ -14,6 +14,7 @@ import SpecTabs from './SpecTabs';
 import SimilarCarsSlider from './SimilarCarsSlider';
 import TestDriveModal from './TestDriveModal';
 import TradeInModal from './TradeInModal';
+import OverviewSpecs from './OverviewSpecs';
 
 export default function CarDetailsClient({ car, isWishlisted: initialIsWishlisted, similarCars }: { car: CarWithOwnerAndImages, isWishlisted?: boolean, similarCars: CarWithImages[] }) {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -96,6 +97,14 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
             </div>
 
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden">
+                <div className="p-6 md:p-12">
+                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                        {car.year} {car.make} {car.model}
+                    </h1>
+                    <p className="text-2xl md:text-3xl font-semibold text-primary dark:text-primary-400 mb-6">
+                        ${car.price.toLocaleString()}
+                    </p>
+                </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2">
                     {/* Image Gallery */}
                     <div className="p-4">
@@ -129,15 +138,9 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                     </div>
 
                     <div ref={ctaTriggerRef} className="p-6 md:p-12 flex flex-col">
-                        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
-                            {car.year} {car.make} {car.model}
-                        </h1>
-                        <p className="text-2xl md:text-3xl font-semibold text-primary dark:text-primary-400 mb-6">
-                            ${car.price.toLocaleString()}
-                        </p>
-                        <p className="text-gray-700 dark:text-gray-300 mb-6 flex-grow">
-                            {car.description}
-                        </p>
+                        <div className="flex-grow">
+                            <OverviewSpecs car={car} />
+                        </div>
                         <div className="mt-auto pt-6 space-y-4">
                             {car.vehicleHistoryUrl && (
                                 <a

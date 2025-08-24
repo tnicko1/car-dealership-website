@@ -75,10 +75,9 @@ const FeatureList = ({ items }: { items: string[] }) => (
 );
 
 export default function SpecTabs({ car }: SpecTabsProps) {
-    const [activeTab, setActiveTab] = useState('overview');
+    const [activeTab, setActiveTab] = useState('performance');
 
     const tabs = [
-        { id: 'overview', label: 'Overview' },
         { id: 'performance', label: 'Performance' },
         { id: 'dimensions', label: 'Dimensions' },
         { id: 'features', label: 'Features' },
@@ -86,24 +85,6 @@ export default function SpecTabs({ car }: SpecTabsProps) {
 
     const renderContent = () => {
         switch (activeTab) {
-            case 'overview':
-                return (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <SpecItem label="Make" value={car.make} />
-                        <SpecItem label="Model" value={car.model} />
-                        <SpecItem label="Year" value={car.year} />
-                        <SpecItem label="Mileage" value={`${car.mileage.toLocaleString()} mi`} />
-                        <SpecItem label="Body Style" value={car.bodyStyle} />
-                        <SpecItem label="Color" value={car.color} />
-                        <SpecItem label="Interior Color" value={car.interiorColor} />
-                        <SpecItem label="Interior Material" value={car.interiorMaterial} />
-                        <SpecItem label="Doors" value={car.doors} />
-                        <SpecItem label="Wheel" value={car.wheel} />
-                        <SpecItem label="VIN" value={car.vin} />
-                        <SpecItem label="Stock #" value={car.stockNumber} />
-                        <SpecItem label="Paint Code" value={car.paintCode} />
-                    </div>
-                );
             case 'performance':
                 return (
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">

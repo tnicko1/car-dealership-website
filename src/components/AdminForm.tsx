@@ -277,11 +277,6 @@ export default function AdminForm({ car }: { car?: CarWithImages }) {
                 </div>
             </div>
             
-            <div>
-                <label htmlFor="description" className="sr-only">Description</label>
-                <textarea id="description" name="description" defaultValue={car?.description || ''} placeholder="Description" required className="p-2 border rounded w-full h-24 dark:bg-gray-700 dark:border-gray-600"></textarea>
-            </div>
-            
             <div className="flex justify-end">
                 <button type="submit" disabled={isSubmitting} className="bg-primary text-white px-6 py-2 rounded hover:bg-primary-700 transition-colors disabled:bg-gray-400">
                     {isSubmitting ? 'Saving...' : (car ? 'Update Car' : 'Add Car')}

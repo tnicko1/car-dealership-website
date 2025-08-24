@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
     }
 
     const title = `${car.year} ${car.make} ${car.model} for Sale`;
-    const description = `View details for the ${car.year} ${car.make} ${car.model}, priced at ${car.price.toLocaleString()}. ${car.description.substring(0, 120)}...`;
+    const description = `View details for the ${car.year} ${car.make} ${car.model}, priced at ${car.price.toLocaleString()}.`;
     const imageUrl = car.images[0]?.url || '/showroom-bg.png';
 
     // Structured Data (JSON-LD) for SEO
@@ -27,7 +27,6 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
         '@context': 'https://schema.org',
         '@type': 'Vehicle',
         name: title,
-        description: car.description,
         image: imageUrl,
         brand: {
             '@type': 'Brand',
