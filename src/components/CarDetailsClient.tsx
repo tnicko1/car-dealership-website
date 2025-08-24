@@ -97,18 +97,22 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
             </div>
 
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden">
-                <div className="p-6 md:p-12">
-                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
-                        {car.year} {car.make} {car.model}
-                    </h1>
-                    <p className="text-2xl md:text-3xl font-semibold text-primary dark:text-primary-400 mb-6">
-                        ${car.price.toLocaleString()}
-                    </p>
-                </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2">
                     {/* Image Gallery */}
-                    <div className="p-4">
+                    <div className="p-4 relative">
                         <div className="relative h-96 lg:h-[500px] rounded-lg overflow-hidden cursor-pointer" onClick={() => setOpenLightbox(true)}>
+                            {/* Gradient Overlay for Text */}
+                            <div className="absolute inset-x-0 top-0 z-10 p-6 bg-gradient-to-b from-black/60 to-transparent">
+                                <div className="flex justify-between items-start">
+                                    <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                                        {car.year} {car.make} {car.model}
+                                    </h1>
+                                    <p className="text-2xl md:text-3xl font-semibold text-white mb-6">
+                                        ${car.price.toLocaleString()}
+                                    </p>
+                                </div>
+                            </div>
+                            
                             {car.images.length > 0 ? (
                                 <Image
                                     src={car.images[currentImageIndex].url}

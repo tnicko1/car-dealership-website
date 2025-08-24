@@ -12,11 +12,16 @@ export default function OverviewSpecs({ car }: { car: Car }) {
         { label: 'Make', value: car.make },
         { label: 'Model', value: car.model },
         { label: 'Year', value: car.year },
-        { label: 'Price', value: car.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) },
         { label: 'Mileage', value: `${car.mileage.toLocaleString()} mi` },
-        { label: 'Fuel Type', value: car.fuelType },
-        { label: 'Transmission', value: car.transmission },
         { label: 'Body Style', value: car.bodyStyle },
+        { label: 'Color', value: car.color },
+        { label: 'Interior Color', value: car.interiorColor },
+        { label: 'Interior Material', value: car.interiorMaterial },
+        { label: 'Doors', value: car.doors },
+        { label: 'Wheel', value: car.wheel },
+        { label: 'VIN', value: car.vin },
+        { label: 'Stock #', value: car.stockNumber },
+        { label: 'Paint Code', value: car.paintCode },
     ];
 
     return (
