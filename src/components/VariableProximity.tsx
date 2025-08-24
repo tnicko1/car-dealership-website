@@ -1,7 +1,7 @@
 'use client';
 
 import { forwardRef, useMemo, useRef, useEffect, MutableRefObject, CSSProperties, HTMLAttributes, useLayoutEffect } from "react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 function useAnimationFrame(callback: () => void) {
     useEffect(() => {
