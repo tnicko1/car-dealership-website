@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import type { CarWithOwnerAndImages, CarWithImages } from "@/types/car";
 import Image from "next/image";
 import { Heart, Mail, Phone, User } from 'lucide-react';
+import WhatsappIcon from './icons/WhatsappIcon';
 import InquiryModal from './InquiryModal';
 import FinancingCalculator from './FinancingCalculator';
 import { useSession } from 'next-auth/react';
@@ -69,8 +70,8 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
     const slides = car.images.map(img => ({ src: img.url }));
 
     return (
-        <>
-            {/* Preload images (already implemented) */}
+        <div className="max-w-screen-xl mx-auto">
+            {/* Preload images */}
             <div style={{ display: 'none' }}>
                 {car.images.map(image => (
                     <Image key={`preload-${image.id}`} src={image.url} alt="preload" width={800} height={600} priority={false} />
@@ -144,9 +145,6 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                                 </div>
                             ))}
                         </div>
-                        <div className="mt-6">
-                           <FinancingCalculator price={car.price} />
-                        </div>
                     </div>
 
                     <div ref={ctaTriggerRef} className="p-6 md:py-4 md:px-12 flex flex-col">
@@ -193,32 +191,37 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
 
                 {car.owner && (
                     <div className="p-6 md:p-12 border-t border-gray-200 dark:border-gray-700">
-                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">Seller Information</h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                            <div className="flex items-center gap-4">
-                                <User className="w-8 h-8 text-primary dark:text-primary-400 flex-shrink-0" />
-                                <div>
-                                    <p className="font-semibold">Name</p>
-                                    <p className="text-gray-600 dark:text-gray-300">{car.owner.name}</p>
-                                </div>
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Seller Information</h2>
+                        <div className="bg-gray-100 dark:bg-gray-900/50 p-6 rounded-lg flex items-center gap-6">
+                            <div className="relative">
+                                <User className="w-16 h-16 text-gray-400 dark:text-gray-500" />
                             </div>
-                            <div className="flex items-center gap-4">
-                                <Mail className="w-8 h-8 text-primary dark:text-primary-400 flex-shrink-0" />
-                                <div>
-                                    <p className="font-semibold">Email</p>
-                                    <a href={`mailto:${car.owner.email}`} className="text-primary dark:text-primary-400 hover:underline break-all">{car.owner.email}</a>
-                                </div>
+                            <div className="flex-grow">
+                                <h3 className="text-xl font-bold">{car.owner.name}</h3>
+                                <p className="text-gray-600 dark:text-gray-400">Private Seller</p>
                             </div>
-                            <div className="flex items-center gap-4">
-                                <Phone className="w-8 h-8 text-primary dark:text-primary-400 flex-shrink-0" />
-                                <div>
-                                    <p className="font-semibold">Phone</p>
-                                    <p className="text-gray-600 dark:text-gray-300">{car.owner.phone || 'N/A'}</p>
-                                </div>
+                            <div className="flex items-center gap-2">
+                                <a href={`mailto:${car.owner.email}`} className="p-3 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white transition-colors">
+                                    <Mail className="w-5 h-5" />
+                                </a>
+                                {car.owner.phone && (
+                                    <>
+                                        <a href={`tel:${car.owner.phone}`} className="p-3 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white transition-colors">
+                                            <Phone className="w-5 h-5" />
+                                        </a>
+                                        <a href={`https://wa.me/${car.owner.phone}`} target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-green-500 hover:text-white transition-colors">
+                                            <WhatsappIcon className="w-5 h-5" />
+                                        </a>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
                 )}
+                
+                <div className="p-6 md:p-12 border-t border-gray-200 dark:border-gray-700">
+                    <FinancingCalculator price={car.price} />
+                </div>
             </div>
             <InquiryModal car={car} isOpen={isInquiryModalOpen} setIsOpen={setIsInquiryModalOpen} />
             <TestDriveModal car={car} isOpen={isTestDriveModalOpen} setIsOpen={setIsTestDriveModalOpen} />
@@ -238,6 +241,6 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                     <SimilarCarsSlider cars={similarCars} />
                 </div>
             )}
-        </>
+        </div>
     );
 }

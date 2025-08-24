@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Car } from '@prisma/client';
+import { useSwipeable } from 'react-swipeable';
 import { 
     CheckCircle, Gauge, Fuel, SlidersHorizontal, Zap, Car as CarIcon, Hash, Palette, 
     ChevronsRightLeft, Calendar, Paintbrush, DoorOpen,
@@ -13,6 +14,7 @@ type SpecTabsProps = {
     car: Car;
 };
 
+// (Icon map remains the same)
 const iconMap = {
     // Overview
     Make: <Factory className="w-5 h-5 mr-2 text-gray-500" />,
@@ -75,7 +77,7 @@ const FeatureList = ({ items }: { items: string[] }) => (
 );
 
 export default function SpecTabs({ car }: SpecTabsProps) {
-    const [activeTab, setActiveTab] = useState('performance');
+    const [activeTab, setActiveTab] = useState(0);
 
     const tabs = [
         { id: 'performance', label: 'Performance' },
@@ -83,8 +85,16 @@ export default function SpecTabs({ car }: SpecTabsProps) {
         { id: 'features', label: 'Features' },
     ];
 
+    const handlers = useSwipeable({
+        onSwipedLeft: () => setActiveTab((prev) => (prev + 1) % tabs.length),
+        onSwipedRight: () => setActiveTab((prev) => (prev - 1 + tabs.length) % tabs.length),
+        preventScrollOnSwipe: true,
+        trackMouse: true,
+    });
+
     const renderContent = () => {
-        switch (activeTab) {
+        const currentTabId = tabs[activeTab].id;
+        switch (currentTabId) {
             case 'performance':
                 return (
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -147,13 +157,13 @@ export default function SpecTabs({ car }: SpecTabsProps) {
         <div>
             <div className="border-b border-gray-200 dark:border-gray-700 mb-6">
                 <nav className="-mb-px flex space-x-6" aria-label="Tabs">
-                    {tabs.map(tab => (
+                    {tabs.map((tab, index) => (
                         <button
                             key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
+                            onClick={() => setActiveTab(index)}
                             className={`${
-                                activeTab === tab.id
-                                    ? 'border-primary-500 text-primary'
+                                activeTab === index
+                                    ? 'border-primary text-primary'
                                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
                             } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
                         >
@@ -162,7 +172,9 @@ export default function SpecTabs({ car }: SpecTabsProps) {
                     ))}
                 </nav>
             </div>
-            <div>{renderContent()}</div>
+            <div {...handlers} className="overflow-hidden">
+                {renderContent()}
+            </div>
         </div>
     );
 }
