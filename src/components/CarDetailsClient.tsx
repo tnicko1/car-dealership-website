@@ -97,7 +97,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
             </div>
 
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden">
-                <div className="p-6 md:p-12">
+                <div className="p-6 md:pt-8 md:pb-4 md:px-12">
                     <div className="flex justify-between items-start">
                         <div>
                             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-1">
@@ -116,7 +116,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2">
                     {/* Image Gallery */}
-                    <div className="p-4">
+                    <div className="px-4 pb-4">
                         <div className="relative h-96 lg:h-[500px] rounded-lg overflow-hidden cursor-pointer" onClick={() => setOpenLightbox(true)}>
                             {car.images.length > 0 ? (
                                 <Image
@@ -149,7 +149,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                         </div>
                     </div>
 
-                    <div ref={ctaTriggerRef} className="p-6 md:p-12 flex flex-col">
+                    <div ref={ctaTriggerRef} className="p-6 md:py-4 md:px-12 flex flex-col">
                         <div className="flex-grow">
                             <OverviewSpecs car={car} />
                         </div>
