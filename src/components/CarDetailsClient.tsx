@@ -10,7 +10,10 @@ import FinancingCalculator from './FinancingCalculator';
 import { useSession } from 'next-auth/react';
 import { toggleWishlist } from '@/actions/wishlistActions';
 import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
 import SpecTabs from './SpecTabs';
 import SimilarCarsSlider from './SimilarCarsSlider';
 import TestDriveModal from './TestDriveModal';
@@ -149,7 +152,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                                         priority
                                     />
                                     <motion.div
-                                        className="absolute top-0 left-0 w-40 h-40 rounded-full border-4 border-white shadow-2xl pointer-events-none"
+                                        className="absolute top-0 left-0 w-40 h-40 rounded-full border-4 border-white shadow-2xl pointer-events-none backdrop-blur-sm"
                                         style={{
                                             backgroundImage: `url(${currentImageUrl})`,
                                             backgroundRepeat: 'no-repeat',
@@ -158,8 +161,8 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                                         animate={{
                                             opacity: isHovering ? 1 : 0,
                                             scale: isHovering ? 1 : 0.5,
-                                            x: mousePos.x - 80, // center the loupe
-                                            y: mousePos.y - 80,
+                                            x: mousePos.x + 15,
+                                            y: mousePos.y + 15,
                                             backgroundSize: `${(imageContainerRef.current?.offsetWidth || 0) * 2.5}px ${(imageContainerRef.current?.offsetHeight || 0) * 2.5}px`,
                                             backgroundPosition: `-${mousePos.x * 2.5 - 80}px -${mousePos.y * 2.5 - 80}px`,
                                         }}
@@ -279,6 +282,17 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                 slides={slides}
                 index={currentImageIndex}
                 on={{ view: ({ index }) => setCurrentImageIndex(index) }}
+                plugins={[Zoom, Thumbnails]}
+                zoom={{
+                    maxZoomPixelRatio: 2,
+                    zoomInMultiplier: 1.5,
+                }}
+                thumbnails={{
+                    border: 0,
+                    borderRadius: 8,
+                    gap: 16,
+                    padding: 16,
+                }}
             />
 
             {similarCars.length > 0 && (
