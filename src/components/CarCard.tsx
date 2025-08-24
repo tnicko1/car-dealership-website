@@ -10,6 +10,8 @@ import { useCompare } from "@/providers/CompareProvider";
 import useEmblaCarousel from 'embla-carousel-react';
 import { Heart, ChevronLeft, ChevronRight, Gauge } from 'lucide-react';
 
+import CarLogo from './CarLogo';
+
 export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInteractive = true, showMileage = false, allowMobileSwipe = false }: { car: CarWithImages, isWishlisted?: boolean, isInteractive?: boolean, showMileage?: boolean, allowMobileSwipe?: boolean }) {
     const { data: session } = useSession();
     const { addToCompare } = useCompare();
@@ -166,12 +168,13 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInte
                     <p className="text-sm text-gray-300">{car.year}</p>
                 </div>
             </div>
-            <div className="p-6">
+            <div className="p-4">
                 <div className="flex justify-between items-center mb-4">
                     <p className="text-2xl font-semibold text-primary dark:text-primary-400">
                         ${car.price.toLocaleString()}
                     </p>
-                    <div className="flex space-x-2">
+                    <div className="flex items-center gap-2">
+                        <CarLogo make={car.make} className="h-12 w-12" />
                         <span className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full">{car.bodyStyle}</span>
                     </div>
                 </div>

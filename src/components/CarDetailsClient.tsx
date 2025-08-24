@@ -81,7 +81,6 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
         setMousePos({ x, y });
     };
 
-    const slides = car.images.map(img => ({ src: img.url }));
     const currentImageUrl = car.images[currentImageIndex]?.url;
 
     return (
@@ -147,7 +146,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                                         src={currentImageUrl}
                                         alt={`${car.make} ${car.model}`}
                                         fill
-                                        style={{ objectFit: 'cover' }}
+                                        style={{ objectFit: 'contain' }}
                                         sizes="(max-width: 1024px) 100vw, 50vw"
                                         priority
                                     />
@@ -158,7 +157,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                                             opacity: isHovering ? 1 : 0,
                                             scale: isHovering ? 1 : 0.5,
                                             x: mousePos.x - 96, // Center the loupe on the cursor
-                                            y: mousePos.y - 200, // Position above the cursor
+                                            y: mousePos.y - 96, // Center the loupe on the cursor
                                         }}
                                         transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                                     >
@@ -168,7 +167,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                                             width={(imageContainerRef.current?.offsetWidth || 0) * 2}
                                             height={(imageContainerRef.current?.offsetHeight || 0) * 2}
                                             style={{
-                                                objectFit: 'cover',
+                                                objectFit: 'contain',
                                                 position: 'absolute',
                                                 top: -mousePos.y * 2 + 96,
                                                 left: -mousePos.x * 2 + 96,
@@ -287,10 +286,23 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
             <Lightbox
                 open={openLightbox}
                 close={() => setOpenLightbox(false)}
-                slides={slides}
+                slides={car.images}
                 index={currentImageIndex}
                 on={{ view: ({ index }) => setCurrentImageIndex(index) }}
                 plugins={[Zoom, Thumbnails]}
+                render={{
+                    slide: ({ slide: image }) => (
+                        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                            <Image
+                                src={image.url}
+                                alt={`${car.make} ${car.model}`}
+                                fill
+                                style={{ objectFit: 'contain' }}
+                                sizes="100vw"
+                            />
+                        </div>
+                    ),
+                }}
                 zoom={{
                     maxZoomPixelRatio: 2,
                     zoomInMultiplier: 1.5,
