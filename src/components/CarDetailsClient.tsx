@@ -82,6 +82,12 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
     };
 
     const currentImageUrl = car.images[currentImageIndex]?.url;
+    const slides = car.images.map(image => ({
+        src: image.url,
+        alt: `${car.make} ${car.model}`,
+        width: 1200, // Provide a default width
+        height: 800, // Provide a default height
+    }));
 
     return (
         <div className="max-w-screen-xl mx-auto">
@@ -286,16 +292,16 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
             <Lightbox
                 open={openLightbox}
                 close={() => setOpenLightbox(false)}
-                slides={car.images}
+                slides={slides}
                 index={currentImageIndex}
                 on={{ view: ({ index }) => setCurrentImageIndex(index) }}
                 plugins={[Zoom, Thumbnails]}
                 render={{
-                    slide: ({ slide: image }) => (
+                    slide: ({ slide }) => (
                         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                             <Image
-                                src={image.url}
-                                alt={`${car.make} ${car.model}`}
+                                src={slide.src}
+                                alt={slide.alt || ''}
                                 fill
                                 style={{ objectFit: 'contain' }}
                                 sizes="100vw"
