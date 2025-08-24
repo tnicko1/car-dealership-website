@@ -1,5 +1,5 @@
 import type { Car } from '@prisma/client';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
 const SpecItem = ({ label, value }: { label: string; value: string | number | null | undefined }) => {
     if (!value) return null;
@@ -27,7 +27,7 @@ export default function OverviewSpecs({ car }: { car: Car }) {
         { label: 'Paint Code', value: car.paintCode },
     ];
 
-    const containerVariants = {
+    const containerVariants: Variants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
@@ -37,7 +37,7 @@ export default function OverviewSpecs({ car }: { car: Car }) {
         },
     };
 
-    const itemVariants = {
+    const itemVariants: Variants = {
         hidden: { y: 20, opacity: 0 },
         visible: {
             y: 0,
