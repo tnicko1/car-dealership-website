@@ -77,43 +77,45 @@ export default function Header() {
     `;
 
     return (
-        <header className={getHeaderClasses()}>
-            {/* Main Header Bar */}
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
-                <div className="flex-1">
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center text-2xl font-bold text-primary dark:text-primary-400 hover:opacity-80 transition-opacity">
-                        <AnimatedLogo />
-                        <span className="glare-effect text-3xl font-extrabold tracking-tight bg-red-600 dark:bg-red-500 ml-2">TorqueTown</span>
-                    </Link>
-                </div>
-
-
-                {/* Desktop Navigation */}
-                <nav className="hidden md:flex flex-1 justify-center items-center space-x-8">
-                    {navLinks.map((link) => (
-                        <Link key={link.href} href={link.href} className={linkClasses(link.href)}>
-                            {link.label}
+        <>
+            <header className={getHeaderClasses()}>
+                {/* Main Header Bar */}
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
+                    <div className="flex-1">
+                        {/* Logo */}
+                        <Link href="/" className="flex items-center text-2xl font-bold text-primary dark:text-primary-400 hover:opacity-80 transition-opacity">
+                            <AnimatedLogo />
+                            <span className="glare-effect text-3xl font-extrabold tracking-tight bg-red-600 dark:bg-red-500 ml-2">TorqueTown</span>
                         </Link>
-                    ))}
-                </nav>
-
-                {/* Right side icons & Mobile menu button */}
-                <div className="flex flex-1 justify-end items-center gap-4">
-                    <div className="hidden md:flex items-center gap-4">
-                        <ThemeSwitcher />
-                        <UserMenu />
                     </div>
-                    <div className="md:hidden flex items-center">
-                        <ThemeSwitcher />
-                        <AnimatedHamburgerIcon 
-                            isOpen={isMenuOpen} 
-                            onClick={toggleMenu}
-                            className="text-gray-800 dark:text-gray-200"
-                        />
+
+
+                    {/* Desktop Navigation */}
+                    <nav className="hidden md:flex flex-1 justify-center items-center space-x-8">
+                        {navLinks.map((link) => (
+                            <Link key={link.href} href={link.href} className={linkClasses(link.href)}>
+                                {link.label}
+                            </Link>
+                        ))}
+                    </nav>
+
+                    {/* Right side icons & Mobile menu button */}
+                    <div className="flex flex-1 justify-end items-center gap-4">
+                        <div className="hidden md:flex items-center gap-4">
+                            <ThemeSwitcher />
+                            <UserMenu />
+                        </div>
+                        <div className="md:hidden flex items-center">
+                            <ThemeSwitcher />
+                            <AnimatedHamburgerIcon
+                                isOpen={isMenuOpen}
+                                onClick={toggleMenu}
+                                className="text-gray-800 dark:text-gray-200"
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
+            </header>
 
             {/* Mobile Menu Drawer */}
             <Transition appear show={isMenuOpen} as={Fragment}>
@@ -157,6 +159,6 @@ export default function Header() {
                     </Transition.Child>
                 </Dialog>
             </Transition>
-        </header>
+        </>
     );
 }
