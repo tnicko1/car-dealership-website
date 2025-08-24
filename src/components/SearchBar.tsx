@@ -27,28 +27,30 @@ export default function SearchBar() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const fetchResults = async (searchQuery: string) => {
-    if (searchQuery.length < 2) {
-      setResults([]);
-      return;
-    }
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/cars/search?query=${encodeURIComponent(searchQuery)}`);
-      if (response.ok) {
-        const data = await response.json();
-        setResults(data);
-      } else {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedFetch = useCallback(
+    debounce(async (searchQuery: string) => {
+      if (searchQuery.length < 2) {
+        setResults([]);
+        return;
+      }
+      setIsLoading(true);
+      try {
+        const response = await fetch(`/api/cars/search?query=${encodeURIComponent(searchQuery)}`);
+        if (response.ok) {
+          const data = await response.json();
+          setResults(data);
+        } else {
+          setResults([]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch search results:', error);
         setResults([]);
       }
-    } catch (error) {
-      console.error('Failed to fetch search results:', error);
-      setResults([]);
-    }
-    setIsLoading(false);
-  };
-
-  const debouncedFetch = useCallback(debounce(fetchResults, 300), []);
+      setIsLoading(false);
+    }, 300),
+    []
+  );
 
   useEffect(() => {
     debouncedFetch(query);
