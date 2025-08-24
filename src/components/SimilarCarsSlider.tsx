@@ -2,7 +2,6 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
-import type { EmblaCarouselType } from 'embla-carousel-react';
 import type { CarWithImages } from '@/types/car';
 import CarCard from '@/components/CarCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -35,14 +34,15 @@ export default function SimilarCarsSlider({ cars }: { cars: CarWithImages[] }) {
     const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
     const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
 
-    const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
+    const onSelect = useCallback(() => {
+        if (!emblaApi) return;
         setPrevBtnEnabled(emblaApi.canScrollPrev());
         setNextBtnEnabled(emblaApi.canScrollNext());
-    }, []);
+    }, [emblaApi]);
 
     useEffect(() => {
         if (!emblaApi) return;
-        onSelect(emblaApi);
+        onSelect();
         emblaApi.on('reInit', onSelect);
         emblaApi.on('select', onSelect);
     }, [emblaApi, onSelect]);
