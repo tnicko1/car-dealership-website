@@ -52,7 +52,7 @@ const config: Config = {
                 'ken-burns': 'ken-burns 15s ease-out forwards',
                 'fade-in': 'fadeIn 0.5s ease-out forwards',
                 'slide-in-up': 'slideInUp 0.5s ease-out forwards',
-                'slow-pulse': 'slow-pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                'slow-pulse': 'slow-pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             },
             backgroundImage: {
                 "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

@@ -19,10 +19,7 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInte
     const [emblaRef, emblaApi] = useEmblaCarousel({ 
         loop: true, 
         active: isInteractive,
-        watchDrag: (emblaApi, event) => {
-            if (!isInteractive) return false;
-            return (event as PointerEvent).pointerType !== 'mouse';
-        }
+        watchDrag: false,
     });
     const [currentImage, setCurrentImage] = useState(0);
 
@@ -127,10 +124,10 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInte
                 {/* Desktop-only Arrow Controls */}
                 {isInteractive && car.images.length > 1 && (
                     <>
-                        <button onClick={scrollPrev} aria-label="Previous image" className="absolute top-1/2 left-2 z-20 -translate-y-1/2 bg-black/30 text-white p-1 rounded-full hover:bg-black/50 transition-all duration-200 opacity-0 md:group-hover:opacity-100 md:flex hidden items-center justify-center">
+                        <button onClick={scrollPrev} aria-label="Previous image" className="absolute top-1/2 left-2 z-20 -translate-y-1/2 bg-black/30 text-white p-1 rounded-full hover:bg-black/50 transition-all duration-200 opacity-0 group-hover:opacity-100 flex items-center justify-center">
                             <ChevronLeft size={20} />
                         </button>
-                        <button onClick={scrollNext} aria-label="Next image" className="absolute top-1/2 right-2 z-20 -translate-y-1/2 bg-black/30 text-white p-1 rounded-full hover:bg-black/50 transition-all duration-200 opacity-0 md:group-hover:opacity-100 md:flex hidden items-center justify-center">
+                        <button onClick={scrollNext} aria-label="Next image" className="absolute top-1/2 right-2 z-20 -translate-y-1/2 bg-black/30 text-white p-1 rounded-full hover:bg-black/50 transition-all duration-200 opacity-0 group-hover:opacity-100 flex items-center justify-center">
                             <ChevronRight size={20} />
                         </button>
                     </>

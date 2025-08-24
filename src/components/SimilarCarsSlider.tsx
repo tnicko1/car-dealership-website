@@ -27,11 +27,21 @@ const NextButton = ({ enabled, onClick }: { enabled: boolean; onClick: () => voi
 );
 
 export default function SimilarCarsSlider({ cars }: { cars: CarWithImages[] }) {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     const [emblaRef, emblaApi] = useEmblaCarousel({ 
         loop: true, 
         align: 'start',
-        watchDrag: false,
+        watchDrag: isMobile,
     });
+    
     const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
     const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
 

@@ -199,7 +199,7 @@ export default function SpecTabs({ car }: SpecTabsProps) {
                     ))}
                 </nav>
             </div>
-            <div {...handlers} className="overflow-hidden relative h-48">
+            <div {...handlers} className="overflow-hidden relative min-h-48">
                 <AnimatePresence initial={false} custom={direction}>
                     <motion.div
                         key={activeTab}
