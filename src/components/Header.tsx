@@ -55,15 +55,15 @@ export default function Header() {
     ];
 
     const getHeaderClasses = () => {
-        const baseClasses = "sticky top-0 z-50 transition-all duration-300 h-20";
+        const baseClasses = "top-0 z-50 transition-all duration-300 h-20 w-full";
 
         if (isMenuOpen) {
-            return `${baseClasses} bg-silver-100 dark:bg-gray-900 shadow-md`;
+            return `${baseClasses} fixed bg-silver-100 dark:bg-gray-900 shadow-md`;
         }
         if (isScrolled) {
-            return `${baseClasses} bg-silver-100/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md`;
+            return `${baseClasses} sticky bg-silver-100/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md`;
         }
-        return `${baseClasses} bg-transparent`;
+        return `${baseClasses} sticky bg-transparent`;
     };
 
     const linkClasses = (href: string) => `
