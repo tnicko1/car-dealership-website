@@ -80,6 +80,14 @@ const FeatureList = ({ items }: { items: string[] }) => (
 export default function SpecTabs({ car }: SpecTabsProps) {
     const [activeTab, setActiveTab] = useState(0);
     const [direction, setDirection] = useState(0);
+    const [height, setHeight] = useState<number | 'auto'>('auto');
+    const contentRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (contentRef.current) {
+            setHeight(contentRef.current.offsetHeight);
+        }
+    }, [activeTab]);
 
     const tabs = [
         { id: 'performance', label: 'Performance' },
@@ -115,66 +123,71 @@ export default function SpecTabs({ car }: SpecTabsProps) {
         }),
     };
 
-    const renderContent = () => {
+    const renderContent = (isMeasure = false) => {
         const currentTabId = tabs[activeTab].id;
-        // ... (rest of the renderContent function is the same)
-        switch (currentTabId) {
-            case 'performance':
-                return (
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        <SpecItem label="Horsepower" value={car.horsepower ? `${car.horsepower} hp` : null} />
-                        <SpecItem label="Engine Volume" value={car.engineVolume ? `${car.engineVolume}L` : null} />
-                        <SpecItem label="Cylinders" value={car.cylinders} />
-                        <SpecItem label="Transmission" value={car.transmission} />
-                        <SpecItem label="Drive Wheels" value={car.driveWheels} />
-                        <SpecItem label="Top Speed" value={car.topSpeed ? `${car.topSpeed} mph` : null} />
-                        <SpecItem label="0-60 mph" value={car.zeroToSixty ? `${car.zeroToSixty}s` : null} />
-                        <SpecItem label="Engine Code" value={car.engineCode} />
-                    </div>
-                );
-            case 'dimensions':
-                return (
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        <SpecItem label="Length" value={car.length ? `${car.length} in` : null} />
-                        <SpecItem label="Width" value={car.width ? `${car.width} in` : null} />
-                        <SpecItem label="Height" value={car.height ? `${car.height} in` : null} />
-                        <SpecItem label="Wheelbase" value={car.wheelbase ? `${car.wheelbase} in` : null} />
-                        <SpecItem label="Cargo Capacity" value={car.cargoCapacity ? `${car.cargoCapacity} cu ft` : null} />
-                        <SpecItem label="Ground Clearance" value={car.groundClearance ? `${car.groundClearance} in` : null} />
-                    </div>
-                );
-            case 'features':
-                return (
-                    <div className="space-y-6">
-                        {car.comfort.length > 0 && (
-                            <div>
-                                <h3 className="text-lg font-semibold mb-2">Comfort</h3>
-                                <FeatureList items={car.comfort} />
-                            </div>
-                        )}
-                        {car.safety.length > 0 && (
-                            <div>
-                                <h3 className="text-lg font-semibold mb-2">Safety</h3>
-                                <FeatureList items={car.safety} />
-                            </div>
-                        )}
-                        {car.multimedia.length > 0 && (
-                            <div>
-                                <h3 className="text-lg font-semibold mb-2">Multimedia</h3>
-                                <FeatureList items={car.multimedia} />
-                            </div>
-                        )}
-                        {car.other.length > 0 && (
-                            <div>
-                                <h3 className="text-lg font-semibold mb-2">Other</h3>
-                                <FeatureList items={car.other} />
-                            </div>
-                        )}
-                    </div>
-                );
-            default:
-                return null;
-        }
+        const classNames = isMeasure ? 'relative' : 'absolute w-full';
+        
+        const content = () => {
+            switch (currentTabId) {
+                case 'performance':
+                    return (
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <SpecItem label="Horsepower" value={car.horsepower ? `${car.horsepower} hp` : null} />
+                            <SpecItem label="Engine Volume" value={car.engineVolume ? `${car.engineVolume}L` : null} />
+                            <SpecItem label="Cylinders" value={car.cylinders} />
+                            <SpecItem label="Transmission" value={car.transmission} />
+                            <SpecItem label="Drive Wheels" value={car.driveWheels} />
+                            <SpecItem label="Top Speed" value={car.topSpeed ? `${car.topSpeed} mph` : null} />
+                            <SpecItem label="0-60 mph" value={car.zeroToSixty ? `${car.zeroToSixty}s` : null} />
+                            <SpecItem label="Engine Code" value={car.engineCode} />
+                        </div>
+                    );
+                case 'dimensions':
+                    return (
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <SpecItem label="Length" value={car.length ? `${car.length} in` : null} />
+                            <SpecItem label="Width" value={car.width ? `${car.width} in` : null} />
+                            <SpecItem label="Height" value={car.height ? `${car.height} in` : null} />
+                            <SpecItem label="Wheelbase" value={car.wheelbase ? `${car.wheelbase} in` : null} />
+                            <SpecItem label="Cargo Capacity" value={car.cargoCapacity ? `${car.cargoCapacity} cu ft` : null} />
+                            <SpecItem label="Ground Clearance" value={car.groundClearance ? `${car.groundClearance} in` : null} />
+                        </div>
+                    );
+                case 'features':
+                    return (
+                        <div className="space-y-6">
+                            {car.comfort.length > 0 && (
+                                <div>
+                                    <h3 className="text-lg font-semibold mb-2">Comfort</h3>
+                                    <FeatureList items={car.comfort} />
+                                </div>
+                            )}
+                            {car.safety.length > 0 && (
+                                <div>
+                                    <h3 className="text-lg font-semibold mb-2">Safety</h3>
+                                    <FeatureList items={car.safety} />
+                                </div>
+                            )}
+                            {car.multimedia.length > 0 && (
+                                <div>
+                                    <h3 className="text-lg font-semibold mb-2">Multimedia</h3>
+                                    <FeatureList items={car.multimedia} />
+                                </div>
+                            )}
+                            {car.other.length > 0 && (
+                                <div>
+                                    <h3 className="text-lg font-semibold mb-2">Other</h3>
+                                    <FeatureList items={car.other} />
+                                </div>
+                            )}
+                        </div>
+                    );
+                default:
+                    return null;
+            }
+        };
+        
+        return <div ref={isMeasure ? contentRef : null} className={classNames}>{content()}</div>;
     };
 
     return (
@@ -199,7 +212,13 @@ export default function SpecTabs({ car }: SpecTabsProps) {
                     ))}
                 </nav>
             </div>
-            <div {...handlers} className="overflow-hidden relative min-h-48">
+            <motion.div 
+                {...handlers} 
+                className="overflow-hidden relative"
+                animate={{ height }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            >
+                <div className="opacity-0">{renderContent(true)}</div>
                 <AnimatePresence initial={false} custom={direction}>
                     <motion.div
                         key={activeTab}
@@ -212,12 +231,12 @@ export default function SpecTabs({ car }: SpecTabsProps) {
                             x: { type: "spring", stiffness: 300, damping: 30 },
                             opacity: { duration: 0.2 }
                         }}
-                        className="absolute w-full"
+                        className="absolute w-full top-0"
                     >
                         {renderContent()}
                     </motion.div>
                 </AnimatePresence>
-            </div>
+            </motion.div>
         </div>
     );
 }

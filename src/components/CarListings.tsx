@@ -191,7 +191,7 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
                             {view === 'grid' ? (
                                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
                                     {displayedCars.slice(0, visibleCount).map((car) => (
-                                        <CarCard key={car.id} car={car} isWishlisted={wishlistedCarIds.includes(car.id)} showMileage={sortOrder.startsWith('mileage')} />
+                                        <CarCard key={car.id} car={car} isWishlisted={wishlistedCarIds.includes(car.id)} showMileage={sortOrder.startsWith('mileage')} allowMobileSwipe={true} />
                                     ))}
                                 </div>
                             ) : (

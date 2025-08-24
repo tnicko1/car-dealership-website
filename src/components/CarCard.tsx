@@ -10,16 +10,24 @@ import { useCompare } from "@/providers/CompareProvider";
 import useEmblaCarousel from 'embla-carousel-react';
 import { Heart, ChevronLeft, ChevronRight, Gauge } from 'lucide-react';
 
-export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInteractive = true, showMileage = false }: { car: CarWithImages, isWishlisted?: boolean, isInteractive?: boolean, showMileage?: boolean }) {
+export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInteractive = true, showMileage = false, allowMobileSwipe = false }: { car: CarWithImages, isWishlisted?: boolean, isInteractive?: boolean, showMileage?: boolean, allowMobileSwipe?: boolean }) {
     const { data: session } = useSession();
     const { addToCompare } = useCompare();
     const [isWishlisted, setIsWishlisted] = useState(initialIsWishlisted);
     const [transform, setTransform] = useState('');
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
     
     const [emblaRef, emblaApi] = useEmblaCarousel({ 
         loop: true, 
         active: isInteractive,
-        watchDrag: false,
+        watchDrag: allowMobileSwipe && isMobile,
     });
     const [currentImage, setCurrentImage] = useState(0);
 
