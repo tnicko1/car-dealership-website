@@ -30,7 +30,8 @@ export default function Header() {
         if (isMenuOpen) {
             toggleMenu();
         }
-    }, [pathname, isMenuOpen, toggleMenu]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pathname]);
 
     // Add/remove class to body to prevent scrolling when mobile menu is open
     useEffect(() => {
