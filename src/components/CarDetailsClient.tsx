@@ -5,7 +5,6 @@ import type { CarWithOwnerAndImages, CarWithImages } from "@/types/car";
 import Image from "next/image";
 import { Heart, Mail, Phone, User } from 'lucide-react';
 import WhatsAppLogo from './icons/WhatsAppLogo';
-import InquiryModal from './InquiryModal';
 import FinancingCalculator from './FinancingCalculator';
 import { useSession } from 'next-auth/react';
 import { toggleWishlist } from '@/actions/wishlistActions';
@@ -16,16 +15,13 @@ import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import SpecTabs from './SpecTabs';
 import SimilarCarsSlider from './SimilarCarsSlider';
-import TestDriveModal from './TestDriveModal';
-import TradeInModal from './TradeInModal';
 import OverviewSpecs from './OverviewSpecs';
 import { motion } from 'framer-motion';
+import { useModal } from '@/providers/ModalProvider';
 
 export default function CarDetailsClient({ car, isWishlisted: initialIsWishlisted, similarCars }: { car: CarWithOwnerAndImages, isWishlisted?: boolean, similarCars: CarWithImages[] }) {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
-    const [isTestDriveModalOpen, setIsTestDriveModalOpen] = useState(false);
-    const [isTradeInModalOpen, setIsTradeInModalOpen] = useState(false);
+    const { openModal } = useModal();
     const { data: session } = useSession();
     const [isWishlisted, setIsWishlisted] = useState(initialIsWishlisted);
     const [openLightbox, setOpenLightbox] = useState(false);
@@ -85,20 +81,18 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
     const slides = car.images.map(image => ({
         src: image.url,
         alt: `${car.make} ${car.model}`,
-        width: 1200, // Provide a default width
-        height: 800, // Provide a default height
+        width: 1200,
+        height: 800,
     }));
 
     return (
         <div className="max-w-screen-xl mx-auto">
-            {/* Preload images */}
             <div style={{ display: 'none' }}>
                 {car.images.map(image => (
                     <Image key={`preload-${image.id}`} src={image.url} alt="preload" width={800} height={600} priority={false} />
                 ))}
             </div>
 
-            {/* Sticky CTA Bar */}
             <div className={`
                 hidden md:flex fixed top-[80px] left-0 right-0 z-40 
                 bg-white/80 dark:bg-gray-900/80 
@@ -111,7 +105,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                         <h2 className="font-bold text-lg">{car.year} {car.make} {car.model}</h2>
                         <p className="text-primary dark:text-primary-400 font-semibold">${car.price.toLocaleString()}</p>
                     </div>
-                    <button onClick={() => setIsInquiryModalOpen(true)} className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary-700 transition-colors">
+                    <button onClick={() => openModal('inquiry', car)} className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary-700 transition-colors">
                         Inquire Now
                     </button>
                 </div>
@@ -136,7 +130,6 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                     </div>
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2">
-                    {/* Image Gallery */}
                     <div className="px-4 pb-4">
                         <div 
                             ref={imageContainerRef}
@@ -162,8 +155,8 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                                         animate={{
                                             opacity: isHovering ? 1 : 0,
                                             scale: isHovering ? 1 : 0.5,
-                                            x: mousePos.x - 96, // Center the loupe on the cursor
-                                            y: mousePos.y - 96, // Center the loupe on the cursor
+                                            x: mousePos.x - 96,
+                                            y: mousePos.y - 96,
                                         }}
                                         transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                                     >
@@ -216,14 +209,14 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                                     View Vehicle History
                                 </a>
                             )}
-                            <button onClick={() => setIsTestDriveModalOpen(true)} className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors w-full">
+                            <button onClick={() => openModal('testDrive', car)} className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors w-full">
                                 Book Test Drive
                             </button>
-                             <button onClick={() => setIsTradeInModalOpen(true)} className="bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-full">
+                             <button onClick={() => openModal('tradeIn', car)} className="bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-full">
                                 Value Your Trade-In
                             </button>
                             <div className="flex flex-col sm:flex-row gap-4">
-                                <button onClick={() => setIsInquiryModalOpen(true)} className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors w-full">
+                                <button onClick={() => openModal('inquiry', car)} className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors w-full">
                                     Inquire Now
                                 </button>
                                 <button
@@ -238,7 +231,6 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                     </div>
                 </div>
 
-                {/* Tabbed Specifications */}
                 <div className="p-6 md:p-12 border-t border-gray-200 dark:border-gray-700">
                     <SpecTabs car={car} />
                 </div>
@@ -272,7 +264,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                                         <a href={`tel:${car.owner.phone}`} className="p-3 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white transition-colors">
                                             <Phone className="w-5 h-5" />
                                         </a>
-                                        <a href={`https://wa.me/${car.owner.phone}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-green-500 text-white pl-3 pr-4 py-1 rounded-lg font-semibold hover:bg-green-600 transition-colors">
+                                        <a href={`httpshttps://wa.me/${car.owner.phone}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-green-500 text-white pl-3 pr-4 py-1 rounded-lg font-semibold hover:bg-green-600 transition-colors">
                                             <WhatsAppLogo className="w-8 h-8" />
                                             <span className="text-sm">Message on WhatsApp</span>
                                         </a>
@@ -287,9 +279,6 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                     <FinancingCalculator price={car.price} />
                 </div>
             </div>
-            <InquiryModal car={car} isOpen={isInquiryModalOpen} setIsOpen={setIsInquiryModalOpen} />
-            <TestDriveModal car={car} isOpen={isTestDriveModalOpen} setIsOpen={setIsTestDriveModalOpen} />
-            <TradeInModal carOfInterest={car} isOpen={isTradeInModalOpen} setIsOpen={setIsTradeInModalOpen} />
             <Lightbox
                 open={openLightbox}
                 close={() => setOpenLightbox(false)}

@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import BrandSelectionModal from './BrandSelectionModal';
 import ModernCheckboxGroup from './ModernCheckboxGroup';
@@ -32,7 +33,8 @@ const RangeInput = ({ name, title, value, onValueChange }: any) => {
     );
 };
 
-export default function FilterSidebar({ makes, bodyStyles, fuelTypes, transmissions, onFilterChange, initialFilters, onReset, isBrandModalOpen, setIsBrandModalOpen }: any) {
+export default function FilterSidebar({ makes, bodyStyles, fuelTypes, transmissions, onFilterChange, initialFilters, onReset }: any) {
+    const [isBrandModalOpen, setIsBrandModalOpen] = useState(false);
     const handleInputChange = useDebouncedCallback((value: string, name:string) => {
         onFilterChange(value, name);
     }, 300);

@@ -40,10 +40,7 @@ const getCarData = (formData: FormData) => {
         interiorMaterial: formData.get('interiorMaterial') as string || null,
         exchange: formData.get('exchange') === 'on',
         technicalInspection: formData.get('technicalInspection') === 'on',
-        comfort: (formData.get('comfort') as string)?.split(',').map(f => f.trim()).filter(f => f) || [],
-        safety: (formData.get('safety') as string)?.split(',').map(f => f.trim()).filter(f => f) || [],
-        multimedia: (formData.get('multimedia') as string)?.split(',').map(f => f.trim()).filter(f => f) || [],
-        other: (formData.get('other') as string)?.split(',').map(f => f.trim()).filter(f => f) || [],
+        features: formData.getAll('features') as string[],
         
         // New fields
         vin: formData.get('vin') as string || null,
@@ -58,6 +55,7 @@ const getCarData = (formData: FormData) => {
         wheelbase: getNumber('wheelbase'),
         cargoCapacity: getNumber('cargoCapacity'),
         groundClearance: getNumber('groundClearance'),
+        weight: getNumber('weight'),
         vehicleHistoryUrl: formData.get('vehicleHistoryUrl') as string || null,
     };
 };

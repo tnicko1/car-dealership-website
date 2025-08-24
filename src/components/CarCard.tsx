@@ -118,13 +118,13 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInte
                         {car.images.map((image, index) => (
                             <div className="relative h-56 w-full flex-shrink-0" key={image.id}>
                                 <Image
-                                    src={image.url || 'https://placehold.co/600x400/cccccc/ffffff?text=No+Image'}
+                                    src={image.url || 'https://dummyimage.com/600x400/cccccc/ffffff?text=No+Image'}
                                     alt={`${car.make} ${car.model} image ${index + 1}`}
                                     fill
                                     style={{ objectFit: 'cover' }}
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     priority={index === 0}
-                                    onError={(e) => { e.currentTarget.src = 'https://placehold.co/600x400/ff0000/ffffff?text=Image+Not+Found'; }}
+                                    onError={(e) => { e.currentTarget.src = 'https://dummyimage.com/600x400/ff0000/ffffff?text=Image+Not+Found'; }}
                                 />
                             </div>
                         ))}

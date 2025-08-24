@@ -47,7 +47,7 @@ export default async function MyListingsPage() {
                         <div key={car.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
                             <div className="relative h-56 w-full">
                                 <Image
-                                    src={car.images[0]?.url || 'https://placehold.co/600x400'}
+                                    src={car.images[0]?.url || 'https://dummyimage.com/600x400'}
                                     alt={`${car.make} ${car.model}`}
                                     fill
                                     style={{ objectFit: 'cover' }}

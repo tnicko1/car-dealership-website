@@ -63,7 +63,7 @@ export default function UserMenu({ direction = 'down' }: { direction?: 'up' | 'd
         <div className="relative" ref={menuRef}>
             <button onClick={() => setIsOpen(!isOpen)} className="flex items-center gap-2">
                 <Image
-                    src={session.user?.image || 'https://placehold.co/40x40'}
+                    src={session.user?.image || 'https://dummyimage.com/40x40'}
                     alt={session.user?.username || 'User'}
                     width={40}
                     height={40}

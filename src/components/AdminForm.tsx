@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { addCar, updateCar } from '@/actions/carActions';
 import Image from 'next/image';
 import type { CarWithImages } from '@/types/car';
+import { featureCategories } from '@/lib/carFeatures';
 
 export default function AdminForm({ car }: { car?: CarWithImages }) {
     const router = useRouter();
@@ -42,14 +43,11 @@ export default function AdminForm({ car }: { car?: CarWithImages }) {
     const handleRemoveImage = (urlToRemove: string, index: number) => {
         const existingCount = existingImageUrls.length;
         if (index < existingCount) {
-            // This is an existing image, remove its URL
             setExistingImageUrls(prev => prev.filter(url => url !== urlToRemove));
         } else {
-            // This is a new file, remove it from the files array
             const fileIndex = index - existingCount;
             setNewImageFiles(prev => prev.filter((_, i) => i !== fileIndex));
         }
-        // Always remove from the combined preview array
         setImagePreviews(prev => prev.filter(url => url !== urlToRemove));
     };
 
@@ -74,7 +72,6 @@ export default function AdminForm({ car }: { car?: CarWithImages }) {
         if (result.success) {
             setMessage(car ? 'Car updated successfully!' : 'Car added successfully!');
             setMessageType('success');
-            // Redirect after a short delay to allow the user to see the message
             setTimeout(() => router.push('/my-listings'), 1000);
         } else {
             setMessage(result.error || 'An error occurred.');
@@ -95,49 +92,21 @@ export default function AdminForm({ car }: { car?: CarWithImages }) {
             <div className="p-6 border rounded-lg dark:border-gray-700">
                 <h2 className="text-xl font-semibold mb-4">Main Details</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label htmlFor="make" className="sr-only">Make</label>
-                        <input id="make" type="text" name="make" defaultValue={car?.make || ''} placeholder="Make" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                        <label htmlFor="model" className="sr-only">Model</label>
-                        <input id="model" type="text" name="model" defaultValue={car?.model || ''} placeholder="Model" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                        <label htmlFor="year" className="sr-only">Year</label>
-                        <input id="year" type="number" name="year" defaultValue={car?.year || ''} placeholder="Year" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                        <label htmlFor="price" className="sr-only">Price</label>
-                        <input id="price" type="number" name="price" defaultValue={car?.price || ''} placeholder="Price" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                        <label htmlFor="mileage" className="sr-only">Mileage</label>
-                        <input id="mileage" type="number" name="mileage" defaultValue={car?.mileage || ''} placeholder="Mileage" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                        <label htmlFor="horsepower" className="sr-only">Horsepower</label>
-                        <input id="horsepower" type="number" name="horsepower" defaultValue={car?.horsepower || ''} placeholder="Horsepower" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                        <label htmlFor="fuelType" className="sr-only">Fuel Type</label>
-                        <input id="fuelType" type="text" name="fuelType" defaultValue={car?.fuelType || ''} placeholder="Fuel Type" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                        <label htmlFor="transmission" className="sr-only">Transmission</label>
-                        <input id="transmission" type="text" name="transmission" defaultValue={car?.transmission || ''} placeholder="Transmission" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                        <label htmlFor="bodyStyle" className="sr-only">Body Style</label>
-                        <input id="bodyStyle" type="text" name="bodyStyle" defaultValue={car?.bodyStyle || ''} placeholder="Body Style" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
+                    <input id="make" type="text" name="make" defaultValue={car?.make || ''} placeholder="Make" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="model" type="text" name="model" defaultValue={car?.model || ''} placeholder="Model" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="year" type="number" name="year" defaultValue={car?.year || ''} placeholder="Year" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="price" type="number" name="price" defaultValue={car?.price || ''} placeholder="Price" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="mileage" type="number" name="mileage" defaultValue={car?.mileage || ''} placeholder="Mileage" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="horsepower" type="number" name="horsepower" defaultValue={car?.horsepower || ''} placeholder="Horsepower" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="fuelType" type="text" name="fuelType" defaultValue={car?.fuelType || ''} placeholder="Fuel Type" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="transmission" type="text" name="transmission" defaultValue={car?.transmission || ''} placeholder="Transmission" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="bodyStyle" type="text" name="bodyStyle" defaultValue={car?.bodyStyle || ''} placeholder="Body Style" required className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
                 </div>
             </div>
 
             {/* Images Section */}
             <div className="p-6 border rounded-lg dark:border-gray-700">
                 <h2 className="text-xl font-semibold mb-4">Images</h2>
-                <label htmlFor="images" className="sr-only">Images</label>
                 <input id="images" type="file" name="images" multiple onChange={handleImageChange} className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
                 <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
                     {imagePreviews.map((url, index) => (
@@ -160,120 +129,87 @@ export default function AdminForm({ car }: { car?: CarWithImages }) {
             <div className="p-6 border rounded-lg dark:border-gray-700">
                 <h2 className="text-xl font-semibold mb-4">Detailed Specifications</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label htmlFor="category" className="sr-only">Category</label>
-                        <input id="category" type="text" name="category" defaultValue={car?.category || ''} placeholder="Category (e.g. Sedan)" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                        <label htmlFor="engineVolume" className="sr-only">Engine Volume</label>
-                        <input id="engineVolume" type="number" name="engineVolume" defaultValue={car?.engineVolume || ''} placeholder="Engine Volume (L)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                        <label htmlFor="cylinders" className="sr-only">Cylinders</label>
-                        <input id="cylinders" type="number" name="cylinders" defaultValue={car?.cylinders || ''} placeholder="Cylinders" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                        <label htmlFor="driveWheels" className="sr-only">Drive Wheels</label>
-                        <input id="driveWheels" type="text" name="driveWheels" defaultValue={car?.driveWheels || ''} placeholder="Drive Wheels" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                        <label htmlFor="doors" className="sr-only">Doors</label>
-                        <input id="doors" type="number" name="doors" defaultValue={car?.doors || ''} placeholder="Doors" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                        <label htmlFor="airbags" className="sr-only">Airbags</label>
-                        <input id="airbags" type="number" name="airbags" defaultValue={car?.airbags || ''} placeholder="Airbags" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                        <label htmlFor="wheel" className="sr-only">Wheel</label>
-                        <input id="wheel" type="text" name="wheel" defaultValue={car?.wheel || ''} placeholder="Wheel (Left/Right)" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                        <label htmlFor="color" className="sr-only">Color</label>
-                        <input id="color" type="text" name="color" defaultValue={car?.color || ''} placeholder="Color" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                        <label htmlFor="interiorColor" className="sr-only">Interior Color</label>
-                        <input id="interiorColor" type="text" name="interiorColor" defaultValue={car?.interiorColor || ''} placeholder="Interior Color" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                        <label htmlFor="interiorMaterial" className="sr-only">Interior Material</label>
-                        <input id="interiorMaterial" type="text" name="interiorMaterial" defaultValue={car?.interiorMaterial || ''} placeholder="Interior Material" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
+                    <input id="category" type="text" name="category" defaultValue={car?.category || ''} placeholder="Category (e.g. Sedan)" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="engineVolume" type="number" name="engineVolume" defaultValue={car?.engineVolume || ''} placeholder="Engine Volume (L)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="cylinders" type="number" name="cylinders" defaultValue={car?.cylinders || ''} placeholder="Cylinders" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="driveWheels" type="text" name="driveWheels" defaultValue={car?.driveWheels || ''} placeholder="Drive Wheels" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="doors" type="number" name="doors" defaultValue={car?.doors || ''} placeholder="Doors" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="airbags" type="number" name="airbags" defaultValue={car?.airbags || ''} placeholder="Airbags" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="wheel" type="text" name="wheel" defaultValue={car?.wheel || ''} placeholder="Wheel (Left/Right)" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="color" type="text" name="color" defaultValue={car?.color || ''} placeholder="Color" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="interiorColor" type="text" name="interiorColor" defaultValue={car?.interiorColor || ''} placeholder="Interior Color" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="interiorMaterial" type="text" name="interiorMaterial" defaultValue={car?.interiorMaterial || ''} placeholder="Interior Material" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
                 </div>
             </div>
 
-            {/* Vehicle Identification Section */}
+            {/* Vehicle Identification & History */}
             <div className="p-6 border rounded-lg dark:border-gray-700">
-                <h2 className="text-xl font-semibold mb-4">Vehicle Identification</h2>
+                <h2 className="text-xl font-semibold mb-4">Vehicle Identification & History</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <input type="text" name="vin" defaultValue={car?.vin || ''} placeholder="VIN" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
                     <input type="text" name="stockNumber" defaultValue={car?.stockNumber || ''} placeholder="Stock Number" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
                     <input type="text" name="engineCode" defaultValue={car?.engineCode || ''} placeholder="Engine Code" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
                     <input type="text" name="paintCode" defaultValue={car?.paintCode || ''} placeholder="Paint Code" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    <input type="url" name="vehicleHistoryUrl" defaultValue={car?.vehicleHistoryUrl || ''} placeholder="Vehicle History Report URL" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600 md:col-span-2" />
                 </div>
             </div>
 
-            {/* Performance Section */}
-            <div className="p-6 border rounded-lg dark:border-gray-700">
-                <h2 className="text-xl font-semibold mb-4">Performance</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="number" name="topSpeed" defaultValue={car?.topSpeed || ''} placeholder="Top Speed (mph)" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    <input type="number" name="zeroToSixty" defaultValue={car?.zeroToSixty || ''} placeholder="0-60 mph (seconds)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+            {/* Performance & Dimensions */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="p-6 border rounded-lg dark:border-gray-700">
+                    <h2 className="text-xl font-semibold mb-4">Performance</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input type="number" name="topSpeed" defaultValue={car?.topSpeed || ''} placeholder="Top Speed (mph)" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                        <input type="number" name="zeroToSixty" defaultValue={car?.zeroToSixty || ''} placeholder="0-60 mph (s)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    </div>
                 </div>
-            </div>
-
-            {/* Dimensions Section */}
-            <div className="p-6 border rounded-lg dark:border-gray-700">
-                <h2 className="text-xl font-semibold mb-4">Dimensions</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input type="number" name="length" defaultValue={car?.length || ''} placeholder="Length (in)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    <input type="number" name="width" defaultValue={car?.width || ''} placeholder="Width (in)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    <input type="number" name="height" defaultValue={car?.height || ''} placeholder="Height (in)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    <input type="number" name="wheelbase" defaultValue={car?.wheelbase || ''} placeholder="Wheelbase (in)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    <input type="number" name="cargoCapacity" defaultValue={car?.cargoCapacity || ''} placeholder="Cargo Capacity (cu ft)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
-                    <input type="number" name="groundClearance" defaultValue={car?.groundClearance || ''} placeholder="Ground Clearance (in)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                <div className="p-6 border rounded-lg dark:border-gray-700">
+                    <h2 className="text-xl font-semibold mb-4">Dimensions</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input type="number" name="length" defaultValue={car?.length || ''} placeholder="Length (in)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                        <input type="number" name="width" defaultValue={car?.width || ''} placeholder="Width (in)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                        <input type="number" name="height" defaultValue={car?.height || ''} placeholder="Height (in)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                        <input type="number" name="wheelbase" defaultValue={car?.wheelbase || ''} placeholder="Wheelbase (in)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                        <input type="number" name="cargoCapacity" defaultValue={car?.cargoCapacity || ''} placeholder="Cargo (cu ft)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                        <input type="number" name="groundClearance" defaultValue={car?.groundClearance || ''} placeholder="Clearance (in)" step="0.1" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                        <input type="number" name="weight" defaultValue={car?.weight || ''} placeholder="Weight (lbs)" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
+                    </div>
                 </div>
-            </div>
-
-            {/* Vehicle History Section */}
-            <div className="p-6 border rounded-lg dark:border-gray-700">
-                <h2 className="text-xl font-semibold mb-4">Vehicle History</h2>
-                <input type="url" name="vehicleHistoryUrl" defaultValue={car?.vehicleHistoryUrl || ''} placeholder="Vehicle History Report URL" className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600" />
             </div>
 
             {/* Features & Options Section */}
             <div className="p-6 border rounded-lg dark:border-gray-700">
                 <h2 className="text-xl font-semibold mb-4">Features & Options</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
-                        <label className="flex items-center gap-2">
-                            <input type="checkbox" name="exchange" defaultChecked={car?.exchange || false} className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
-                            <span>Exchange possible</span>
-                        </label>
-                        <label className="flex items-center gap-2">
-                            <input type="checkbox" name="technicalInspection" defaultChecked={car?.technicalInspection || false} className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
-                            <span>Technical inspection passed</span>
-                        </label>
-                    </div>
-                    <div className="space-y-4">
-                        <div>
-                            <label htmlFor="comfort" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Comfort (comma-separated)</label>
-                            <textarea id="comfort" name="comfort" defaultValue={car?.comfort?.join(', ') || ''} placeholder="e.g. Sunroof, Cruise control" className="mt-1 p-2 border rounded w-full h-20 dark:bg-gray-700 dark:border-gray-600"></textarea>
+                <div className="space-y-6">
+                    {Object.entries(featureCategories).map(([category, features]) => (
+                        <div key={category}>
+                            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">{category}</h3>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                {features.map(feature => (
+                                    <label key={feature} className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        <input
+                                            type="checkbox"
+                                            name="features"
+                                            value={feature}
+                                            defaultChecked={car?.features?.includes(feature)}
+                                            className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                        />
+                                        {feature}
+                                    </label>
+                                ))}
+                            </div>
                         </div>
-                        <div>
-                            <label htmlFor="safety" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Safety (comma-separated)</label>
-                            <textarea id="safety" name="safety" defaultValue={car?.safety?.join(', ') || ''} placeholder="e.g. ABS, Parking assist" className="mt-1 p-2 border rounded w-full h-20 dark:bg-gray-700 dark:border-gray-600"></textarea>
-                        </div>
-                        <div>
-                            <label htmlFor="multimedia" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Multimedia (comma-separated)</label>
-                            <textarea id="multimedia" name="multimedia" defaultValue={car?.multimedia?.join(', ') || ''} placeholder="e.g. Bluetooth, Navigation" className="mt-1 p-2 border rounded w-full h-20 dark:bg-gray-700 dark:border-gray-600"></textarea>
-                        </div>
-                        <div>
-                            <label htmlFor="other" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Other (comma-separated)</label>
-                            <textarea id="other" name="other" defaultValue={car?.other?.join(', ') || ''} placeholder="e.g. Alloy wheels, Service book" className="mt-1 p-2 border rounded w-full h-20 dark:bg-gray-700 dark:border-gray-600"></textarea>
-                        </div>
-                    </div>
+                    ))}
+                </div>
+                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                     <label className="flex items-center gap-2">
+                        <input type="checkbox" name="exchange" defaultChecked={car?.exchange || false} className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
+                        <span>Exchange possible</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                        <input type="checkbox" name="technicalInspection" defaultChecked={car?.technicalInspection || false} className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
+                        <span>Technical inspection passed</span>
+                    </label>
                 </div>
             </div>
             

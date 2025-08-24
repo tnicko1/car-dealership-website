@@ -39,7 +39,7 @@ function CarListItem({ car }: { car: CarWithImages }) {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 flex items-center justify-between">
             <div className="flex items-center gap-4">
                 <Image
-                    src={car.images[0]?.url || 'https://placehold.co/100x75/cccccc/ffffff?text=No+Image'}
+                    src={car.images[0]?.url || 'https://dummyimage.com/100x75/cccccc/ffffff?text=No+Image'}
                     alt={`${car.make} ${car.model}`}
                     width={96}
                     height={64}

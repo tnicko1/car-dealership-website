@@ -2,16 +2,13 @@
 
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
-import { Car } from '@prisma/client';
 import { X } from 'lucide-react';
+import { useModal } from '@/providers/ModalProvider';
 
-type TradeInModalProps = {
-  carOfInterest: Car;
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
-};
-
-export default function TradeInModal({ carOfInterest, isOpen, setIsOpen }: TradeInModalProps) {
+export default function TradeInModal() {
+  const { modalType, closeModal, selectedCar } = useModal();
+  const isOpen = modalType === 'tradeIn';
+  
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -21,7 +18,7 @@ export default function TradeInModal({ carOfInterest, isOpen, setIsOpen }: Trade
     const formData = new FormData(e.currentTarget);
     
     console.log({
-        carOfInterestId: carOfInterest.id,
+        carOfInterestId: selectedCar?.id,
         tradeIn: {
             make: formData.get('make'),
             model: formData.get('model'),
@@ -43,14 +40,16 @@ export default function TradeInModal({ carOfInterest, isOpen, setIsOpen }: Trade
     setMessage('Your trade-in information has been submitted! We will contact you with an estimate shortly.');
   };
 
-  function closeModal() {
-    setIsOpen(false);
+  function handleClose() {
+    closeModal();
     setMessage('');
   }
+  
+  if (!selectedCar) return null;
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={closeModal}>
+      <Dialog as="div" className="relative z-50" onClose={handleClose}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -78,7 +77,7 @@ export default function TradeInModal({ carOfInterest, isOpen, setIsOpen }: Trade
                 <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900 dark:text-white">
                   Value Your Trade-In
                 </Dialog.Title>
-                <button onClick={closeModal} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <button onClick={handleClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
                   <X size={24} />
                 </button>
                 

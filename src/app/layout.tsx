@@ -10,6 +10,9 @@ import CompareBar from "@/components/CompareBar";
 import BackToTopButton from "@/components/BackToTopButton";
 import { MenuProvider } from "@/providers/MenuProvider";
 import { ModalProvider } from '@/providers/ModalProvider';
+import InquiryModal from '@/components/InquiryModal';
+import TestDriveModal from '@/components/TestDriveModal';
+import TradeInModal from '@/components/TradeInModal';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const robotoFlex = Roboto_Flex({ subsets: ['latin'], variable: '--font-roboto-flex' });
@@ -45,6 +48,9 @@ export default function RootLayout({
                             <Footer />
                             <CompareBar />
                             <BackToTopButton />
+                            <InquiryModal />
+                            <TestDriveModal />
+                            <TradeInModal />
                         </ModalProvider>
                     </MenuProvider>
                 </CompareProvider>

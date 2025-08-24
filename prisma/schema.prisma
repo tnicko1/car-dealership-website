@@ -55,6 +55,7 @@ model Car {
   wheelbase         Float? // in inches
   cargoCapacity     Float? // in cubic feet
   groundClearance   Float? // in inches
+  weight            Int? // in lbs
   vehicleHistoryUrl String?
 
   // General Specifications (Comfort, Safety, Multimedia, Other)

@@ -17,7 +17,8 @@ export default function Header() {
     const pathname = usePathname();
     const [isScrolled, setIsScrolled] = useState(false);
     const { isMenuOpen, toggleMenu } = useMenu();
-    const { isBrandModalOpen } = useModal();
+    const { modalType } = useModal();
+    const isModalOpen = modalType !== null;
 
     useEffect(() => {
         const handleScroll = () => {
@@ -80,7 +81,7 @@ export default function Header() {
 
     return (
         <>
-            <header className={`${getHeaderClasses()} ${isBrandModalOpen ? 'pointer-events-none blur-sm' : ''}`}>
+            <header className={`${getHeaderClasses()} ${isModalOpen ? 'pointer-events-none blur-sm' : ''}`}>
                 {/* Main Header Bar */}
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
                     <div className="flex-1">
@@ -109,11 +110,16 @@ export default function Header() {
                         </div>
                         <div className="md:hidden flex items-center">
                             <ThemeSwitcher />
-                            <AnimatedHamburgerIcon
-                                isOpen={isMenuOpen}
+                            <button
                                 onClick={toggleMenu}
-                                className="text-gray-800 dark:text-gray-200"
-                            />
+                                className="focus:outline-none"
+                                aria-label="Toggle menu"
+                            >
+                                <AnimatedHamburgerIcon
+                                    isOpen={isMenuOpen}
+                                    className="text-gray-800 dark:text-gray-200"
+                                />
+                            </button>
                         </div>
                     </div>
                 </div>

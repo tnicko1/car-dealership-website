@@ -2,16 +2,13 @@
 
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
-import { Car } from '@prisma/client';
 import { X } from 'lucide-react';
+import { useModal } from '@/providers/ModalProvider';
 
-type TestDriveModalProps = {
-  car: Car;
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
-};
-
-export default function TestDriveModal({ car, isOpen, setIsOpen }: TestDriveModalProps) {
+export default function TestDriveModal() {
+  const { modalType, closeModal, selectedCar } = useModal();
+  const isOpen = modalType === 'testDrive';
+  
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -20,9 +17,8 @@ export default function TestDriveModal({ car, isOpen, setIsOpen }: TestDriveModa
     setIsSubmitting(true);
     const formData = new FormData(e.currentTarget);
     
-    // Here you would typically send this data to a server action
     console.log({
-        carId: car.id,
+        carId: selectedCar?.id,
         name: formData.get('name'),
         email: formData.get('email'),
         phone: formData.get('phone'),
@@ -30,22 +26,22 @@ export default function TestDriveModal({ car, isOpen, setIsOpen }: TestDriveModa
         preferredTime: formData.get('time'),
     });
 
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     setIsSubmitting(false);
     setMessage('Your test drive request has been submitted! We will contact you shortly.');
-    // Do not close the modal, so the user can see the success message.
   };
 
-  function closeModal() {
-    setIsOpen(false);
-    setMessage(''); // Reset message on close
+  function handleClose() {
+    closeModal();
+    setMessage('');
   }
+  
+  if (!selectedCar) return null;
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={closeModal}>
+      <Dialog as="div" className="relative z-50" onClose={handleClose}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -71,9 +67,9 @@ export default function TestDriveModal({ car, isOpen, setIsOpen }: TestDriveModa
             >
               <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
                 <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900 dark:text-white">
-                  Book a Test Drive for the {car.year} {car.make} {car.model}
+                  Book a Test Drive for the {selectedCar.year} {selectedCar.make} {selectedCar.model}
                 </Dialog.Title>
-                <button onClick={closeModal} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <button onClick={handleClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
                   <X size={24} />
                 </button>
                 

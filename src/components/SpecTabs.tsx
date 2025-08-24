@@ -4,37 +4,35 @@ import { useState, useRef, useEffect } from 'react';
 import { Car } from '@prisma/client';
 import { useSwipeable } from 'react-swipeable';
 import { motion, AnimatePresence } from 'framer-motion';
+import { featureCategories } from '@/lib/carFeatures';
 import { 
-    CheckCircle, Gauge, Fuel, SlidersHorizontal, Zap, Car as CarIcon, Hash, Palette, 
+    CheckCircle, XCircle, Gauge, Fuel, SlidersHorizontal, Zap, Car as CarIcon, Hash, Palette, 
     ChevronsRightLeft, Calendar, Paintbrush, DoorOpen,
     Box, ArrowUp, Maximize, MoveHorizontal, MoveVertical, 
-    Clock, Cog, Factory, ClipboardSignature, Disc3, SwatchBook, Scaling, Cylinder
+    Clock, Cog, Factory, ClipboardSignature, Disc3, SwatchBook, Scaling, Cylinder, Weight
 } from 'lucide-react';
 
 type SpecTabsProps = {
     car: Car;
 };
 
-// (Icon map remains the same)
 const iconMap = {
-    // Overview
+    // (Icon map remains the same)
     Make: <Factory className="w-5 h-5 mr-2 text-gray-500" />,
     Model: <ClipboardSignature className="w-5 h-5 mr-2 text-gray-500" />,
     Year: <Calendar className="w-5 h-5 mr-2 text-gray-500" />,
     Mileage: <Gauge className="w-5 h-5 mr-2 text-blue-500" />,
     'Body Style': <CarIcon className="w-5 h-5 mr-2 text-indigo-500" />,
     Color: <Palette className="w-5 h-5 mr-2 text-pink-500" />,
-    'Interior Color': <Palette className="w-5 h-5 mr-2 text-fuchsia-500" />,
+    'Interior Color': <Palette className="w-s h-5 mr-2 text-fuchsia-500" />,
     'Interior Material': <SwatchBook className="w-5 h-5 mr-2 text-gray-500" />,
     Doors: <DoorOpen className="w-5 h-5 mr-2 text-amber-500" />,
     Wheel: <Disc3 className="w-5 h-5 mr-2 text-gray-500" />,
     'VIN': <Hash className="w-5 h-5 mr-2 text-red-500" />,
     'Stock #': <Hash className="w-5 h-5 mr-2 text-teal-500" />,
     'Paint Code': <Paintbrush className="w-5 h-5 mr-2 text-purple-500" />,
-    
-    // Performance
     Horsepower: <Zap className="w-5 h-5 mr-2 text-yellow-500" />,
-    'Engine Volume': <Scaling className="w-5 h-g mr-2 text-orange-500" />,
+    'Engine Volume': <Scaling className="w-5 h-5 mr-2 text-orange-500" />,
     Cylinders: <Cylinder className="w-5 h-5 mr-2 text-gray-500" />,
     Transmission: <SlidersHorizontal className="w-5 h-5 mr-2 text-purple-500" />,
     'Drive Wheels': <ChevronsRightLeft className="w-5 h-5 mr-2 text-lime-500" />,
@@ -42,14 +40,13 @@ const iconMap = {
     '0-60 mph': <Clock className="w-5 h-5 mr-2 text-blue-500" />,
     'Engine Code': <Cog className="w-5 h-5 mr-2 text-gray-500" />,
     'Fuel Type': <Fuel className="w-5 h-5 mr-2 text-green-500" />,
-
-    // Dimensions
     Length: <MoveHorizontal className="w-5 h-5 mr-2 text-sky-500" />,
     Width: <MoveHorizontal className="w-5 h-5 mr-2 text-sky-500" />,
     Height: <MoveVertical className="w-5 h-5 mr-2 text-sky-500" />,
     Wheelbase: <Maximize className="w-5 h-5 mr-2 text-sky-500" />,
     'Cargo Capacity': <Box className="w-5 h-5 mr-2 text-amber-600" />,
     'Ground Clearance': <ArrowUp className="w-5 h-5 mr-2 text-green-600" />,
+    'Weight': <Weight className="w-5 h-5 mr-2 text-gray-500" />,
 };
 
 const SpecItem = ({ label, value }: { label: keyof typeof iconMap | string; value: string | number | boolean | null | undefined }) => {
@@ -65,17 +62,6 @@ const SpecItem = ({ label, value }: { label: keyof typeof iconMap | string; valu
         </div>
     );
 };
-
-const FeatureList = ({ items }: { items: string[] }) => (
-    <ul className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {items.map((item, index) => (
-            <li key={index} className="flex items-center">
-                <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
-                <span>{item}</span>
-            </li>
-        ))}
-    </ul>
-);
 
 export default function SpecTabs({ car }: SpecTabsProps) {
     const [activeTab, setActiveTab] = useState(0);
@@ -109,18 +95,9 @@ export default function SpecTabs({ car }: SpecTabsProps) {
     });
 
     const variants = {
-        enter: (direction: number) => ({
-            x: direction > 0 ? '100%' : '-100%',
-            opacity: 0,
-        }),
-        center: {
-            x: 0,
-            opacity: 1,
-        },
-        exit: (direction: number) => ({
-            x: direction < 0 ? '100%' : '-100%',
-            opacity: 0,
-        }),
+        enter: (direction: number) => ({ x: direction > 0 ? '100%' : '-100%', opacity: 0 }),
+        center: { x: 0, opacity: 1 },
+        exit: (direction: number) => ({ x: direction < 0 ? '100%' : '-100%', opacity: 0 }),
     };
 
     const renderContent = (isMeasure = false) => {
@@ -151,35 +128,34 @@ export default function SpecTabs({ car }: SpecTabsProps) {
                             <SpecItem label="Wheelbase" value={car.wheelbase ? `${car.wheelbase} in` : null} />
                             <SpecItem label="Cargo Capacity" value={car.cargoCapacity ? `${car.cargoCapacity} cu ft` : null} />
                             <SpecItem label="Ground Clearance" value={car.groundClearance ? `${car.groundClearance} in` : null} />
+                            <SpecItem label="Weight" value={car.weight ? `${car.weight} lbs` : null} />
                         </div>
                     );
                 case 'features':
                     return (
                         <div className="space-y-6">
-                            {car.comfort.length > 0 && (
-                                <div>
-                                    <h3 className="text-lg font-semibold mb-2">Comfort</h3>
-                                    <FeatureList items={car.comfort} />
+                            {Object.entries(featureCategories).map(([category, features]) => (
+                                <div key={category}>
+                                    <h3 className="text-lg font-semibold mb-3">{category}</h3>
+                                    <ul className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-3">
+                                        {features.map((feature) => {
+                                            const hasFeature = car.features.includes(feature);
+                                            return (
+                                                <li key={feature} className="flex items-center">
+                                                    {hasFeature ? (
+                                                        <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
+                                                    ) : (
+                                                        <XCircle className="w-5 h-5 text-red-500 mr-2 flex-shrink-0" />
+                                                    )}
+                                                    <span className={!hasFeature ? 'text-gray-500 line-through' : ''}>
+                                                        {feature}
+                                                    </span>
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
                                 </div>
-                            )}
-                            {car.safety.length > 0 && (
-                                <div>
-                                    <h3 className="text-lg font-semibold mb-2">Safety</h3>
-                                    <FeatureList items={car.safety} />
-                                </div>
-                            )}
-                            {car.multimedia.length > 0 && (
-                                <div>
-                                    <h3 className="text-lg font-semibold mb-2">Multimedia</h3>
-                                    <FeatureList items={car.multimedia} />
-                                </div>
-                            )}
-                            {car.other.length > 0 && (
-                                <div>
-                                    <h3 className="text-lg font-semibold mb-2">Other</h3>
-                                    <FeatureList items={car.other} />
-                                </div>
-                            )}
+                            ))}
                         </div>
                     );
                 default:

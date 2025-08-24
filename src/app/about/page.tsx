@@ -34,25 +34,25 @@ export default function AboutPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-8">
                         {/* Team Member Card */}
                         <div className="text-center">
-                            <Image src="https://placehold.co/400x400/cccccc/ffffff?text=Team+Member" alt="Team member" width={150} height={150} className="mx-auto rounded-full" />
+                            <Image src="https://dummyimage.com/400x400/cccccc/ffffff?text=Team+Member" alt="Team member" width={150} height={150} className="mx-auto rounded-full" />
                             <h3 className="mt-4 text-xl font-bold">John Doe</h3>
                             <p className="text-gray-500">General Manager</p>
                         </div>
                         {/* Team Member Card */}
                         <div className="text-center">
-                            <Image src="https://placehold.co/400x400/cccccc/ffffff?text=Team+Member" alt="Team member" width={150} height={150} className="mx-auto rounded-full" />
+                            <Image src="https://dummyimage.com/400x400/cccccc/ffffff?text=Team+Member" alt="Team member" width={150} height={150} className="mx-auto rounded-full" />
                             <h3 className="mt-4 text-xl font-bold">Jane Smith</h3>
                             <p className="text-gray-500">Head of Sales</p>
                         </div>
                         {/* Team Member Card */}
                         <div className="text-center">
-                            <Image src="https://placehold.co/400x400/cccccc/ffffff?text=Team+Member" alt="Team member" width={150} height={150} className="mx-auto rounded-full" />
+                            <Image src="https://dummyimage.com/400x400/cccccc/ffffff?text=Team+Member" alt="Team member" width={150} height={150} className="mx-auto rounded-full" />
                             <h3 className="mt-4 text-xl font-bold">Mike Johnson</h3>
                             <p className="text-gray-500">Finance Expert</p>
                         </div>
                         {/* Team Member Card */}
                         <div className="text-center">
-                            <Image src="https://placehold.co/400x400/cccccc/ffffff?text=Team+Member" alt="Team member" width={150} height={150} className="mx-auto rounded-full" />
+                            <Image src="https://dummyimage.com/400x400/cccccc/ffffff?text=Team+Member" alt="Team member" width={150} height={150} className="mx-auto rounded-full" />
                             <h3 className="mt-4 text-xl font-bold">Sarah Williams</h3>
                             <p className="text-gray-500">Service Manager</p>
                         </div>

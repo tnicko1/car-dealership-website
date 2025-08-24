@@ -20,7 +20,7 @@ export default function CompareBar() {
                         {compareList.map(car => (
                             <div key={car.id} className="relative">
                                 <Image
-                                    src={car.images[0]?.url || 'https://placehold.co/100x75/cccccc/ffffff?text=No+Image'}
+                                    src={car.images[0]?.url || 'https://dummyimage.com/100x75/cccccc/ffffff?text=No+Image'}
                                     alt={car.model}
                                     width={80}
                                     height={60}

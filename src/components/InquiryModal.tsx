@@ -2,17 +2,19 @@
 
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import type { CarWithImages } from '@/types/car';
+import { useModal } from '@/providers/ModalProvider';
 
-export default function InquiryModal({ car, isOpen, setIsOpen }: { car: CarWithImages, isOpen: boolean, setIsOpen: (isOpen: boolean) => void }) {
-    
-    const closeModal = () => setIsOpen(false);
+export default function InquiryModal() {
+    const { modalType, closeModal, selectedCar } = useModal();
+    const isOpen = modalType === 'inquiry';
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        // Handle form submission, e.g., send an email with Resend
+        // Handle form submission
         closeModal();
     };
+    
+    if (!selectedCar) return null;
 
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -45,7 +47,7 @@ export default function InquiryModal({ car, isOpen, setIsOpen }: { car: CarWithI
                                     as="h3"
                                     className="text-lg font-medium leading-6 text-gray-900 dark:text-white"
                                 >
-                                    Inquire about the {car.year} {car.make} {car.model}
+                                    Inquire about the {selectedCar.year} {selectedCar.make} {selectedCar.model}
                                 </Dialog.Title>
                                 <form onSubmit={handleSubmit} className="mt-4 space-y-4">
                                     <div>
