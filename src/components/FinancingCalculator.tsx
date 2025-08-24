@@ -50,7 +50,7 @@ export default function FinancingCalculator({ price }: { price: number }) {
                 
                 {/* Result Section */}
                 <div className="relative rounded-lg p-6 text-center h-full flex flex-col justify-center overflow-hidden bg-gray-900">
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary to-indigo-600 animate-pulse"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary to-indigo-600 animate-slow-pulse"></div>
                     <div className="relative z-10">
                         <p className="text-lg text-white/80">Monthly Payment</p>
                         <div className="text-5xl font-bold text-white mt-2">

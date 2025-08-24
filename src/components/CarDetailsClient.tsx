@@ -193,8 +193,17 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                     <div className="p-6 md:p-12 border-t border-gray-200 dark:border-gray-700">
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Seller Information</h2>
                         <div className="bg-gray-100 dark:bg-gray-900/50 p-6 rounded-lg flex items-center gap-6">
-                            <div className="relative">
-                                <User className="w-16 h-16 text-gray-400 dark:text-gray-500" />
+                            <div className="relative w-16 h-16">
+                                {car.owner.image ? (
+                                    <Image
+                                        src={car.owner.image}
+                                        alt={car.owner.name ?? 'Seller avatar'}
+                                        fill
+                                        className="rounded-full object-cover"
+                                    />
+                                ) : (
+                                    <User className="w-16 h-16 text-gray-400 dark:text-gray-500" />
+                                )}
                             </div>
                             <div className="flex-grow">
                                 <h3 className="text-xl font-bold">{car.owner.name}</h3>

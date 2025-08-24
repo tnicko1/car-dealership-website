@@ -8,7 +8,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const PrevButton = ({ enabled, onClick }: { enabled: boolean; onClick: () => void }) => (
     <button
-        className="absolute top-1/2 left-4 -translate-y-1/2 z-10 bg-white/80 dark:bg-gray-900/80 p-2 rounded-full shadow-md disabled:opacity-50"
+        className="absolute top-1/2 -left-4 -translate-y-1/2 z-10 bg-white/80 dark:bg-gray-900/80 p-2 rounded-full shadow-md disabled:opacity-50 hidden md:block"
         onClick={onClick}
         disabled={!enabled}
     >
@@ -18,7 +18,7 @@ const PrevButton = ({ enabled, onClick }: { enabled: boolean; onClick: () => voi
 
 const NextButton = ({ enabled, onClick }: { enabled: boolean; onClick: () => void }) => (
     <button
-        className="absolute top-1/2 right-4 -translate-y-1/2 z-10 bg-white/80 dark:bg-gray-900/80 p-2 rounded-full shadow-md disabled:opacity-50"
+        className="absolute top-1/2 -right-4 -translate-y-1/2 z-10 bg-white/80 dark:bg-gray-900/80 p-2 rounded-full shadow-md disabled:opacity-50 hidden md:block"
         onClick={onClick}
         disabled={!enabled}
     >
@@ -27,7 +27,11 @@ const NextButton = ({ enabled, onClick }: { enabled: boolean; onClick: () => voi
 );
 
 export default function SimilarCarsSlider({ cars }: { cars: CarWithImages[] }) {
-    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' });
+    const [emblaRef, emblaApi] = useEmblaCarousel({ 
+        loop: true, 
+        align: 'start',
+        watchDrag: false,
+    });
     const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
     const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
 
@@ -52,7 +56,7 @@ export default function SimilarCarsSlider({ cars }: { cars: CarWithImages[] }) {
     }
 
     return (
-        <div className="relative">
+        <div className="relative md:px-12">
             <div className="overflow-hidden" ref={emblaRef}>
                 <div className="flex">
                     {cars.map((car) => (

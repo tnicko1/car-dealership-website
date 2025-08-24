@@ -19,7 +19,7 @@ export default function CountUp({
   from = 0,
   direction = "up",
   delay = 0,
-  duration = 2,
+  duration = 0.5,
   className = "",
   startWhen = true,
   separator = "",
@@ -38,20 +38,6 @@ export default function CountUp({
   });
 
   const isInView = useInView(ref, { once: true, margin: "0px" });
-
-  // Get number of decimal places in a number
-  const getDecimalPlaces = (num: number): number => {
-    const str = num.toString();
-    if (str.includes(".")) {
-      const decimals = str.split(".")[1];
-      if (parseInt(decimals) !== 0) {
-        return decimals.length;
-      }
-    }
-    return 0;
-  };
-
-  const maxDecimals = Math.max(getDecimalPlaces(from), getDecimalPlaces(to));
 
   useEffect(() => {
     if (ref.current) {
@@ -99,12 +85,10 @@ export default function CountUp({
   useEffect(() => {
     const unsubscribe = springValue.on("change", (latest) => {
       if (ref.current) {
-        const hasDecimals = maxDecimals > 0;
-
         const options: Intl.NumberFormatOptions = {
           useGrouping: !!separator,
-          minimumFractionDigits: hasDecimals ? maxDecimals : 0,
-          maximumFractionDigits: hasDecimals ? maxDecimals : 0,
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
         };
 
         const formattedNumber = Intl.NumberFormat("en-US", options).format(
@@ -118,7 +102,7 @@ export default function CountUp({
     });
 
     return () => unsubscribe();
-  }, [springValue, separator, maxDecimals]);
+  }, [springValue, separator]);
 
   return <span className={className} ref={ref} />;
 }

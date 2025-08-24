@@ -41,6 +41,10 @@ const config: Config = {
                     '0%': { transform: 'translateY(20px)', opacity: '0' },
                     '100%': { transform: 'translateY(0)', opacity: '1' },
                 },
+                'slow-pulse': {
+                    '0%, 100%': { opacity: '1' },
+                    '50%': { opacity: '.5' },
+                },
             },
             animation: {
                 shine: 'shine 5s linear infinite',
@@ -48,6 +52,7 @@ const config: Config = {
                 'ken-burns': 'ken-burns 15s ease-out forwards',
                 'fade-in': 'fadeIn 0.5s ease-out forwards',
                 'slide-in-up': 'slideInUp 0.5s ease-out forwards',
+                'slow-pulse': 'slow-pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             },
             backgroundImage: {
                 "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

@@ -1,4 +1,4 @@
-import type { Car, CarImage, User } from '@prisma/client';
+import type { Car, CarImage } from '@prisma/client';
 
 export type { Car, CarImage };
 
@@ -12,5 +12,6 @@ export type CarWithOwnerAndImages = Car & {
         name: string | null;
         email: string | null;
         phone: string | null;
+        image: string | null;
     } | null;
 };

@@ -89,6 +89,7 @@ export default async function CarDetailsPage({ params }: { params: { id: string 
                         lastName: true,
                         email: true,
                         phone: true,
+                        image: true,
                     }
                 }
             },

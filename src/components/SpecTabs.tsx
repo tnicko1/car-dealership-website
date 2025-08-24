@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Car } from '@prisma/client';
 import { useSwipeable } from 'react-swipeable';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
     CheckCircle, Gauge, Fuel, SlidersHorizontal, Zap, Car as CarIcon, Hash, Palette, 
     ChevronsRightLeft, Calendar, Paintbrush, DoorOpen,
@@ -33,7 +34,7 @@ const iconMap = {
     
     // Performance
     Horsepower: <Zap className="w-5 h-5 mr-2 text-yellow-500" />,
-    'Engine Volume': <Scaling className="w-5 h-5 mr-2 text-orange-500" />,
+    'Engine Volume': <Scaling className="w-5 h-g mr-2 text-orange-500" />,
     Cylinders: <Cylinder className="w-5 h-5 mr-2 text-gray-500" />,
     Transmission: <SlidersHorizontal className="w-5 h-5 mr-2 text-purple-500" />,
     'Drive Wheels': <ChevronsRightLeft className="w-5 h-5 mr-2 text-lime-500" />,
@@ -78,6 +79,7 @@ const FeatureList = ({ items }: { items: string[] }) => (
 
 export default function SpecTabs({ car }: SpecTabsProps) {
     const [activeTab, setActiveTab] = useState(0);
+    const [direction, setDirection] = useState(0);
 
     const tabs = [
         { id: 'performance', label: 'Performance' },
@@ -86,14 +88,36 @@ export default function SpecTabs({ car }: SpecTabsProps) {
     ];
 
     const handlers = useSwipeable({
-        onSwipedLeft: () => setActiveTab((prev) => (prev + 1) % tabs.length),
-        onSwipedRight: () => setActiveTab((prev) => (prev - 1 + tabs.length) % tabs.length),
+        onSwipedLeft: () => {
+            setDirection(1);
+            setActiveTab((prev) => (prev + 1) % tabs.length);
+        },
+        onSwipedRight: () => {
+            setDirection(-1);
+            setActiveTab((prev) => (prev - 1 + tabs.length) % tabs.length);
+        },
         preventScrollOnSwipe: true,
         trackMouse: true,
     });
 
+    const variants = {
+        enter: (direction: number) => ({
+            x: direction > 0 ? '100%' : '-100%',
+            opacity: 0,
+        }),
+        center: {
+            x: 0,
+            opacity: 1,
+        },
+        exit: (direction: number) => ({
+            x: direction < 0 ? '100%' : '-100%',
+            opacity: 0,
+        }),
+    };
+
     const renderContent = () => {
         const currentTabId = tabs[activeTab].id;
+        // ... (rest of the renderContent function is the same)
         switch (currentTabId) {
             case 'performance':
                 return (
@@ -160,7 +184,10 @@ export default function SpecTabs({ car }: SpecTabsProps) {
                     {tabs.map((tab, index) => (
                         <button
                             key={tab.id}
-                            onClick={() => setActiveTab(index)}
+                            onClick={() => {
+                                setDirection(index > activeTab ? 1 : -1);
+                                setActiveTab(index);
+                            }}
                             className={`${
                                 activeTab === index
                                     ? 'border-primary text-primary'
@@ -172,8 +199,24 @@ export default function SpecTabs({ car }: SpecTabsProps) {
                     ))}
                 </nav>
             </div>
-            <div {...handlers} className="overflow-hidden">
-                {renderContent()}
+            <div {...handlers} className="overflow-hidden relative h-48">
+                <AnimatePresence initial={false} custom={direction}>
+                    <motion.div
+                        key={activeTab}
+                        custom={direction}
+                        variants={variants}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        transition={{
+                            x: { type: "spring", stiffness: 300, damping: 30 },
+                            opacity: { duration: 0.2 }
+                        }}
+                        className="absolute w-full"
+                    >
+                        {renderContent()}
+                    </motion.div>
+                </AnimatePresence>
             </div>
         </div>
     );
