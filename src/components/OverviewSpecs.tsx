@@ -20,7 +20,6 @@ export default function OverviewSpecs({ car }: { car: Car }) {
         { label: 'Doors', value: car.doors },
         { label: 'Wheel', value: car.wheel },
         { label: 'VIN', value: car.vin },
-        { label: 'Stock #', value: car.stockNumber },
         { label: 'Paint Code', value: car.paintCode },
     ];
 

@@ -97,22 +97,27 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
             </div>
 
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden">
+                <div className="p-6 md:p-12">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-1">
+                                {car.year} {car.make} {car.model}
+                            </h1>
+                            {car.stockNumber && (
+                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    Stock #: {car.stockNumber}
+                                </p>
+                            )}
+                        </div>
+                        <p className="text-3xl md:text-4xl font-bold text-primary dark:text-primary-400">
+                            ${car.price.toLocaleString()}
+                        </p>
+                    </div>
+                </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2">
                     {/* Image Gallery */}
-                    <div className="p-4 relative">
+                    <div className="p-4">
                         <div className="relative h-96 lg:h-[500px] rounded-lg overflow-hidden cursor-pointer" onClick={() => setOpenLightbox(true)}>
-                            {/* Gradient Overlay for Text */}
-                            <div className="absolute inset-x-0 top-0 z-10 p-6 bg-gradient-to-b from-black/60 to-transparent">
-                                <div className="flex justify-between items-start">
-                                    <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                                        {car.year} {car.make} {car.model}
-                                    </h1>
-                                    <p className="text-2xl md:text-3xl font-semibold text-white mb-6">
-                                        ${car.price.toLocaleString()}
-                                    </p>
-                                </div>
-                            </div>
-                            
                             {car.images.length > 0 ? (
                                 <Image
                                     src={car.images[currentImageIndex].url}
@@ -138,6 +143,9 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                                     <Image src={image.url} alt={`Thumbnail ${index + 1}`} fill style={{ objectFit: 'cover' }} />
                                 </div>
                             ))}
+                        </div>
+                        <div className="mt-6">
+                           <FinancingCalculator price={car.price} />
                         </div>
                     </div>
 
@@ -183,7 +191,6 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                     <SpecTabs car={car} />
                 </div>
 
-                <FinancingCalculator price={car.price} />
                 {car.owner && (
                     <div className="p-6 md:p-12 border-t border-gray-200 dark:border-gray-700">
                         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">Seller Information</h2>
