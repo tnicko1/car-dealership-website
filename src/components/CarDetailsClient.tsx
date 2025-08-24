@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, MouseEvent } from 'react';
 import type { CarWithOwnerAndImages, CarWithImages } from "@/types/car";
 import Image from "next/image";
 import { Heart, Mail, Phone, User } from 'lucide-react';
@@ -16,6 +16,7 @@ import SimilarCarsSlider from './SimilarCarsSlider';
 import TestDriveModal from './TestDriveModal';
 import TradeInModal from './TradeInModal';
 import OverviewSpecs from './OverviewSpecs';
+import { motion } from 'framer-motion';
 
 export default function CarDetailsClient({ car, isWishlisted: initialIsWishlisted, similarCars }: { car: CarWithOwnerAndImages, isWishlisted?: boolean, similarCars: CarWithImages[] }) {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -26,7 +27,10 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
     const [isWishlisted, setIsWishlisted] = useState(initialIsWishlisted);
     const [openLightbox, setOpenLightbox] = useState(false);
     const [isCtaVisible, setIsCtaVisible] = useState(false);
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const [isHovering, setIsHovering] = useState(false);
 
+    const imageContainerRef = useRef<HTMLDivElement>(null);
     const ctaTriggerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -66,8 +70,16 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
             alert("Something went wrong. Please try again.");
         }
     };
+    
+    const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+        const { left, top } = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - left;
+        const y = e.clientY - top;
+        setMousePos({ x, y });
+    };
 
     const slides = car.images.map(img => ({ src: img.url }));
+    const currentImageUrl = car.images[currentImageIndex]?.url;
 
     return (
         <div className="max-w-screen-xl mx-auto">
@@ -118,16 +130,42 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                 <div className="grid grid-cols-1 lg:grid-cols-2">
                     {/* Image Gallery */}
                     <div className="px-4 pb-4">
-                        <div className="relative h-96 lg:h-[500px] rounded-lg overflow-hidden cursor-pointer" onClick={() => setOpenLightbox(true)}>
+                        <div 
+                            ref={imageContainerRef}
+                            className="relative h-96 lg:h-[500px] rounded-lg overflow-hidden cursor-pointer" 
+                            onClick={() => setOpenLightbox(true)}
+                            onMouseEnter={() => setIsHovering(true)}
+                            onMouseLeave={() => setIsHovering(false)}
+                            onMouseMove={handleMouseMove}
+                        >
                             {car.images.length > 0 ? (
-                                <Image
-                                    src={car.images[currentImageIndex].url}
-                                    alt={`${car.make} ${car.model}`}
-                                    fill
-                                    style={{ objectFit: 'cover' }}
-                                    sizes="(max-width: 1024px) 100vw, 50vw"
-                                    priority
-                                />
+                                <>
+                                    <Image
+                                        src={currentImageUrl}
+                                        alt={`${car.make} ${car.model}`}
+                                        fill
+                                        style={{ objectFit: 'cover' }}
+                                        sizes="(max-width: 1024px) 100vw, 50vw"
+                                        priority
+                                    />
+                                    <motion.div
+                                        className="absolute top-0 left-0 w-40 h-40 rounded-full border-4 border-white shadow-2xl pointer-events-none"
+                                        style={{
+                                            backgroundImage: `url(${currentImageUrl})`,
+                                            backgroundRepeat: 'no-repeat',
+                                        }}
+                                        initial={{ opacity: 0, scale: 0.5 }}
+                                        animate={{
+                                            opacity: isHovering ? 1 : 0,
+                                            scale: isHovering ? 1 : 0.5,
+                                            x: mousePos.x - 80, // center the loupe
+                                            y: mousePos.y - 80,
+                                            backgroundSize: `${(imageContainerRef.current?.offsetWidth || 0) * 2.5}px ${(imageContainerRef.current?.offsetHeight || 0) * 2.5}px`,
+                                            backgroundPosition: `-${mousePos.x * 2.5 - 80}px -${mousePos.y * 2.5 - 80}px`,
+                                        }}
+                                        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                                    />
+                                </>
                             ) : (
                                 <div className="flex items-center justify-center h-full bg-gray-200 dark:bg-gray-700">
                                     <p className="text-gray-500">No Image Available</p>
@@ -240,6 +278,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                 close={() => setOpenLightbox(false)}
                 slides={slides}
                 index={currentImageIndex}
+                on={{ view: ({ index }) => setCurrentImageIndex(index) }}
             />
 
             {similarCars.length > 0 && (
