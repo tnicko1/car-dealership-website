@@ -8,6 +8,7 @@ import AppSessionProvider from "@/providers/SessionProvider";
 import { CompareProvider } from "@/providers/CompareProvider";
 import CompareBar from "@/components/CompareBar";
 import BackToTopButton from "@/components/BackToTopButton";
+import { MenuProvider } from "@/providers/MenuProvider";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const robotoFlex = Roboto_Flex({ subsets: ['latin'], variable: '--font-roboto-flex' });
@@ -36,11 +37,13 @@ export default function RootLayout({
         <AppSessionProvider>
             <ThemeProvider>
                 <CompareProvider>
-                    <Header />
-                    <main className="pb-24">{children}</main>
-                    <CompareBar />
-                    <Footer />
-                    <BackToTopButton />
+                    <MenuProvider>
+                        <Header />
+                        <main className="pb-24">{children}</main>
+                        <CompareBar />
+                        <Footer />
+                        <BackToTopButton />
+                    </MenuProvider>
                 </CompareProvider>
             </ThemeProvider>
         </AppSessionProvider>

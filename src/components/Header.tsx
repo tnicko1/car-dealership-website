@@ -9,12 +9,13 @@ import UserMenu from './UserMenu';
 import AnimatedLogo from './AnimatedLogo';
 import { Dialog, Transition } from '@headlessui/react';
 import AnimatedHamburgerIcon from './AnimatedHamburgerIcon';
+import { useMenu } from '@/providers/MenuProvider';
 
 export default function Header() {
     const { data: session } = useSession();
     const pathname = usePathname();
     const [isScrolled, setIsScrolled] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { isMenuOpen, toggleMenu } = useMenu();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -26,8 +27,10 @@ export default function Header() {
 
     // Close mobile menu on route change
     useEffect(() => {
-        setIsMenuOpen(false);
-    }, [pathname]);
+        if (isMenuOpen) {
+            toggleMenu();
+        }
+    }, [pathname, isMenuOpen, toggleMenu]);
 
     // Add/remove class to body to prevent scrolling when mobile menu is open
     useEffect(() => {
@@ -102,7 +105,7 @@ export default function Header() {
                         <ThemeSwitcher />
                         <AnimatedHamburgerIcon 
                             isOpen={isMenuOpen} 
-                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            onClick={toggleMenu}
                             className="text-gray-800 dark:text-gray-200"
                         />
                     </div>
@@ -111,7 +114,7 @@ export default function Header() {
 
             {/* Mobile Menu Drawer */}
             <Transition appear show={isMenuOpen} as={Fragment}>
-                <Dialog as="div" className="md:hidden" onClose={setIsMenuOpen}>
+                <Dialog as="div" className="md:hidden" onClose={toggleMenu}>
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
