@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
-    "@cardog-icons/react": "^1.0.1",
     "@headlessui/react": "^2.2.5",
     "@prisma/client": "5.15.1",
     "@supabase/supabase-js": "^2.50.5",

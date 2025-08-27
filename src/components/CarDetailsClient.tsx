@@ -19,6 +19,8 @@ import OverviewSpecs from './OverviewSpecs';
 import { motion } from 'framer-motion';
 import { useModal } from '@/providers/ModalProvider';
 
+import CarLogo from './CarLogo';
+
 export default function CarDetailsClient({ car, isWishlisted: initialIsWishlisted, similarCars }: { car: CarWithOwnerAndImages, isWishlisted?: boolean, similarCars: CarWithImages[] }) {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const { openModal } = useModal();
@@ -114,15 +116,18 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden">
                 <div className="p-6 md:pt-8 md:pb-4 md:px-12">
                     <div className="flex justify-between items-start">
-                        <div>
-                            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-1">
-                                {car.year} {car.make} {car.model}
-                            </h1>
-                            {car.stockNumber && (
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                    Stock #: {car.stockNumber}
-                                </p>
-                            )}
+                        <div className="flex items-center gap-4">
+                            <CarLogo make={car.make} className="w-20 h-20" />
+                            <div>
+                                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-1">
+                                    {car.year} {car.make} {car.model}
+                                </h1>
+                                {car.stockNumber && (
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                        Stock #: {car.stockNumber}
+                                    </p>
+                                )}
+                            </div>
                         </div>
                         <p className="text-3xl md:text-4xl font-bold text-primary dark:text-primary-400">
                             ${car.price.toLocaleString()}

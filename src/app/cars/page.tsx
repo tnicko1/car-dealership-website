@@ -53,7 +53,16 @@ export default async function VehiclesPage({ searchParams }: VehiclesPageProps) 
             orderBy: { createdAt: 'desc' },
             include: { images: true },
         }),
-        prisma.car.findMany({ select: { make: true }, distinct: ['make'] }).then(res => res.map(c => c.make).sort()),
+        // prisma.car.findMany({ select: { make: true }, distinct: ['make'] }).then(res => res.map(c => c.make).sort()),
+        Promise.resolve([
+    'Acura', 'Aixam', 'Alpina', 'Ariel', 'Ascari', 'Aston Martin', 'Atalanta Motors', 'Audi', 'Bmw', 'Brabus', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler',
+    'Citroen', 'Dacia', 'Daihatsu', 'DeLorean', 'Dodge', 'Eagle', 'Fiat', 'Ferrari', 'Fisker', 'Force Motors', 'Ford',
+    'Gmc', 'Honda', 'Hummer', 'Hyundai', 'Infiniti', 'Isuzu', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg',
+    'Lamborghini', 'Lancia', 'Land Rover', 'Lexus', 'Lincoln', 'Lotus', 'Lucid', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Amg', 'Mercedes-Benz', 
+    'Mercury', 'Mini', 'Mitsubishi', 'Nissan', 'Oldsmobile', 'Opel', 'Pagani', 'Pars Khodro', 'Peugeot', 'Plymouth', 'Polaris', 'Pontiac', 'Porsche', 'Ram',
+    'Renault', 'Rimac', 'Rivian', 'Rolls-Royce', 'Saab', 'Saleen', 'Saturn', 'Scion', 'Seat', 'Skoda', 'Spyker', 'Ssangyong', 
+    'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo', 'Zagato'
+].sort()),
         prisma.car.findMany({ select: { bodyStyle: true }, distinct: ['bodyStyle'] }).then(res => res.map(c => c.bodyStyle).sort()),
         prisma.car.findMany({ select: { fuelType: true }, distinct: ['fuelType'] }).then(res => res.map(c => c.fuelType).sort()),
         prisma.car.findMany({ select: { transmission: true }, distinct: ['transmission'] }).then(res => res.map(c => c.transmission).sort()),
