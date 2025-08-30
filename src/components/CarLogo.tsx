@@ -13,6 +13,8 @@ const makeToLogoName: { [key: string]: keyof typeof Logos } = {
     'aston martin': 'AstonMartin',
     'atalanta motors': 'AtalantaMotors',
     'audi': 'Audi',
+    'alfa romeo': 'AlfaRomeo',
+    'bentley': 'Bentley',
     'bmw': 'Bmw',
     'brabus': 'Brabus',
     'bugatti': 'Bugatti',

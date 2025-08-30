@@ -79,3 +79,5 @@ export { default as Toyota } from './Toyota';
 export { default as Volkswagen } from './Volkswagen';
 export { default as Volvo } from './Volvo';
 export { default as Zagato } from './Zagato';
+export { default as AlfaRomeo } from './AlfaRomeo';
+export { default as Bentley } from './Bentley';

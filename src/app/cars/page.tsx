@@ -55,7 +55,7 @@ export default async function VehiclesPage({ searchParams }: VehiclesPageProps) 
         }),
         // prisma.car.findMany({ select: { make: true }, distinct: ['make'] }).then(res => res.map(c => c.make).sort()),
         Promise.resolve([
-    'Acura', 'Aixam', 'Alpina', 'Ariel', 'Ascari', 'Aston Martin', 'Atalanta Motors', 'Audi', 'Bmw', 'Brabus', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler',
+    'Acura', 'Aixam', 'Alpina', 'Alfa Romeo', 'Ariel', 'Ascari', 'Aston Martin', 'Atalanta Motors', 'Audi', 'Bmw', 'Bentley', 'Brabus', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler',
     'Citroen', 'Dacia', 'Daihatsu', 'DeLorean', 'Dodge', 'Eagle', 'Fiat', 'Ferrari', 'Fisker', 'Force Motors', 'Ford',
     'Gmc', 'Honda', 'Hummer', 'Hyundai', 'Infiniti', 'Isuzu', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg',
     'Lamborghini', 'Lancia', 'Land Rover', 'Lexus', 'Lincoln', 'Lotus', 'Lucid', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Amg', 'Mercedes-Benz', 
