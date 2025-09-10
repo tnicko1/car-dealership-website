@@ -31,25 +31,30 @@ export async function middleware(req: NextRequest) {
     response.headers.set('x-nonce', nonce);
 
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    const { pathname } = req.nextUrl;
+
+    if (token) {
+        const profileComplete = token.firstName && token.lastName && token.username && token.image;
+
+        if (!profileComplete && pathname !== "/account/setup") {
+            return NextResponse.redirect(new URL("/account/setup", req.url));
+        }
+
+        if (profileComplete && pathname === "/account/setup") {
+            return NextResponse.redirect(new URL("/account", req.url));
+        }
+    }
 
     const protectedRoutes = ["/admin", "/account", "/my-listings", "/wishlist"];
-    const isAdminRoute = req.nextUrl.pathname.startsWith("/admin");
+    const isAdminRoute = pathname.startsWith("/admin");
 
-    if (protectedRoutes.some(route => req.nextUrl.pathname.startsWith(route))) {
+    if (protectedRoutes.some(route => pathname.startsWith(route))) {
         if (!token) {
             return NextResponse.redirect(new URL('/login', req.url));
         }
 
         if (isAdminRoute && token.role !== "admin") {
             return NextResponse.redirect(new URL("/", req.url));
-        }
-
-        const isAccountPage = req.nextUrl.pathname.startsWith("/account");
-        if (token && !isAccountPage) {
-            const { firstName, lastName, phone } = token as { firstName?: string, lastName?: string, phone?: string, role?: string };
-            if (!firstName || !lastName || !phone) {
-                return NextResponse.redirect(new URL("/account", req.url));
-            }
         }
     }
 

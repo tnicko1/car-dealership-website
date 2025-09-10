@@ -22,10 +22,32 @@ export const authOptions: AuthOptions = {
             // The '!' tells TypeScript that we are certain these environment variables exist.
             clientId: process.env.GITHUB_ID!,
             clientSecret: process.env.GITHUB_SECRET!,
+            profile(profile) {
+                const nameParts = profile.name?.split(" ") ?? [];
+                const firstName = nameParts[0];
+                const lastName = nameParts.slice(1).join(" ");
+
+                return {
+                    id: profile.id.toString(),
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: profile.email,
+                    image: profile.avatar_url,
+                };
+            },
         }),
         Google({
             clientId: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+            profile(profile) {
+                return {
+                    id: profile.sub,
+                    firstName: profile.given_name,
+                    lastName: profile.family_name,
+                    email: profile.email,
+                    image: profile.picture,
+                };
+            },
         }),
         Email({
             server: {}, // Required, but empty as we override sendVerificationRequest
