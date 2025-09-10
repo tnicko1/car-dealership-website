@@ -33,31 +33,25 @@ export async function middleware(req: NextRequest) {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
     const { pathname } = req.nextUrl;
 
-    if (token) {
-        const profileComplete = token.firstName && token.lastName && token.username;
-
-        if (!profileComplete && pathname !== "/account/setup") {
-            const setupUrl = new URL("/account/setup", req.url);
-            setupUrl.searchParams.set("callbackUrl", pathname);
-            return NextResponse.redirect(setupUrl);
-        }
-
-        if (profileComplete && pathname === "/account/setup") {
-            return NextResponse.redirect(new URL("/account", req.url));
-        }
+    if (!token) {
+        return NextResponse.redirect(new URL("/login", req.url));
     }
 
-    const protectedRoutes = ["/admin", "/account", "/my-listings", "/wishlist"];
+    const profileComplete = token.firstName && token.lastName && token.username;
+
+    if (!profileComplete && pathname !== "/account/setup") {
+        const setupUrl = new URL("/account/setup", req.url);
+        setupUrl.searchParams.set("callbackUrl", pathname);
+        return NextResponse.redirect(setupUrl);
+    }
+
+    if (profileComplete && pathname === "/account/setup") {
+        return NextResponse.redirect(new URL("/account", req.url));
+    }
+
     const isAdminRoute = pathname.startsWith("/admin");
-
-    if (protectedRoutes.some(route => pathname.startsWith(route))) {
-        if (!token) {
-            return NextResponse.redirect(new URL('/login', req.url));
-        }
-
-        if (isAdminRoute && token.role !== "admin") {
-            return NextResponse.redirect(new URL("/", req.url));
-        }
+    if (isAdminRoute && token.role !== "admin") {
+        return NextResponse.redirect(new URL("/", req.url));
     }
 
     return response;
