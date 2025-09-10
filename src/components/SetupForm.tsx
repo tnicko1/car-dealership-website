@@ -48,19 +48,20 @@ const SetupForm = () => {
         e.preventDefault();
         setError("");
 
+        if (!session?.user?.id) {
+            setError("You must be logged in to update your profile.");
+            return;
+        }
+
         if (!formData.firstName || !formData.lastName || !formData.username || !formData.image) {
             setError("All fields are required.");
             return;
         }
 
         try {
-            const result = await updateUserProfile(formData);
-            if (result.success) {
-                await update(); // This will trigger a session update
-                router.push("/account");
-            } else {
-                setError(result.error || "An unknown error occurred.");
-            }
+            await updateUserProfile(session.user.id, formData);
+            await update(); // This will trigger a session update
+            router.push("/account");
         } catch (err) {
             setError("Failed to update profile.");
         }
