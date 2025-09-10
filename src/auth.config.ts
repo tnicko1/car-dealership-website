@@ -33,6 +33,7 @@ export const authOptions: AuthOptions = {
                     lastName: lastName,
                     email: profile.email,
                     image: profile.avatar_url,
+                    role: "user",
                 };
             },
         }),
@@ -46,6 +47,7 @@ export const authOptions: AuthOptions = {
                     lastName: profile.family_name,
                     email: profile.email,
                     image: profile.picture,
+                    role: "user",
                 };
             },
         }),
