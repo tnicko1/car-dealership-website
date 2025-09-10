@@ -26,7 +26,7 @@ wss.on('connection', (ws, req) => {
     }
 
     console.log('[WSS] Verifying token...');
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    jwt.verify(token, process.env.NEXTAUTH_SECRET, (err, decoded) => {
         if (err) {
             console.error('[WSS] Invalid token:', err.message);
             ws.close();

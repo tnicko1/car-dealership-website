@@ -11,12 +11,12 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  if (!process.env.JWT_SECRET) {
-    console.error('JWT_SECRET is not defined in environment variables');
+  if (!process.env.NEXTAUTH_SECRET) {
+    console.error('NEXTAUTH_SECRET is not defined in environment variables');
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 
-  const token = jwt.sign({ userId: session.user.id }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ userId: session.user.id }, process.env.NEXTAUTH_SECRET, {
     expiresIn: '60s', // The token is short-lived
   });
 
