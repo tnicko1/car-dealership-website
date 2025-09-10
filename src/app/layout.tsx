@@ -13,6 +13,7 @@ import InquiryModal from '@/components/InquiryModal';
 import TestDriveModal from '@/components/TestDriveModal';
 import TradeInModal from '@/components/TradeInModal';
 import { WebSocketProvider } from '@/providers/WebSocketProvider';
+import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const robotoFlex = Roboto_Flex({ subsets: ['latin'], variable: '--font-roboto-flex' });
@@ -51,6 +52,7 @@ export default function RootLayout({
                             <InquiryModal />
                             <TestDriveModal />
                             <TradeInModal />
+                            <Toaster richColors position="top-right" />
                         </ModalProvider>
                     </MenuProvider>
                 </CompareProvider>
