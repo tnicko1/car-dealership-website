@@ -34,7 +34,7 @@ export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
 
     if (token) {
-        const profileComplete = token.firstName && token.lastName && token.username && token.image;
+        const profileComplete = token.firstName && token.lastName && token.username;
 
         if (!profileComplete && pathname !== "/account/setup") {
             return NextResponse.redirect(new URL("/account/setup", req.url));
