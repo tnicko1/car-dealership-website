@@ -2,12 +2,14 @@
 
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { completeUserProfile } from "@/actions/userActions";
 
 const SetupForm = () => {
     const { data: session, status, update } = useSession();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get('callbackUrl');
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -43,7 +45,7 @@ const SetupForm = () => {
             const result = await completeUserProfile(formData);
             if (result.success) {
                 await update(); // This will trigger a session update
-                router.push("/account");
+                router.push(callbackUrl || "/account");
             } else {
                 setError(result.error || "An unknown error occurred.");
             }

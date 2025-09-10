@@ -81,7 +81,9 @@ export async function updateUser(formData: FormData): Promise<{ success: boolean
         if (!session?.user?.id) {
             return { success: false, error: 'Not authenticated' };
         }
+        const userId = session.user.id;
 
+        // User data
         const firstName = formData.get('firstName') as string;
         const lastName = formData.get('lastName') as string;
         const username = formData.get('username') as string;
@@ -89,15 +91,32 @@ export async function updateUser(formData: FormData): Promise<{ success: boolean
         const phone = formData.get('phone') as string;
         const imageFile = formData.get('image') as File | null;
 
+        // UserProfile data
+        const bio = formData.get('bio') as string;
+        const website = formData.get('website') as string;
+        const x = formData.get('x') as string;
+        const github = formData.get('github') as string;
+        const linkedin = formData.get('linkedin') as string;
+
+        // Messaging data
+        const useSameNumberForApps = formData.get('useSameNumberForApps') === 'on';
+        const whatsappEnabled = formData.get('whatsappEnabled') === 'on';
+        const whatsappNumber = formData.get('whatsappNumber') as string;
+        const viberEnabled = formData.get('viberEnabled') === 'on';
+        const viberNumber = formData.get('viberNumber') as string;
+        const telegramEnabled = formData.get('telegramEnabled') === 'on';
+        const telegramNumber = formData.get('telegramNumber') as string;
+        const signalEnabled = formData.get('signalEnabled') === 'on';
+        const signalNumber = formData.get('signalNumber') as string;
+
         let imageUrl: string | undefined = undefined;
 
         if (imageFile && imageFile.size > 0) {
-            // Re-add the user ID to the path for organization and to work with RLS policies
-            const fileName = `${session.user.id}/${Date.now()}-${imageFile.name}`;
+            const fileName = `${userId}/${Date.now()}-${imageFile.name}`;
             const { data, error } = await supabaseAdmin.storage
                 .from('avatars')
                 .upload(fileName, imageFile, {
-                    cacheControl: '36-00',
+                    cacheControl: '3600',
                     upsert: true,
                 });
 
@@ -110,19 +129,59 @@ export async function updateUser(formData: FormData): Promise<{ success: boolean
             imageUrl = publicUrl;
         }
 
-        const updatedUser = await prisma.user.update({
-            where: { id: session.user.id },
-            data: {
-                firstName,
-                lastName,
-                username,
-                email,
-                phone,
-                ...(imageUrl && { image: imageUrl }),
-            },
-        });
+        const [updatedUser] = await prisma.$transaction([
+            prisma.user.update({
+                where: { id: userId },
+                data: {
+                    firstName,
+                    lastName,
+                    username,
+                    email,
+                    phone,
+                    ...(imageUrl && { image: imageUrl }),
+                },
+            }),
+            prisma.userProfile.upsert({
+                where: { userId: userId },
+                update: {
+                    bio,
+                    website,
+                    x,
+                    github,
+                    linkedin,
+                    useSameNumberForApps,
+                    whatsappEnabled,
+                    whatsappNumber,
+                    viberEnabled,
+                    viberNumber,
+                    telegramEnabled,
+                    telegramNumber,
+                    signalEnabled,
+                    signalNumber,
+                },
+                create: {
+                    userId: userId,
+                    bio,
+                    website,
+                    x,
+                    github,
+                    linkedin,
+                    useSameNumberForApps,
+                    whatsappEnabled,
+                    whatsappNumber,
+                    viberEnabled,
+                    viberNumber,
+                    telegramEnabled,
+                    telegramNumber,
+                    signalEnabled,
+                    signalNumber,
+                },
+            }),
+        ]);
+
         return { success: true, user: updatedUser };
     } catch (error) {
+        console.error("Failed to update user profile:", error);
         return { success: false, error: (error as Error).message };
     }
 }

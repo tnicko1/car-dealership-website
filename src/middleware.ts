@@ -37,7 +37,9 @@ export async function middleware(req: NextRequest) {
         const profileComplete = token.firstName && token.lastName && token.username;
 
         if (!profileComplete && pathname !== "/account/setup") {
-            return NextResponse.redirect(new URL("/account/setup", req.url));
+            const setupUrl = new URL("/account/setup", req.url);
+            setupUrl.searchParams.set("callbackUrl", pathname);
+            return NextResponse.redirect(setupUrl);
         }
 
         if (profileComplete && pathname === "/account/setup") {
