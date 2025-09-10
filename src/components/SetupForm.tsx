@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { updateUserProfile } from "@/actions/userProfileActions";
+import { completeUserProfile } from "@/actions/userActions";
 import Image from "next/image";
 
 const SetupForm = () => {
@@ -48,20 +48,19 @@ const SetupForm = () => {
         e.preventDefault();
         setError("");
 
-        if (!session?.user?.id) {
-            setError("You must be logged in to update your profile.");
-            return;
-        }
-
         if (!formData.firstName || !formData.lastName || !formData.username || !formData.image) {
             setError("All fields are required.");
             return;
         }
 
         try {
-            await updateUserProfile(session.user.id, formData);
-            await update(); // This will trigger a session update
-            router.push("/account");
+            const result = await completeUserProfile(formData);
+            if (result.success) {
+                await update(); // This will trigger a session update
+                router.push("/account");
+            } else {
+                setError(result.error || "An unknown error occurred.");
+            }
         } catch (err) {
             setError("Failed to update profile.");
         }

@@ -22,6 +22,59 @@ export async function isUsernameAvailable(username: string): Promise<boolean> {
     return !user || user.id === session.user.id;
 }
 
+export async function completeUserProfile(data: {
+    firstName: string;
+    lastName: string;
+    username: string;
+    image: string;
+}): Promise<{ success: boolean; error?: string }> {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+        return { success: false, error: "Not authenticated" };
+    }
+
+    const { firstName, lastName, username, image } = data;
+    let imageUrl = image;
+
+    // If the image is a base64 string, upload it to Supabase
+    if (image.startsWith("data:image/")) {
+        const response = await fetch(image);
+        const blob = await response.blob();
+        const fileName = `${session.user.id}/avatar-${Date.now()}`;
+        const { data: uploadData, error } = await supabaseAdmin.storage
+            .from("avatars")
+            .upload(fileName, blob, {
+                cacheControl: "3600",
+                upsert: true,
+                contentType: blob.type,
+            });
+
+        if (error) {
+            console.error("Supabase upload error:", error);
+            return { success: false, error: "Failed to upload image." };
+        }
+
+        const { data: { publicUrl } } = supabaseAdmin.storage.from("avatars").getPublicUrl(uploadData.path);
+        imageUrl = publicUrl;
+    }
+
+    try {
+        await prisma.user.update({
+            where: { id: session.user.id },
+            data: {
+                firstName,
+                lastName,
+                username,
+                image: imageUrl,
+            },
+        });
+        return { success: true };
+    } catch (error) {
+        console.error("Failed to update user profile:", error);
+        return { success: false, error: "Failed to update profile." };
+    }
+}
+
 export async function updateUser(formData: FormData): Promise<{ success: boolean; error?: string, user?: User }> {
     try {
         const session = await getServerSession(authOptions);
