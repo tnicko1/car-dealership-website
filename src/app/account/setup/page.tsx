@@ -1,4 +1,5 @@
 import SetupForm from "@/components/SetupForm";
+import { Suspense } from "react";
 
 const SetupPage = () => {
     return (
@@ -8,7 +9,9 @@ const SetupPage = () => {
                 <p className="text-center text-gray-600">
                     Please fill out the information below to continue.
                 </p>
-                <SetupForm />
+                <Suspense fallback={<div>Loading...</div>}>
+                    <SetupForm />
+                </Suspense>
             </div>
         </div>
     );
