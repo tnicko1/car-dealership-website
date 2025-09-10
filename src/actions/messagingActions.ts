@@ -2,7 +2,6 @@
 
 import prisma from "@/lib/prisma";
 import { Message } from "@prisma/client";
-import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth.config";
 import { encrypt, decrypt } from "@/lib/encryption";
@@ -254,5 +253,4 @@ export async function markMessagesAsRead(conversationId: string) {
       }
     }
   }
-  revalidatePath(`/messages/${conversationId}`);
 }
