@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useState, useRef } from 'react';
-import { useSession } from "next-auth/react";
-import { markMessagesAsRead } from "@/actions/messagingActions";
-import { useWebSocket } from '@/providers/WebSocketProvider';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Check, CheckCheck } from "lucide-react";
-import TypingIndicator from './TypingIndicator';
+import Link from "next/link";
 import MessageForm from './MessageForm';
+import TypingIndicator from './TypingIndicator';
+import { Check, CheckCheck } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useWebSocket } from '@/providers/WebSocketProvider';
+import { markMessagesAsRead } from "@/actions/messagingActions";
+import { useSession } from "next-auth/react";
+import { useEffect, useState, useRef } from 'react';
 
 import { MessageWithSender } from '@/types/global';
 
@@ -75,10 +76,12 @@ export default function ConversationClient({ initialMessages, conversationId, re
               className={`flex items-end gap-2 my-2 ${isSender ? "justify-end" : "justify-start"}`}
             >
               {!isSender && (
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={message.sender.image ?? undefined} />
-                  <AvatarFallback>{message.sender.firstName?.[0]}{message.sender.lastName?.[0]}</AvatarFallback>
-                </Avatar>
+                <Link href={`/users/${message.sender.username}`}>
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={message.sender.image ?? undefined} />
+                    <AvatarFallback>{message.sender.firstName?.[0]}{message.sender.lastName?.[0]}</AvatarFallback>
+                  </Avatar>
+                </Link>
               )}
               <div
                 className={`rounded-lg py-2 px-3 max-w-md ${

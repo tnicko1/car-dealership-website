@@ -87,7 +87,11 @@ app.post('/notify', (req, res) => {
     console.log(`[WSS] Attempting to send notification to ${userId}`);
     if (client && client.readyState === 1) { // WebSocket.OPEN
         console.log(`[WSS] Client ${userId} found, sending message:`, message);
-        client.send(JSON.stringify(message), (error) => {
+        const payload = {
+            type: message.type,
+            payload: message.payload,
+        };
+        client.send(JSON.stringify(payload), (error) => {
             if (error) {
                 console.error(`[WSS] Failed to send message to ${userId}:`, error);
             }

@@ -1,4 +1,3 @@
-import { getUserProfile, createUserProfile } from "@/actions/userProfileActions";
 import { getReviewsForSeller } from "@/actions/reviewActions";
 import prisma from "@/lib/prisma";
 import { notFound } from 'next/navigation';
@@ -7,15 +6,13 @@ import UserProfileClient from "@/components/UserProfileClient";
 export default async function UserProfilePage({ params }: { params: { username: string } }) {
     const user = await prisma.user.findUnique({
         where: { username: params.username },
+        include: {
+            UserProfile: true,
+        }
     });
 
-    if (!user) {
+    if (!user || !user.UserProfile) {
         notFound();
-    }
-
-    let userProfile = await getUserProfile(user.id);
-    if (!userProfile) {
-        userProfile = await createUserProfile(user.id, {});
     }
 
     const reviews = await getReviewsForSeller(user.id);
@@ -23,7 +20,7 @@ export default async function UserProfilePage({ params }: { params: { username: 
     const userCars = await prisma.car.findMany({
         where: {
             userId: user.id,
-                         Transaction: null, // Car is not sold if it has no transaction
+            Transaction: null, // Car is not sold if it has no transaction
         },
         include: {
             images: true,
@@ -41,7 +38,7 @@ export default async function UserProfilePage({ params }: { params: { username: 
     return (
         <UserProfileClient
             user={user}
-            userProfile={userProfile}
+            userProfile={user.UserProfile}
             reviews={reviews}
             userCars={userCars}
             averageRating={averageRating}
