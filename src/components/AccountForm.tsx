@@ -151,7 +151,7 @@ export default function AccountForm({ user }: { user: UserWithProfile }) {
             {/* ... existing form fields ... */}
             <div className="flex items-center gap-6">
                 <div className="relative">
-                    <Image src={preview || '/default-avatar.png'} alt="Profile preview" width={96} height={96} className="rounded-full object-cover" />
+                    <Image src={preview || ''} alt="Profile preview" width={96} height={96} className="rounded-full object-cover" />
                     <label
                         htmlFor="image"
                         className="absolute bottom-0 right-0 flex items-center justify-center w-8 h-8 bg-primary rounded-full text-white cursor-pointer hover:bg-primary-700 transition-colors"

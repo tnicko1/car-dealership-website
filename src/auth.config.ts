@@ -118,7 +118,7 @@ export const authOptions: AuthOptions = {
                 session.user.firstName = token.firstName as string;
                 session.user.lastName = token.lastName as string;
                 session.user.phone = token.phone as string;
-                session.user.image = token.image as string;
+                session.user.image = (token.image as string) || "/default-avatar.svg";
             }
             return session;
         },

@@ -4,7 +4,6 @@ import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { completeUserProfile } from "@/actions/userActions";
-import Image from "next/image";
 
 const SetupForm = () => {
     const { data: session, status, update } = useSession();
@@ -13,7 +12,6 @@ const SetupForm = () => {
         firstName: "",
         lastName: "",
         username: "",
-        image: "",
     });
     const [error, setError] = useState("");
 
@@ -23,7 +21,6 @@ const SetupForm = () => {
                 firstName: session.user.firstName || "",
                 lastName: session.user.lastName || "",
                 username: session.user.username || "",
-                image: session.user.image || "",
             });
         }
     }, [session, status]);
@@ -33,22 +30,11 @@ const SetupForm = () => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setFormData((prev) => ({ ...prev, image: reader.result as string }));
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
 
-        if (!formData.firstName || !formData.lastName || !formData.username || !formData.image) {
+        if (!formData.firstName || !formData.lastName || !formData.username) {
             setError("All fields are required.");
             return;
         }
@@ -110,22 +96,6 @@ const SetupForm = () => {
                     onChange={handleChange}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
-            </div>
-            <div>
-                <label htmlFor="image" className="block text-sm font-medium text-gray-700">
-                    Profile Picture
-                </label>
-                <input
-                    type="file"
-                    name="image"
-                    id="image"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100"
-                />
-                {formData.image && (
-                    <Image src={formData.image} alt="Profile Preview" width={96} height={96} className="mt-4 w-24 h-24 rounded-full object-cover" />
-                )}
             </div>
             {error && <p className="text-red-500 text-sm">{error}</p>}
             <button

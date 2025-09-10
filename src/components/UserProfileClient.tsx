@@ -55,7 +55,7 @@ export default function UserProfileClient({
                 <div className="md:col-span-1 space-y-6">
                     <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
                         <Avatar className="w-32 h-32 border-4 border-gray-200">
-                            <AvatarImage src={user.image ?? '/placeholder-avatar.png'} alt={`${user.firstName} ${user.lastName}`} />
+                            <AvatarImage src={user.image!} alt={`${user.firstName} ${user.lastName}`} />
                             <AvatarFallback>{user.firstName?.[0]}{user.lastName?.[0]}</AvatarFallback>
                         </Avatar>
                         <h1 className="text-2xl font-bold mt-4 text-center">{user.firstName} {user.lastName}</h1>
@@ -136,7 +136,7 @@ export default function UserProfileClient({
                                     reviews.map((review) => (
                                         <div key={review.id} className="bg-white border rounded-lg p-4 flex items-start">
                                             <Avatar className="w-12 h-12">
-                                                <AvatarImage src={review.reviewer.image ?? "/placeholder-avatar.png"} />
+                                                <AvatarImage src={review.reviewer.image!} />
                                                 <AvatarFallback>{review.reviewer.firstName?.[0]}{review.reviewer.lastName?.[0]}</AvatarFallback>
                                             </Avatar>
                                             <div className="ml-4 flex-1">

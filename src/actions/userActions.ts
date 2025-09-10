@@ -26,7 +26,7 @@ export async function completeUserProfile(data: {
     firstName: string;
     lastName: string;
     username: string;
-    image: string;
+    image?: string;
 }): Promise<{ success: boolean; error?: string }> {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -37,7 +37,7 @@ export async function completeUserProfile(data: {
     let imageUrl = image;
 
     // If the image is a base64 string, upload it to Supabase
-    if (image.startsWith("data:image/")) {
+    if (image && image.startsWith("data:image/")) {
         const response = await fetch(image);
         const blob = await response.blob();
         const fileName = `${session.user.id}/avatar-${Date.now()}`;
@@ -65,7 +65,7 @@ export async function completeUserProfile(data: {
                 firstName,
                 lastName,
                 username,
-                image: imageUrl,
+                ...(imageUrl && { image: imageUrl }),
             },
         });
         return { success: true };
