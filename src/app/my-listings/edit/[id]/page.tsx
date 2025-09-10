@@ -1,10 +1,18 @@
 import prisma from "@/lib/prisma";
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import AdminForm from '@/components/AdminForm';
 import type { CarWithImages } from '@/types/car';
 import { getAllMakes } from '@/lib/carData';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth.config";
 
 export default async function EditCarPage({ params }: { params: { id: string } }) {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+        redirect('/login');
+    }
+
     const [car, makes] = await Promise.all([
         prisma.car.findUnique({
             where: { id: params.id },
@@ -17,6 +25,11 @@ export default async function EditCarPage({ params }: { params: { id: string } }
 
     if (!car) {
         notFound();
+    }
+
+    // Authorization check
+    if (car.userId !== session.user.id) {
+        redirect('/');
     }
 
     return (
