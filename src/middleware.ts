@@ -47,7 +47,7 @@ export async function middleware(req: NextRequest) {
         }
     }
 
-    const protectedRoutes = ["/admin", "/account", "/my-listings", "/wishlist"];
+    const protectedRoutes = ["/admin", "/account", "/my-listings", "/wishlist", "/my-listings/edit"];
     const isAdminRoute = pathname.startsWith("/admin");
 
     if (protectedRoutes.some(route => pathname.startsWith(route))) {

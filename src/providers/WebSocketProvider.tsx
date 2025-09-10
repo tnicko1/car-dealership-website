@@ -41,7 +41,8 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           const { token } = await res.json();
           console.log('[WebSocketProvider] Token received. Connecting...');
 
-          const socket = new WebSocket('ws://localhost:3001', token);
+          const wsUrl = process.env.NEXT_PUBLIC_WEBSOCKET_URL || 'ws://localhost:3001';
+          const socket = new WebSocket(wsUrl, token);
           ws.current = socket;
 
           socket.onopen = () => {
