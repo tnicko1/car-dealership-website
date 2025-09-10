@@ -8,7 +8,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const PrevButton = ({ enabled, onClick }: { enabled: boolean; onClick: () => void }) => (
     <button
-        className="absolute top-1/2 -left-4 -translate-y-1/2 z-10 bg-white/80 dark:bg-gray-900/80 p-2 rounded-full shadow-md disabled:opacity-50 hidden md:block"
+        className="absolute top-1/2 -left-4 -translate-y-1/2 z-10 bg-white/80 p-2 rounded-full shadow-md disabled:opacity-50 hidden md:block"
         onClick={onClick}
         disabled={!enabled}
     >
@@ -18,7 +18,7 @@ const PrevButton = ({ enabled, onClick }: { enabled: boolean; onClick: () => voi
 
 const NextButton = ({ enabled, onClick }: { enabled: boolean; onClick: () => void }) => (
     <button
-        className="absolute top-1/2 -right-4 -translate-y-1/2 z-10 bg-white/80 dark:bg-gray-900/80 p-2 rounded-full shadow-md disabled:opacity-50 hidden md:block"
+        className="absolute top-1/2 -right-4 -translate-y-1/2 z-10 bg-white/80 p-2 rounded-full shadow-md disabled:opacity-50 hidden md:block"
         onClick={onClick}
         disabled={!enabled}
     >

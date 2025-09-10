@@ -1,10 +1,16 @@
 'use client';
 
-import * as Logos from '@/components/icons/logos';
 import { Car } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { FC, SVGProps, ComponentType, memo } from 'react';
 
-// A mapping from car make (lowercase) to the corresponding logo component name in @cardog-icons/react
-const makeToLogoName: { [key: string]: keyof typeof Logos } = {
+// Define the props for the CarLogo component
+interface CarLogoProps extends SVGProps<SVGSVGElement> {
+    make: string;
+}
+
+// A mapping from car make (lowercase) to the corresponding logo component name
+const makeToLogoName: { [key: string]: string } = {
     'acura': 'Acura',
     'aixam': 'Aixam',
     'alpina': 'Alpina',
@@ -90,17 +96,31 @@ const makeToLogoName: { [key: string]: keyof typeof Logos } = {
     'zagato': 'Zagato',
 };
 
-const CarLogo = ({ make, ...props }: { make: string } & React.SVGProps<SVGSVGElement>) => {
-    const logoName = makeToLogoName[make.toLowerCase()];
-    const LogoComponent = logoName ? Logos[logoName] as React.ElementType : null;
+// Create a cache for the logo components
+const logoCache = new Map<string, ComponentType<SVGProps<SVGSVGElement>>>();
 
-    if (LogoComponent) {
-        // @ts-ignore
-        return <LogoComponent {...props} />;
+const CarLogo: FC<CarLogoProps> = ({ make, ...props }) => {
+    const logoName = makeToLogoName[make.toLowerCase()];
+
+    if (!logoName) {
+        // Return a default icon if no logo is found
+        return <Car {...props} />;
     }
 
-    // Return a default icon if no logo is found
-    return <Car {...props} />;
+    let LogoComponent = logoCache.get(logoName);
+
+    if (!LogoComponent) {
+        LogoComponent = dynamic(() =>
+            import(`@/components/icons/logos/${logoName}`),
+            {
+                loading: () => <Car {...props} />, // Fallback while loading
+                ssr: true, // Render on server
+            }
+        );
+        logoCache.set(logoName, LogoComponent);
+    }
+
+    return <LogoComponent {...props} />;
 };
 
-export default CarLogo;
+export default memo(CarLogo);

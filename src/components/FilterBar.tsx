@@ -8,7 +8,7 @@ import ModelSelectionModal from './ModelSelectionModal';
 import YearRangePicker from './YearRangePicker';
 import RangePicker from './RangePicker';
 
-export default function FilterBar({ filters, onFilterChange, initialFilters, onReset }: any) {
+export default function FilterBar({ filters, modelsByMake, onFilterChange, initialFilters, onReset }: any) {
     const [isBrandModalOpen, setIsBrandModalOpen] = useState(false);
     const [isModelModalOpen, setIsModelModalOpen] = useState(false);
     const [isMoreFiltersModalOpen, setIsMoreFiltersModalOpen] = useState(false);
@@ -42,13 +42,13 @@ export default function FilterBar({ filters, onFilterChange, initialFilters, onR
 
     return (
         <>
-            <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md mb-8 sticky top-24 z-30">
+            <div className="p-4 bg-white rounded-lg shadow-md mb-8 sticky top-24 z-30">
                 <div className="flex flex-wrap gap-4 items-end">
                     {/* Make */}
                     <div className="flex-1 min-w-[150px]">
                         <button
                             onClick={() => setIsBrandModalOpen(true)}
-                            className="w-full text-left p-3 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                            className="w-full text-left p-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
                         >
                             <p className="text-xs text-gray-500">Make</p>
                             <p className="font-semibold">{selectedMakesCount > 0 ? `${selectedMakesCount} selected` : 'All Brands'}</p>
@@ -59,7 +59,7 @@ export default function FilterBar({ filters, onFilterChange, initialFilters, onR
                     <div className="flex-1 min-w-[150px]">
                         <button
                             onClick={() => setIsModelModalOpen(true)}
-                            className="w-full text-left p-3 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full text-left p-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled={selectedMakesCount === 0}
                         >
                             <p className="text-xs text-gray-500">Model</p>
@@ -105,7 +105,7 @@ export default function FilterBar({ filters, onFilterChange, initialFilters, onR
                     <div className="flex gap-2">
                         <button
                             onClick={() => setIsMoreFiltersModalOpen(true)}
-                            className={`flex items-center justify-center gap-2 p-3 rounded-lg transition-colors relative ${activeFilterCount > 0 ? 'bg-red-100 text-red-600 dark:bg-red-900/50 dark:text-red-400' : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
+                            className={`flex items-center justify-center gap-2 p-3 rounded-lg transition-colors relative ${activeFilterCount > 0 ? 'bg-red-100 text-red-600' : 'bg-gray-100 hover:bg-gray-200'}`}
                         >
                             <SlidersHorizontal size={20} />
                             <span className="font-semibold hidden sm:inline">More</span>
@@ -115,7 +115,7 @@ export default function FilterBar({ filters, onFilterChange, initialFilters, onR
                         </button>
                         <button
                             onClick={onReset}
-                            className="p-3 bg-red-100 text-red-600 dark:bg-red-900/50 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900 transition-colors"
+                            className="p-3 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors"
                             aria-label="Reset filters"
                         >
                             <X size={20} />
@@ -134,7 +134,7 @@ export default function FilterBar({ filters, onFilterChange, initialFilters, onR
             <ModelSelectionModal
                 isOpen={isModelModalOpen}
                 onClose={() => setIsModelModalOpen(false)}
-                models={filters.models}
+                modelsByMake={modelsByMake}
                 selectedModels={initialFilters.model}
                 onModelChange={onFilterChange}
             />

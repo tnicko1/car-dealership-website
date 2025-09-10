@@ -13,16 +13,16 @@ type Testimonial = {
 };
 
 const TestimonialSkeleton = () => (
-    <div className="bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md animate-pulse">
-        <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-full mb-3"></div>
-        <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-5/6 mb-4"></div>
-        <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded w-1/3 mb-3"></div>
+    <div className="bg-gray-100 p-8 rounded-lg shadow-md animate-pulse">
+        <div className="h-4 bg-gray-300 rounded w-full mb-3"></div>
+        <div className="h-4 bg-gray-300 rounded w-5/6 mb-4"></div>
+        <div className="h-6 bg-gray-300 rounded w-1/3 mb-3"></div>
         <div className="flex items-center mt-2">
-            <div className="w-5 h-5 bg-gray-300 dark:bg-gray-700 rounded-full mr-1"></div>
-            <div className="w-5 h-5 bg-gray-300 dark:bg-gray-700 rounded-full mr-1"></div>
-            <div className="w-5 h-5 bg-gray-300 dark:bg-gray-700 rounded-full mr-1"></div>
-            <div className="w-5 h-5 bg-gray-300 dark:bg-gray-700 rounded-full mr-1"></div>
-            <div className="w-5 h-5 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+            <div className="w-5 h-5 bg-gray-300 rounded-full mr-1"></div>
+            <div className="w-5 h-5 bg-gray-300 rounded-full mr-1"></div>
+            <div className="w-5 h-5 bg-gray-300 rounded-full mr-1"></div>
+            <div className="w-5 h-5 bg-gray-300 rounded-full mr-1"></div>
+            <div className="w-5 h-5 bg-gray-300 rounded-full"></div>
         </div>
     </div>
 );
@@ -43,9 +43,9 @@ export default function Testimonials() {
     }, []);
 
     return (
-        <section className="bg-white dark:bg-gray-800 py-20">
+        <section className="bg-white py-20">
             <div className="container mx-auto px-4">
-                <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 dark:text-white mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
                     What Our Customers Say
                 </h2>
                 
@@ -60,10 +60,10 @@ export default function Testimonials() {
                         <div className="flex">
                             {testimonials.map(testimonial => (
                                 <div key={testimonial.id} className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.33%] p-4">
-                                    <div className="bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md h-full flex flex-col">
-                                        <p className="text-gray-600 dark:text-gray-400 mb-4 flex-grow">"{testimonial.testimonial}"</p>
+                                    <div className="bg-gray-100 p-8 rounded-lg shadow-md h-full flex flex-col">
+                                        <p className="text-gray-600 mb-4 flex-grow">"{testimonial.testimonial}"</p>
                                         <div>
-                                            <p className="font-bold text-lg text-gray-900 dark:text-white">{testimonial.name}</p>
+                                            <p className="font-bold text-lg text-gray-900">{testimonial.name}</p>
                                             <div className="flex items-center mt-2">
                                                 {[...Array(testimonial.rating)].map((_, i) => (
                                                     <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">

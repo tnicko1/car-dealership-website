@@ -6,7 +6,7 @@ const RangeInput = ({ name, title, value, onValueChange, type = 'number', step =
     const debouncedOnChange = useDebouncedCallback(onValueChange, 400);
     return (
         <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{title}</label>
+            <label className="block text-sm font-medium text-gray-700">{title}</label>
             <div className="flex gap-2 mt-1">
                 <input
                     type={type}
@@ -15,7 +15,7 @@ const RangeInput = ({ name, title, value, onValueChange, type = 'number', step =
                     defaultValue={value.min}
                     onChange={(e) => debouncedOnChange(e.target.value, `min${name}`)}
                     step={step}
-                    className="w-full p-2 border-transparent rounded-md bg-gray-100 dark:bg-gray-700 focus:ring-2 focus:ring-primary focus:border-transparent transition no-spinner"
+                    className="w-full p-2 border-transparent rounded-md bg-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent transition no-spinner"
                 />
                 <input
                     type={type}
@@ -24,7 +24,7 @@ const RangeInput = ({ name, title, value, onValueChange, type = 'number', step =
                     defaultValue={value.max}
                     onChange={(e) => debouncedOnChange(e.target.value, `max${name}`)}
                     step={step}
-                    className="w-full p-2 border-transparent rounded-md bg-gray-100 dark:bg-gray-700 focus:ring-2 focus:ring-primary focus:border-transparent transition no-spinner"
+                    className="w-full p-2 border-transparent rounded-md bg-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent transition no-spinner"
                 />
             </div>
         </div>

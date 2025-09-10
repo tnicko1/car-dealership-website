@@ -3,7 +3,6 @@ import { Inter, Roboto_Flex } from 'next/font/google';
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { ThemeProvider } from "@/providers/ThemeProvider";
 import AppSessionProvider from "@/providers/SessionProvider";
 import { CompareProvider } from "@/providers/CompareProvider";
 import CompareBar from "@/components/CompareBar";
@@ -13,6 +12,7 @@ import { ModalProvider } from '@/providers/ModalProvider';
 import InquiryModal from '@/components/InquiryModal';
 import TestDriveModal from '@/components/TestDriveModal';
 import TradeInModal from '@/components/TradeInModal';
+import { WebSocketProvider } from '@/providers/WebSocketProvider';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const robotoFlex = Roboto_Flex({ subsets: ['latin'], variable: '--font-roboto-flex' });
@@ -39,7 +39,7 @@ export default function RootLayout({
         </head>
         <body className={`${inter.variable} ${robotoFlex.variable} font-sans bg-gray-50 dark:bg-gray-900`}>
         <AppSessionProvider>
-            <ThemeProvider>
+            <WebSocketProvider>
                 <CompareProvider>
                     <MenuProvider>
                         <ModalProvider>
@@ -54,7 +54,7 @@ export default function RootLayout({
                         </ModalProvider>
                     </MenuProvider>
                 </CompareProvider>
-            </ThemeProvider>
+            </WebSocketProvider>
         </AppSessionProvider>
         <div id="modal-root" />
         </body>

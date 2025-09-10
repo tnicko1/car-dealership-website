@@ -19,6 +19,7 @@ export default function HeroSection() {
                     src="/hero-background.avif"
                     alt="Luxury cars in a modern dealership"
                     fill
+                    sizes="100vw"
                     className="object-cover animate-ken-burns blur-sm"
                     priority
                 />

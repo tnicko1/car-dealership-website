@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { LogIn, User, Settings, LogOut } from 'lucide-react';
+import { LogIn, User, Settings, LogOut, Mail } from 'lucide-react';
 import LoginModal from './LoginModal';
 import { usePathname } from 'next/navigation';
 
@@ -73,13 +73,21 @@ export default function UserMenu({ direction = 'down' }: { direction?: 'up' | 'd
             </button>
 
             {isOpen && (
-                <div className={`absolute right-0 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50 ${direction === 'up' ? 'bottom-full mb-2' : 'mt-2'}`}>
-                    <Link href="/account" onClick={() => setIsOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                <div className={`absolute right-0 w-48 bg-white rounded-md shadow-lg py-1 z-50 ${direction === 'up' ? 'bottom-full mb-2' : 'mt-2'}`}>
+                    <Link href="/account" onClick={() => setIsOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         <Settings className="w-4 h-4 mr-2" />
                         Account Settings
                     </Link>
+                    <Link href={`/users/${session.user.username}`} onClick={() => setIsOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <User className="w-4 h-4 mr-2" />
+                        My Profile
+                    </Link>
+                    <Link href="/messages" onClick={() => setIsOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <Mail className="w-4 h-4 mr-2" />
+                        Messages
+                    </Link>
                     {session.user.role === 'admin' && (
-                        <Link href="/admin" onClick={() => setIsOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <Link href="/admin" onClick={() => setIsOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             <User className="w-4 h-4 mr-2" />
                             Admin Panel
                         </Link>
@@ -89,7 +97,7 @@ export default function UserMenu({ direction = 'down' }: { direction?: 'up' | 'd
                             setIsOpen(false);
                             signOut();
                         }}
-                        className="w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                         <LogOut className="w-4 h-4 mr-2" />
                         Logout

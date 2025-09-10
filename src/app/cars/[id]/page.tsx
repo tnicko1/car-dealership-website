@@ -84,12 +84,15 @@ export default async function CarDetailsPage({ params }: { params: { id: string 
             include: {
                 images: true,
                 owner: {
-                    select: {
+                                        select: {
+                        id: true,
                         firstName: true,
                         lastName: true,
                         email: true,
                         phone: true,
                         image: true,
+                        username: true,
+                        reviewsAsSeller: true,
                     }
                 }
             },

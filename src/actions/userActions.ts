@@ -6,6 +6,22 @@ import prisma from '@/lib/prisma';
 import { supabaseAdmin } from '@/lib/supabaseAdmin'; // Use the admin client
 import { User } from '@prisma/client';
 
+export async function isUsernameAvailable(username: string): Promise<boolean> {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+        return false; // Or handle as an error
+    }
+
+    const user = await prisma.user.findUnique({
+        where: {
+            username: username,
+        },
+    });
+
+    // If a user is found, the username is available only if it belongs to the current user
+    return !user || user.id === session.user.id;
+}
+
 export async function updateUser(formData: FormData): Promise<{ success: boolean; error?: string, user?: User }> {
     try {
         const session = await getServerSession(authOptions);

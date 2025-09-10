@@ -101,7 +101,7 @@ export default function SearchBar() {
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsFocused(true)}
           placeholder="Search by Make, Model, Stock #..."
-          className="w-full pl-12 pr-10 py-3 text-lg bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-2 border-transparent rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 shadow-lg"
+          className="w-full pl-12 pr-10 py-3 text-lg bg-white/90 backdrop-blur-sm border-2 border-transparent rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 shadow-lg"
         />
         {query && (
           <button type="button" onClick={() => setQuery('')} className="absolute right-12 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
@@ -112,11 +112,11 @@ export default function SearchBar() {
       </form>
 
       {showResults && (
-        <div className="absolute top-full mt-2 w-full bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden z-50 animate-fade-in-fast">
-          <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+        <div className="absolute top-full mt-2 w-full bg-white rounded-2xl shadow-2xl overflow-hidden z-50 animate-fade-in-fast">
+          <ul className="divide-y divide-gray-200">
             {results.map((car) => (
               <li key={car.id}>
-                <Link href={`/cars/${car.id}`} onClick={() => setIsFocused(false)} className="flex items-center p-4 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <Link href={`/cars/${car.id}`} onClick={() => setIsFocused(false)} className="flex items-center p-4 hover:bg-gray-100 transition-colors">
                   <Image
                     src={car.images[0]?.url || '/placeholder.png'}
                     alt={`${car.make} ${car.model}`}
@@ -125,8 +125,8 @@ export default function SearchBar() {
                     className="w-20 h-15 object-cover rounded-md"
                   />
                   <div className="ml-4">
-                    <p className="font-semibold text-gray-900 dark:text-white">{car.year} {car.make} {car.model}</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Stock #: {car.stockNumber}</p>
+                    <p className="font-semibold text-gray-900">{car.year} {car.make} {car.model}</p>
+                    <p className="text-sm text-gray-600">Stock #: {car.stockNumber}</p>
                   </div>
                 </Link>
               </li>

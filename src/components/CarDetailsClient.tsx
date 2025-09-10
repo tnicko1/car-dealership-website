@@ -3,11 +3,13 @@
 import { useState, useEffect, useRef, MouseEvent } from 'react';
 import type { CarWithOwnerAndImages, CarWithImages } from "@/types/car";
 import Image from "next/image";
-import { Heart, Mail, Phone, User } from 'lucide-react';
-import WhatsAppLogo from './icons/WhatsAppLogo';
+import { Heart, User, ShieldCheck, MessageCircle, Star } from 'lucide-react';
 import FinancingCalculator from './FinancingCalculator';
 import { useSession } from 'next-auth/react';
 import { toggleWishlist } from '@/actions/wishlistActions';
+import { sendMessage } from '@/actions/messagingActions';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
@@ -20,6 +22,7 @@ import { motion } from 'framer-motion';
 import { useModal } from '@/providers/ModalProvider';
 
 import CarLogo from './CarLogo';
+import ScrollAnimatedComponent from './ScrollAnimatedComponent';
 
 export default function CarDetailsClient({ car, isWishlisted: initialIsWishlisted, similarCars }: { car: CarWithOwnerAndImages, isWishlisted?: boolean, similarCars: CarWithImages[] }) {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -30,6 +33,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
     const [isCtaVisible, setIsCtaVisible] = useState(false);
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const [isHovering, setIsHovering] = useState(false);
+    const router = useRouter();
 
     const imageContainerRef = useRef<HTMLDivElement>(null);
     const ctaTriggerRef = useRef<HTMLDivElement>(null);
@@ -71,6 +75,28 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
             alert("Something went wrong. Please try again.");
         }
     };
+
+    const handleSendMessage = async () => {
+        if (!session) {
+            alert("Please log in to send a message.");
+            return;
+        }
+        if (!car.owner) {
+            alert("This car has no owner.");
+            return;
+        }
+        if (session.user.id === car.owner.id) {
+            alert("You cannot send a message to yourself.");
+            return;
+        }
+        try {
+            const message = await sendMessage(car.owner.id, `Hi, I'm interested in your ${car.year} ${car.make} ${car.model}.`);
+            router.push(`/messages/${message.conversationId}`);
+        } catch (error) {
+            console.error("Failed to send message", error);
+            alert(`Something went wrong. Please try again. Error: ${(error as Error).message}`);
+        }
+    };
     
     const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
         const { left, top } = e.currentTarget.getBoundingClientRect();
@@ -97,7 +123,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
 
             <div className={`
                 hidden md:flex fixed top-[80px] left-0 right-0 z-40 
-                bg-white/80 dark:bg-gray-900/80 
+                bg-white/80
                 backdrop-blur-sm shadow-md 
                 transition-all duration-300 ease-in-out 
                 ${isCtaVisible ? 'translate-y-0 opacity-100 visible' : '-translate-y-full opacity-0 invisible'}
@@ -105,7 +131,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                 <div className="container mx-auto px-4 py-3 flex justify-between items-center">
                     <div>
                         <h2 className="font-bold text-lg">{car.year} {car.make} {car.model}</h2>
-                        <p className="text-primary dark:text-primary-400 font-semibold">${car.price.toLocaleString()}</p>
+                        <p className="text-primary font-semibold">${car.price.toLocaleString()}</p>
                     </div>
                     <button onClick={() => openModal('inquiry', car)} className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary-700 transition-colors">
                         Inquire Now
@@ -113,29 +139,39 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                 </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden">
-                <div className="p-6 md:pt-8 md:pb-4 md:px-12">
-                    <div className="flex justify-between items-start">
-                        <div className="flex items-center gap-4">
-                            <CarLogo make={car.make} className="w-20 h-20" />
-                            <div>
-                                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-1">
-                                    {car.year} {car.make} {car.model}
-                                </h1>
-                                {car.stockNumber && (
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                                        Stock #: {car.stockNumber}
-                                    </p>
-                                )}
+            <div className="bg-white rounded-lg shadow-xl overflow-hidden">
+                <ScrollAnimatedComponent>
+                    <div className="p-6 md:pt-8 md:pb-4 md:px-12">
+                        <div className="flex justify-between items-start">
+                            <div className="flex items-center gap-4">
+                                <CarLogo make={car.make} className="w-20 h-20" />
+                                <div>
+                                    <div className="flex items-center gap-2">
+                                        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-1">
+                                            {car.year} {car.make} {car.model}
+                                        </h1>
+                                        {car.verified && (
+                                            <div className="flex items-center text-green-500" title="Verified Listing">
+                                                <ShieldCheck size={28} />
+                                                <span className="ml-1 font-semibold">Verified</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    {car.stockNumber && (
+                                        <p className="text-sm text-gray-500">
+                                            Stock #: {car.stockNumber}
+                                        </p>
+                                    )}
+                                </div>
                             </div>
+                            <p className="text-3xl md:text-4xl font-bold text-primary">
+                                ${car.price.toLocaleString()}
+                            </p>
                         </div>
-                        <p className="text-3xl md:text-4xl font-bold text-primary dark:text-primary-400">
-                            ${car.price.toLocaleString()}
-                        </p>
                     </div>
-                </div>
+                </ScrollAnimatedComponent>
                 <div className="grid grid-cols-1 lg:grid-cols-2">
-                    <div className="px-4 pb-4">
+                    <ScrollAnimatedComponent delay={0.1} className="px-4 pb-4">
                         <div 
                             ref={imageContainerRef}
                             className="relative h-96 lg:h-[500px] rounded-lg overflow-hidden cursor-pointer" 
@@ -181,7 +217,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                                     </motion.div>
                                 </>
                             ) : (
-                                <div className="flex items-center justify-center h-full bg-gray-200 dark:bg-gray-700">
+                                <div className="flex items-center justify-center h-full bg-gray-200">
                                     <p className="text-gray-500">No Image Available</p>
                                 </div>
                             )}
@@ -197,9 +233,9 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                                 </div>
                             ))}
                         </div>
-                    </div>
+                    </ScrollAnimatedComponent>
 
-                    <div ref={ctaTriggerRef} className="p-6 md:py-4 md:px-12 flex flex-col">
+                    <ScrollAnimatedComponent ref={ctaTriggerRef} delay={0.2} className="p-6 md:py-4 md:px-12 flex flex-col">
                         <div className="flex-grow">
                             <OverviewSpecs car={car} />
                         </div>
@@ -217,7 +253,7 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                             <button onClick={() => openModal('testDrive', car)} className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors w-full">
                                 Book Test Drive
                             </button>
-                             <button onClick={() => openModal('tradeIn', car)} className="bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-full">
+                             <button onClick={() => openModal('tradeIn', car)} className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors w-full">
                                 Value Your Trade-In
                             </button>
                             <div className="flex flex-col sm:flex-row gap-4">
@@ -233,56 +269,58 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </ScrollAnimatedComponent>
                 </div>
 
-                <div className="p-6 md:p-12 border-t border-gray-200 dark:border-gray-700">
+                <ScrollAnimatedComponent delay={0.3} className="p-6 md:p-12 border-t border-gray-200">
                     <SpecTabs car={car} />
-                </div>
+                </ScrollAnimatedComponent>
 
                 {car.owner && (
-                    <div className="p-6 md:p-12 border-t border-gray-200 dark:border-gray-700">
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Seller Information</h2>
-                        <div className="bg-gray-100 dark:bg-gray-900/50 p-6 rounded-lg flex items-center gap-6">
-                            <div className="relative w-16 h-16">
+                    <ScrollAnimatedComponent delay={0.4} className="p-6 md:p-12 border-t border-gray-200">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Seller Information</h2>
+                        <div className="bg-gray-100 p-6 rounded-lg flex items-center gap-6">
+                            <Link href={`/users/${car.owner.username}`} className="relative w-16 h-16 flex-shrink-0">
                                 {car.owner.image ? (
                                     <Image
                                         src={car.owner.image}
-                                        alt={car.owner.name ?? 'Seller avatar'}
+                                        alt={car.owner.name || 'Seller avatar'}
                                         fill
                                         className="rounded-full object-cover"
                                     />
                                 ) : (
-                                    <User className="w-16 h-16 text-gray-400 dark:text-gray-500" />
+                                    <User className="w-16 h-16 text-gray-400" />
                                 )}
-                            </div>
+                            </Link>
                             <div className="flex-grow">
-                                <h3 className="text-xl font-bold">{car.owner.name}</h3>
-                                <p className="text-gray-600 dark:text-gray-400">Private Seller</p>
+                                <Link href={`/users/${car.owner.username}`} className="hover:underline">
+                                    <h3 className="text-xl font-bold">{car.owner.name}</h3>
+                                </Link>
+                                 <div className="flex items-center mt-1">
+                                    <Star className="text-yellow-400 w-5 h-5" />
+                                    <span className="ml-1 font-bold">
+                                        {car.owner.reviewsAsSeller && car.owner.reviewsAsSeller.length > 0
+                                            ? (car.owner.reviewsAsSeller.reduce((acc, r) => acc + r.rating, 0) / car.owner.reviewsAsSeller.length).toFixed(1)
+                                            : 'No reviews'}
+                                    </span>
+                                    <span className="ml-2 text-gray-500">
+                                        ({car.owner.reviewsAsSeller?.length || 0} reviews)
+                                    </span>
+                                </div>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <a href={`mailto:${car.owner.email}`} className="p-3 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white transition-colors">
-                                    <Mail className="w-5 h-5" />
-                                </a>
-                                {car.owner.phone && (
-                                    <>
-                                        <a href={`tel:${car.owner.phone}`} className="p-3 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white transition-colors">
-                                            <Phone className="w-5 h-5" />
-                                        </a>
-                                        <a href={`httpshttps://wa.me/${car.owner.phone}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-green-500 text-white pl-3 pr-4 py-1 rounded-lg font-semibold hover:bg-green-600 transition-colors">
-                                            <WhatsAppLogo className="w-8 h-8" />
-                                            <span className="text-sm">Message on WhatsApp</span>
-                                        </a>
-                                    </>
-                                )}
-                            </div>
+                            {session && session.user.id !== car.owner.id && (
+                                <button onClick={handleSendMessage} className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-700 transition-colors">
+                                    <MessageCircle className="w-5 h-5" />
+                                    Message Seller
+                                </button>
+                            )}
                         </div>
-                    </div>
+                    </ScrollAnimatedComponent>
                 )}
                 
-                <div className="p-6 md:p-12 border-t border-gray-200 dark:border-gray-700">
+                <ScrollAnimatedComponent delay={0.5} className="p-6 md:p-12 border-t border-gray-200">
                     <FinancingCalculator price={car.price} />
-                </div>
+                </ScrollAnimatedComponent>
             </div>
             <Lightbox
                 open={openLightbox}
@@ -317,12 +355,12 @@ export default function CarDetailsClient({ car, isWishlisted: initialIsWishliste
             />
 
             {similarCars.length > 0 && (
-                <div className="py-12 border-t border-gray-200 dark:border-gray-700">
-                    <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-6">
+                <ScrollAnimatedComponent delay={0.6} className="py-12 border-t border-gray-200">
+                    <h2 className="text-3xl font-bold text-center text-gray-900 mb-6">
                         You Might Also Like
                     </h2>
                     <SimilarCarsSlider cars={similarCars} />
-                </div>
+                </ScrollAnimatedComponent>
             )}
         </div>
     );

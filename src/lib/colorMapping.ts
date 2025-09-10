@@ -1,0 +1,17 @@
+export const colorHexMap: { [key: string]: string } = {
+    'Black': '#000000',
+    'White': '#FFFFFF',
+    'Silver': '#C0C0C0',
+    'Gray': '#808080',
+    'Red': '#FF0000',
+    'Blue': '#0000FF',
+    'Brown': '#A52A2A',
+    'Green': '#008000',
+    'Beige': '#F5F5DC',
+    'Yellow': '#FFFF00',
+    'Orange': '#FFA500',
+    'Purple': '#800080',
+    'Gold': '#FFD700',
+    'Bronze': '#CD7F32',
+    'Other': '#E0E0E0',
+};

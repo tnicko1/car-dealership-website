@@ -13,11 +13,11 @@ export default function AuthButtons() {
     if (session) {
         return (
             <div className="flex items-center gap-4">
-                <Link href={session.user?.role === 'admin' ? '/admin' : '/my-listings/add'} className="text-sm font-medium text-primary dark:text-primary-400 hover:underline">
+                <Link href={session.user?.role === 'admin' ? '/admin' : '/my-listings/add'} className="text-sm font-medium text-primary hover:underline">
                     {session.user?.role === 'admin' ? 'Admin' : 'Add Car'}
                 </Link>
                 <div className="md:hidden">
-                    <Link href="/my-listings" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400">
+                    <Link href="/my-listings" className="text-sm font-medium text-gray-600 hover:text-primary">
                         My Listings
                     </Link>
                 </div>

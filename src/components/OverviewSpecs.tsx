@@ -4,9 +4,9 @@ import { motion, Variants } from 'framer-motion';
 const SpecItem = ({ label, value }: { label: string; value: string | number | null | undefined }) => {
     if (!value) return null;
     return (
-        <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-            <span className="font-medium text-gray-600 dark:text-gray-400">{label}</span>
-            <span className="font-semibold text-gray-900 dark:text-white text-right">{value}</span>
+        <div className="flex justify-between py-2 border-b border-gray-200">
+            <span className="font-medium text-gray-600">{label}</span>
+            <span className="font-semibold text-gray-900 text-right">{value}</span>
         </div>
     );
 };

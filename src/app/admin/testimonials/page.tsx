@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import prisma from "@/lib/prisma";
 import TestimonialForm from '@/components/TestimonialForm';
 
 export default async function TestimonialsPage() {
@@ -14,9 +14,9 @@ export default async function TestimonialsPage() {
                 <h2 className="text-2xl font-bold mb-4">Existing Testimonials</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {testimonials.map(testimonial => (
-                        <div key={testimonial.id} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                        <div key={testimonial.id} className="bg-white p-6 rounded-lg shadow-md">
                             <p className="text-lg font-semibold">{testimonial.name}</p>
-                            <p className="text-gray-600 dark:text-gray-400 mt-2">{testimonial.testimonial}</p>
+                            <p className="text-gray-600 mt-2">{testimonial.testimonial}</p>
                             <p className="text-yellow-500 mt-2">Rating: {testimonial.rating}/5</p>
                         </div>
                     ))}

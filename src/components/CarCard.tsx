@@ -8,9 +8,10 @@ import { toggleWishlist } from "@/actions/wishlistActions";
 import { useSession } from "next-auth/react";
 import { useCompare } from "@/providers/CompareProvider";
 import useEmblaCarousel from 'embla-carousel-react';
-import { Heart, ChevronLeft, ChevronRight, Gauge } from 'lucide-react';
+import { Heart, ChevronLeft, ChevronRight, Gauge, ShieldCheck } from 'lucide-react';
 
 import CarLogo from './CarLogo';
+
 
 export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInteractive = true, showMileage = false, allowMobileSwipe = false }: { car: CarWithImages, isWishlisted?: boolean, isInteractive?: boolean, showMileage?: boolean, allowMobileSwipe?: boolean }) {
     const { data: session } = useSession();
@@ -103,7 +104,7 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInte
             onMouseMove={onMouseMove}
             onMouseLeave={onMouseLeave}
             style={{ transform: transform }}
-            className="block bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-200 ease-out group"
+            className="block bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-200 ease-out group"
         >
             <div className="relative">
                 {showMileage && (
@@ -156,26 +157,33 @@ export default function CarCard({ car, isWishlisted: initialIsWishlisted, isInte
                         onClick={handleWishlistToggle} 
                         aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
                         className={`p-2 rounded-full transition-colors
-                        ${isWishlisted ? 'text-red-500 bg-red-100 dark:bg-gray-700' : 'text-gray-500 bg-white dark:bg-gray-800'}`}>
+                        ${isWishlisted ? 'text-red-500 bg-red-100' : 'text-gray-500 bg-white'}`}>
                         <Heart fill={isWishlisted ? 'currentColor' : 'none'} className="w-6 h-6" />
                     </button>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none"></div>
                 <div className="absolute bottom-0 left-0 p-4">
-                    <h3 className="text-xl font-bold text-white">
-                        {car.make} {car.model}
-                    </h3>
+                    <div className="flex items-center gap-2">
+                        <h3 className="text-xl font-bold text-white">
+                            {car.make} {car.model}
+                        </h3>
+                        {car.verified && (
+                            <div className="flex items-center text-green-400" title="Verified Listing">
+                                <ShieldCheck size={20} />
+                            </div>
+                        )}
+                    </div>
                     <p className="text-sm text-gray-300">{car.year}</p>
                 </div>
             </div>
             <div className="p-4">
                 <div className="flex justify-between items-center mb-4">
-                    <p className="text-2xl font-semibold text-primary dark:text-primary-400">
+                    <p className="text-2xl font-semibold text-primary">
                         ${car.price.toLocaleString()}
                     </p>
                     <div className="flex items-center gap-2">
                         <CarLogo make={car.make} className="h-12 w-12" />
-                        <span className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full">{car.bodyStyle}</span>
+                        <span className="text-xs bg-gray-200 text-gray-800 px-2 py-1 rounded-full">{car.bodyStyle}</span>
                     </div>
                 </div>
                 <div className="flex gap-2">

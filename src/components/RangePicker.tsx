@@ -75,14 +75,14 @@ export default function RangePicker({ value, onChange, title, minName, maxName, 
             <p className="text-xs text-gray-500 mb-1 ml-1">{title}</p>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full text-left p-3 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex justify-between items-center"
+                className="w-full text-left p-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors flex justify-between items-center"
             >
                 <span className="font-semibold">{displayValue}</span>
                 <ChevronDown size={20} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {isOpen && (
-                <div className="absolute top-full mt-2 w-full bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg shadow-lg z-10 p-4">
+                <div className="absolute top-full mt-2 w-full bg-white border rounded-lg shadow-lg z-10 p-4">
                     <div className="flex gap-4 mb-4">
                         <input
                             type="number"
@@ -90,7 +90,7 @@ export default function RangePicker({ value, onChange, title, minName, maxName, 
                             value={minVal}
                             onChange={(e) => setMinVal(e.target.value)}
                             onBlur={(e) => handleBlur(e, 'min')}
-                            className="w-full p-2 border-transparent rounded-md bg-gray-100 dark:bg-gray-700 focus:ring-2 focus:ring-primary focus:border-transparent transition no-spinner"
+                            className="w-full p-2 border-transparent rounded-md bg-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent transition no-spinner"
                         />
                         <input
                             type="number"
@@ -98,12 +98,12 @@ export default function RangePicker({ value, onChange, title, minName, maxName, 
                             value={maxVal}
                             onChange={(e) => setMaxVal(e.target.value)}
                             onBlur={(e) => handleBlur(e, 'max')}
-                            className="w-full p-2 border-transparent rounded-md bg-gray-100 dark:bg-gray-700 focus:ring-2 focus:ring-primary focus:border-transparent transition no-spinner"
+                            className="w-full p-2 border-transparent rounded-md bg-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent transition no-spinner"
                         />
                     </div>
                     <div className="grid grid-cols-2 gap-2 mb-4">
                         {presets.map(p => (
-                            <button key={p.label} onClick={() => handlePreset(p.min, p.max)} className="p-2 text-sm bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-primary hover:text-white transition-colors">
+                            <button key={p.label} onClick={() => handlePreset(p.min, p.max)} className="p-2 text-sm bg-gray-100 rounded-md hover:bg-primary hover:text-white transition-colors">
                                 {p.label}
                             </button>
                         ))}

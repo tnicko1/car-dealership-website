@@ -11,6 +11,7 @@ import Image from 'next/image';
 import { useModal } from '@/providers/ModalProvider';
 import { getGeneralColor } from '@/lib/colorUtils';
 import { getGeneralMaterial } from '@/lib/materialUtils';
+import { matchesFilter } from '@/lib/filterNormalization';
 
 type FilterProps = {
     makes: string[];
@@ -64,7 +65,7 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
         };
     });
 
-    const [models, setModels] = useState<string[]>([]);
+    const [modelsByMake, setModelsByMake] = useState<{ [make: string]: string[] }>({});
     const [view, setView] = useState('grid');
     const [sortOrder, setSortOrder] = useState('createdAt-desc');
     const [visibleCount, setVisibleCount] = useState(12);
@@ -72,11 +73,19 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
     useEffect(() => {
         const fetchModels = async () => {
             if (filtersState.make.length > 0) {
-                const response = await fetch(`/api/cars/models?make=${filtersState.make.join(',')}`);
-                const data = await response.json();
-                setModels(data);
+                const newModelsByMake: { [make: string]: string[] } = {};
+                const promises = filtersState.make.map(async make => {
+                    const response = await fetch(`/api/cars/models?make=${make}`);
+                    const data = await response.json();
+                    if (data.Results) {
+                        const modelNames = data.Results.map((r: any) => r.Model_Name);
+                        newModelsByMake[make] = [...new Set<string>(modelNames)].sort();
+                    }
+                });
+                await Promise.all(promises);
+                setModelsByMake(newModelsByMake);
             } else {
-                setModels([]);
+                setModelsByMake({});
             }
         };
         fetchModels();
@@ -127,10 +136,10 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
             if (!inRange(car.topSpeed, minTopSpeed, maxTopSpeed)) return false;
             if (!inRange(car.zeroToSixty, minZeroToSixty, maxZeroToSixty)) return false;
             if (!inRange(car.weight, minWeight, maxWeight)) return false;
-            if (!inArray(car.bodyStyle, bodyStyle)) return false;
+            if (!matchesFilter(car.bodyStyle, bodyStyle, 'bodyStyle')) return false;
+            if (!matchesFilter(car.driveWheels, driveWheels, 'driveWheels')) return false;
             if (!inArray(car.fuelType, fuelType)) return false;
             if (!inArray(car.transmission, transmission)) return false;
-            if (!inArray(car.driveWheels, driveWheels)) return false;
             if (!inArray(car.wheel, wheel)) return false;
             if (!inColorGroup(car.color, color)) return false;
             if (!inColorGroup(car.interiorColor, interiorColor)) return false;
@@ -141,8 +150,6 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
             if (hasVin && !car.vin) return false;
             if (exchange && car.exchange !== exchange) return false;
             return !(technicalInspection && car.technicalInspection !== technicalInspection);
-
-
         }).sort((a, b) => {
             const [sortBy, sortDirection] = sortOrder.split('-');
             let valA: any, valB: any;
@@ -188,14 +195,14 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
     const loadMore = () => setVisibleCount(prev => prev + 12);
 
     const CarListItem = ({ car }: { car: CarWithImages }) => (
-        <Link href={`/cars/${car.id}`} className="flex bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 gap-4 hover:shadow-lg hover:scale-[1.01] transition-all duration-200">
+        <Link href={`/cars/${car.id}`} className="flex bg-white rounded-lg shadow-md p-4 gap-4 hover:shadow-lg hover:scale-[1.01] transition-all duration-200">
             <div className="w-1/3 h-32 relative flex-shrink-0">
-                <Image src={car.images[0]?.url || 'https://dummyimage.com/600x400'} alt={`${car.make} ${car.model}`} fill style={{ objectFit: 'cover' }} className="rounded-md" />
+                <Image src={car.images[0]?.url || 'https://dummyimage.com/600x400'} alt={`${car.make} ${car.model}`} fill sizes="100vw" style={{ objectFit: 'cover' }} className="rounded-md" />
             </div>
             <div className="w-2/3">
                 <h3 className="text-lg font-bold">{car.make} {car.model}</h3>
-                <p className="text-xl font-semibold text-primary dark:text-primary-400">${car.price.toLocaleString()}</p>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mt-2 grid grid-cols-2 gap-2">
+                <p className="text-xl font-semibold text-primary">${car.price.toLocaleString()}</p>
+                <div className="text-sm text-gray-600 mt-2 grid grid-cols-2 gap-2">
                     <p><strong>Year:</strong> {car.year}</p>
                     <p><strong>Mileage:</strong> {car.mileage.toLocaleString()} mi</p>
                     <p><strong>Fuel:</strong> {car.fuelType}</p>
@@ -207,16 +214,16 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
 
     return (
         <div className={`container mx-auto px-4 py-12 ${isModalOpen ? 'pointer-events-none blur-sm' : ''}`}>
-            <FilterBar filters={{ ...filters, models }} onFilterChange={handleFilterChange} initialFilters={filtersState} onReset={handleReset} />
+            <FilterBar filters={filters} modelsByMake={modelsByMake} onFilterChange={handleFilterChange} initialFilters={filtersState} onReset={handleReset} />
 
             <div className="flex justify-between items-center mb-6">
-                <p className="text-gray-600 dark:text-gray-400">Showing {Math.min(visibleCount, displayedCars.length)} of {displayedCars.length} results</p>
+                <p className="text-gray-600">Showing {Math.min(visibleCount, displayedCars.length)} of {displayedCars.length} results</p>
                 <div className="flex gap-2 items-center">
                     <div className={`relative rounded-md transition-all duration-300 ${isSortActive ? 'static-glow' : ''}`}>
                         <select
                             value={sortOrder}
                             onChange={(e) => setSortOrder(e.target.value)}
-                            className="appearance-none bg-gray-200 dark:bg-gray-700 border-none rounded-md py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                            className="appearance-none bg-gray-200 border-none rounded-md py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                         >
                             <option value="createdAt-desc">Newest</option>
                             <option value="price-asc">Price: Low to High</option>
@@ -224,17 +231,17 @@ export default function CarListings({ initialCars, filters, wishlistedCarIds }: 
                             <option value="mileage-asc">Mileage: Low to High</option>
                             <option value="year-desc">Year: Newest First</option>
                         </select>
-                        <ArrowUpDown size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 pointer-events-none" />
+                        <ArrowUpDown size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                     </div>
                     {isSortActive && (
-                        <button onClick={() => setSortOrder('createdAt-desc')} className="p-2 rounded-md bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Remove sort">
+                        <button onClick={() => setSortOrder('createdAt-desc')} className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 transition-colors" aria-label="Remove sort">
                             <X size={20} />
                         </button>
                     )}
-                    <button onClick={() => setView('grid')} className={`p-2 rounded-md ${view === 'grid' ? 'bg-primary text-white' : 'bg-gray-200 dark:bg-gray-700'}`}>
+                    <button onClick={() => setView('grid')} className={`p-2 rounded-md ${view === 'grid' ? 'bg-primary text-white' : 'bg-gray-200'}`}>
                         <Grid />
                     </button>
-                    <button onClick={() => setView('list')} className={`p-2 rounded-md ${view === 'list' ? 'bg-primary text-white' : 'bg-gray-200 dark:bg-gray-700'}`}>
+                    <button onClick={() => setView('list')} className={`p-2 rounded-md ${view === 'list' ? 'bg-primary text-white' : 'bg-gray-200'}`}>
                         <List />
                     </button>
                 </div>

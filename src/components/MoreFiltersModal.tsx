@@ -19,13 +19,13 @@ export default function MoreFiltersModal({ isOpen, onClose, filters, onFilterCha
                 <div className="fixed inset-0 overflow-y-auto">
                     <div className="flex min-h-full items-center justify-center p-4">
                         <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95">
-                            <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
+                                                        <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                                 <div className="flex justify-between items-center">
-                                    <Dialog.Title as="h3" className="text-xl font-bold leading-6 text-gray-900 dark:text-white flex items-center gap-2">
+                                    <Dialog.Title as="h3" className="text-xl font-bold leading-6 text-gray-900 flex items-center gap-2">
                                         <SlidersHorizontal size={22} />
                                         More Filters
                                     </Dialog.Title>
-                                    <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-100 transition-colors">
                                         <X size={24} />
                                     </button>
                                 </div>
@@ -75,7 +75,7 @@ export default function MoreFiltersModal({ isOpen, onClose, filters, onFilterCha
                                     ))}
                                 </div>
 
-                                <div className="mt-6 flex justify-between items-center border-t pt-5 dark:border-gray-700">
+                                <div className="mt-6 flex justify-between items-center border-t pt-5">
                                     <button onClick={onReset} className="text-sm font-semibold text-primary hover:underline">
                                         Reset All Filters
                                     </button>

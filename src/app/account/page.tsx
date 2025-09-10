@@ -13,17 +13,25 @@ export default async function AccountPage() {
 
     const user = await prisma.user.findUnique({
         where: { id: session.user.id },
+        include: {
+            UserProfile: true,
+        },
     });
 
     if (!user) {
         redirect('/');
     }
 
+    const userWithProfile = {
+        ...user,
+        profile: user.UserProfile,
+    };
+
     return (
         <div className="container mx-auto px-4 py-12">
             <h1 className="text-3xl font-bold mb-8">Account Settings</h1>
             <div className="max-w-2xl mx-auto">
-                <AccountForm user={user} />
+                <AccountForm user={userWithProfile} />
             </div>
         </div>
     );

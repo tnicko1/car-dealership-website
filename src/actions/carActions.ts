@@ -191,5 +191,24 @@ export async function removeCar(id: string) {
 
     revalidatePath('/admin');
     revalidatePath('/cars');
-    revalidatePath('/my-listings');
+            revalidatePath('/my-listings');
+}
+
+export async function verifyCar(id: string): Promise<ActionResult> {
+    const session = await getServerSession(authOptions);
+    if (session?.user?.role !== 'admin') {
+        return { success: false, error: 'Unauthorized' };
+    }
+
+    try {
+        await prisma.car.update({
+            where: { id },
+            data: { verified: true },
+        });
+        revalidatePath(`/cars/${id}`);
+        revalidatePath('/admin');
+        return { success: true };
+    } catch (e) {
+        return { success: false, error: (e as Error).message };
+    }
 }

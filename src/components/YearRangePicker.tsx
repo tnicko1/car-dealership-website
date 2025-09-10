@@ -71,14 +71,14 @@ export default function YearRangePicker({ value, onChange }: { value: { min: str
             <p className="text-xs text-gray-500 mb-1 ml-1">Year Range</p>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full text-left p-3 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex justify-between items-center"
+                className="w-full text-left p-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors flex justify-between items-center"
             >
                 <span className="font-semibold">{displayValue}</span>
                 <ChevronDown size={20} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {isOpen && (
-                <div className="absolute top-full mt-2 w-full bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg shadow-lg z-10 p-4">
+                <div className="absolute top-full mt-2 w-full bg-white border rounded-lg shadow-lg z-10 p-4">
                     <div className="flex gap-4 mb-4">
                         <input
                             type="number"
@@ -86,7 +86,7 @@ export default function YearRangePicker({ value, onChange }: { value: { min: str
                             value={fromYear}
                             onChange={(e) => setFromYear(e.target.value)}
                             onBlur={(e) => handleBlur(e, 'from')}
-                            className="w-full p-2 border-transparent rounded-md bg-gray-100 dark:bg-gray-700 focus:ring-2 focus:ring-primary focus:border-transparent transition no-spinner"
+                            className="w-full p-2 border-transparent rounded-md bg-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent transition no-spinner"
                         />
                         <input
                             type="number"
@@ -94,20 +94,20 @@ export default function YearRangePicker({ value, onChange }: { value: { min: str
                             value={toYear}
                             onChange={(e) => setToYear(e.target.value)}
                             onBlur={(e) => handleBlur(e, 'to')}
-                            className="w-full p-2 border-transparent rounded-md bg-gray-100 dark:bg-gray-700 focus:ring-2 focus:ring-primary focus:border-transparent transition no-spinner"
+                            className="w-full p-2 border-transparent rounded-md bg-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent transition no-spinner"
                         />
                     </div>
                     <div className="flex gap-4 h-48">
                         <div className="w-1/2 overflow-y-auto">
                             {fromYears.map(year => (
-                                <div key={`from-${year}`} onClick={() => setFromYear(prev => prev === year.toString() ? '' : year.toString())} className={`p-2 cursor-pointer rounded-md ${fromYear === year.toString() ? 'bg-primary text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}`}>
+                                <div key={`from-${year}`} onClick={() => setFromYear(prev => prev === year.toString() ? '' : year.toString())} className={`p-2 cursor-pointer rounded-md ${fromYear === year.toString() ? 'bg-primary text-white' : 'hover:bg-gray-100'}`}>
                                     {year}
                                 </div>
                             ))}
                         </div>
                         <div className="w-1/2 overflow-y-auto">
                             {toYears.map(year => (
-                                <div key={`to-${year}`} onClick={() => setToYear(prev => prev === year.toString() ? '' : year.toString())} className={`p-2 cursor-pointer rounded-md ${toYear === year.toString() ? 'bg-primary text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}`}>
+                                <div key={`to-${year}`} onClick={() => setToYear(prev => prev === year.toString() ? '' : year.toString())} className={`p-2 cursor-pointer rounded-md ${toYear === year.toString() ? 'bg-primary text-white' : 'hover:bg-gray-100'}`}>
                                     {year}
                                 </div>
                             ))}

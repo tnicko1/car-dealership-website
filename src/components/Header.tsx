@@ -4,13 +4,13 @@ import { useState, useEffect, Fragment } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import ThemeSwitcher from './ThemeSwitcher';
 import UserMenu from './UserMenu';
 import AnimatedLogo from './AnimatedLogo';
 import { Dialog, Transition } from '@headlessui/react';
 import AnimatedHamburgerIcon from './AnimatedHamburgerIcon';
 import { useMenu } from '@/providers/MenuProvider';
 import { useModal } from '@/providers/ModalProvider';
+import NotificationBell from './NotificationBell';
 
 export default function Header() {
     const { data: session } = useSession();
@@ -61,19 +61,19 @@ export default function Header() {
         const baseClasses = "top-0 z-50 transition-all duration-300 h-20 w-full";
 
         if (isMenuOpen) {
-            return `${baseClasses} fixed bg-silver-100 dark:bg-gray-900 shadow-md`;
+            return `${baseClasses} fixed bg-silver-100 shadow-md`;
         }
         if (isScrolled) {
-            return `${baseClasses} sticky bg-silver-100/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md`;
+            return `${baseClasses} sticky bg-silver-100/80 backdrop-blur-sm shadow-md`;
         }
         return `${baseClasses} sticky bg-transparent`;
     };
 
     const linkClasses = (href: string) => `
-        relative font-medium text-gray-600 dark:text-gray-300 whitespace-nowrap
-        transition-colors duration-300 hover:text-primary dark:hover:text-primary-400
+        relative font-medium text-gray-600 whitespace-nowrap
+        transition-colors duration-300 hover:text-primary
         after:content-[''] after:absolute after:left-0 after:bottom-[-2px]
-        after:w-full after:h-[2px] after:bg-primary dark:after:bg-primary-400
+        after:w-full after:h-[2px] after:bg-primary
         after:transition-transform after:duration-300
         ${pathname === href ? 'after:scale-x-100' : 'after:scale-x-0'}
         hover:after:scale-x-100
@@ -86,9 +86,9 @@ export default function Header() {
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
                     <div className="flex-1">
                         {/* Logo */}
-                        <Link href="/" className="flex items-center text-2xl font-bold text-primary dark:text-primary-400 hover:opacity-80 transition-opacity">
+                        <Link href="/" className="flex items-center text-2xl font-bold text-primary hover:opacity-80 transition-opacity">
                             <AnimatedLogo />
-                            <span className="glare-effect text-3xl font-extrabold tracking-tight bg-red-600 dark:bg-red-500 ml-2">TorqueTown</span>
+                            <span className="glare-effect text-3xl font-extrabold tracking-tight bg-red-600 ml-2">TorqueTown</span>
                         </Link>
                     </div>
 
@@ -105,11 +105,10 @@ export default function Header() {
                     {/* Right side icons & Mobile menu button */}
                     <div className="flex flex-1 justify-end items-center gap-4">
                         <div className="hidden md:flex items-center gap-4">
-                            <ThemeSwitcher />
+                            {session && <NotificationBell />}
                             <UserMenu />
                         </div>
                         <div className="md:hidden flex items-center">
-                            <ThemeSwitcher />
                             <button
                                 onClick={toggleMenu}
                                 className="focus:outline-none"
@@ -117,7 +116,7 @@ export default function Header() {
                             >
                                 <AnimatedHamburgerIcon
                                     isOpen={isMenuOpen}
-                                    className="text-gray-800 dark:text-gray-200"
+                                    className="text-gray-800"
                                 />
                             </button>
                         </div>
@@ -150,7 +149,7 @@ export default function Header() {
                         leaveFrom="translate-x-0"
                         leaveTo="translate-x-full"
                     >
-                        <Dialog.Panel className="fixed top-20 right-0 w-full max-w-xs h-[calc(100dvh-5rem)] bg-white dark:bg-gray-900 shadow-xl flex flex-col z-50 overflow-y-auto">
+                        <Dialog.Panel className="fixed top-20 right-0 w-full max-w-xs h-[calc(100dvh-5rem)] bg-white shadow-xl flex flex-col z-50 overflow-y-auto">
                             <div className="p-6">
                                 <nav className="flex flex-col items-start space-y-6 text-xl">
                                     {navLinks.map((link) => (
@@ -160,7 +159,7 @@ export default function Header() {
                                     ))}
                                 </nav>
                             </div>
-                            <div className="mt-auto p-6 border-t dark:border-gray-700">
+                            <div className="mt-auto p-6 border-t">
                                 <UserMenu direction="up" />
                             </div>
                         </Dialog.Panel>

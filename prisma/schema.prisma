@@ -1,5 +1,3 @@
-// This file is the single source of truth for your database schema.
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,98 +8,89 @@ datasource db {
   directUrl = env("MIGRATE_DATABASE_URL")
 }
 
-// Defines the Car table in your database
 model Car {
-  id          String   @id @default(cuid())
-  make        String
-  model       String
-  year        Int
-  price       Int
-  mileage     Int
-  horsepower  Int
-  fuelType    String
-  transmission String
-  bodyStyle   String
-  features    String[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  images CarImage[]
-
-  // Detailed Specifications
-  category          String?
-  engineVolume      Float?
-  cylinders         Int?
-  driveWheels       String?
-  doors             Int?
-  airbags           Int?
-  wheel             String?
-  color             String?
-  interiorColor     String?
-  interiorMaterial  String?
-  exchange          Boolean?
+  id                  String       @id @default(cuid())
+  make                String
+  model               String
+  year                Int
+  price               Int
+  mileage             Int
+  horsepower          Int
+  fuelType            String
+  transmission        String
+  bodyStyle           String
+  features            String[]
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+  category            String?
+  engineVolume        Float?
+  cylinders           Int?
+  driveWheels         String?
+  doors               Int?
+  airbags             Int?
+  wheel               String?
+  color               String?
+  interiorColor       String?
+  interiorMaterial    String?
+  exchange            Boolean?
   technicalInspection Boolean?
-
-  // New Fields from our discussion
-  vin               String? @unique
-  stockNumber       String? @unique
-  engineCode        String?
-  paintCode         String?
-  topSpeed          Int?
-  zeroToSixty       Float? // 0-60 mph
-  length            Float? // in inches
-  width             Float? // in inches
-  height            Float? // in inches
-  wheelbase         Float? // in inches
-  cargoCapacity     Float? // in cubic feet
-  groundClearance   Float? // in inches
-  weight            Int? // in lbs
-  vehicleHistoryUrl String?
-
-  // General Specifications (Comfort, Safety, Multimedia, Other)
-  comfort           String[]
-  safety            String[]
-  multimedia        String[]
-  other             String[]
-
-  wishlistedBy User[] @relation
-
-  owner   User   @relation("UserCars", fields: [userId], references: [id])
-  userId  String
+  vin                 String?      @unique
+  stockNumber         String?      @unique
+  engineCode          String?
+  paintCode           String?
+  topSpeed            Int?
+  zeroToSixty         Float?
+  length              Float?
+  width               Float?
+  height              Float?
+  wheelbase           Float?
+  cargoCapacity       Float?
+  groundClearance     Float?
+  weight              Int?
+  vehicleHistoryUrl   String?
+  verified            Boolean?     @default(false)
+  comfort             String[]
+  safety              String[]
+  multimedia          String[]
+  other               String[]
+  userId              String
+  owner               User         @relation("UserCars", fields: [userId], references: [id])
+  images              CarImage[]
+  Transaction         Transaction?
+  wishlistedBy        User[]       @relation("CarToUser")
 }
 
 model CarImage {
   id        String   @id @default(cuid())
   url       String
   carId     String
-  car       Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+  car       Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
 }
 
 model Testimonial {
-    id          String @id @default(cuid())
-    name        String
-    testimonial String
-    rating      Int
-    createdAt   DateTime @default(now())
+  id          String   @id @default(cuid())
+  name        String
+  testimonial String
+  rating      Int
+  createdAt   DateTime @default(now())
 }
 
-// Models required by NextAuth.js Prisma Adapter
 model Account {
   id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  password          String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -115,19 +104,29 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  firstName     String?
-  lastName      String?
-  username      String?   @unique
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  phone         String?
-  role          String    @default("user") // "user" or "admin"
-  accounts      Account[]
-  sessions      Session[]
-  wishlist      Car[]     @relation
-  cars          Car[]     @relation("UserCars")
+  id                                     String         @id @default(cuid())
+  firstName                              String?
+  lastName                               String?
+  username                               String?        @unique
+  email                                  String?        @unique
+  emailVerified                          DateTime?
+  image                                  String?
+  phone                                  String?
+  role                                   String         @default("user")
+  phoneVerified                          Boolean        @default(false)
+  emailNotifications                     Boolean        @default(true)
+  accounts                               Account[]
+  cars                                   Car[]          @relation("UserCars")
+  Message                                Message[]
+  Notification                           Notification[]
+  reviewsAsReviewer Review[] @relation("ReviewerReviews")
+  reviewsAsSeller   Review[] @relation("SellerReviews")
+  sessions                               Session[]
+  Transaction_Transaction_buyerIdToUser  Transaction[]  @relation("Transaction_buyerIdToUser")
+  Transaction_Transaction_sellerIdToUser Transaction[]  @relation("Transaction_sellerIdToUser")
+  UserProfile                            UserProfile?
+  wishlist                               Car[]          @relation("CarToUser")
+  conversations Conversation[]
 }
 
 model VerificationToken {
@@ -136,4 +135,93 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Conversation {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages     Message[]
+  participants User[]
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  senderId       String
+  content        String
+  createdAt      DateTime     @default(now())
+  isRead         Boolean      @default(false)
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  sender         User         @relation(fields: [senderId], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  link      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  body      String
+  title     String
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id                           String      @id @default(cuid())
+  transactionId                String      @unique
+  rating                       Int
+  comment                      String?
+  reviewerId                   String
+  sellerId                     String
+  createdAt                    DateTime    @default(now())
+  reviewer      User        @relation("ReviewerReviews", fields: [reviewerId], references: [id])
+  seller        User        @relation("SellerReviews", fields: [sellerId], references: [id])
+  Transaction                  Transaction @relation(fields: [transactionId], references: [id])
+}
+
+model Transaction {
+  id                              String   @id
+  carId                           String   @unique
+  sellerId                        String
+  buyerId                         String
+  price                           Int
+  createdAt                       DateTime @default(now())
+  Review                          Review?
+  User_Transaction_buyerIdToUser  User     @relation("Transaction_buyerIdToUser", fields: [buyerId], references: [id])
+  Car                             Car      @relation(fields: [carId], references: [id])
+  User_Transaction_sellerIdToUser User     @relation("Transaction_sellerIdToUser", fields: [sellerId], references: [id])
+}
+
+model UserProfile {
+  id                   String   @id @default(cuid())
+  userId               String   @unique
+  bio                  String?
+  location             String?
+  website              String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  github               String?
+  linkedin             String?
+  signalEnabled        Boolean  @default(false)
+  signalNumber         String?
+  telegramEnabled      Boolean  @default(false)
+  telegramNumber       String?
+  useSameNumberForApps Boolean  @default(true)
+  viberEnabled         Boolean  @default(false)
+  viberNumber          String?
+  whatsappEnabled      Boolean  @default(false)
+  whatsappNumber       String?
+  x                    String?
+  User                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Verification {
+  id        String   @id @default(cuid())
+  phone     String
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@unique([phone, code])
 }
