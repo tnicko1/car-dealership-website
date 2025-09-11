@@ -1,4 +1,4 @@
-import AdminForm from "@/components/AdminForm";
+import CarForm from "@/components/CarForm";
 import { getAllMakes } from "@/lib/carData";
 
 export default async function AddCarPage() {
@@ -12,7 +12,7 @@ export default async function AddCarPage() {
                 Fill out the details below to list your vehicle on our platform.
             </p>
             <div className="max-w-4xl mx-auto">
-                <AdminForm makes={makes} />
+                <CarForm makes={makes} />
             </div>
         </div>
     );
