@@ -13,7 +13,7 @@ import SingleModelSelectionModal from '@/components/SingleModelSelectionModal';
 import { decodeVin } from '@/actions/vinActions';
 import { Loader } from 'lucide-react';
 
-export default function AdminForm({ car, makes = [] }: { car?: CarWithImages, makes?: string[] }) {
+export default function CarForm({ car, makes = [] }: { car?: CarWithImages, makes?: string[] }) {
     const router = useRouter();
     const [isBrandModalOpen, setIsBrandModalOpen] = useState(false);
     const [isModelModalOpen, setIsModelModalOpen] = useState(false);

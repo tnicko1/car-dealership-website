@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { notFound, redirect } from 'next/navigation';
-import AdminForm from '@/components/AdminForm';
+import CarForm from '@/components/CarForm';
 import type { CarWithImages } from '@/types/car';
 import { getAllMakes } from '@/lib/carData';
 import { getServerSession } from "next-auth";
@@ -36,7 +36,7 @@ export default async function EditCarPage({ params }: { params: { id: string } }
         <div className="container mx-auto px-4 py-8">
             <h1 className="text-4xl font-bold mb-8 text-center">Edit Car</h1>
             <div className="bg-white p-8 rounded-lg shadow-lg max-w-4xl mx-auto">
-                <AdminForm car={car as CarWithImages} makes={makes} />
+                <CarForm car={car as CarWithImages} makes={makes} />
             </div>
         </div>
     );
